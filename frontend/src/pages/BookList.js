@@ -4,46 +4,54 @@
 // 오래 걸린 이유 : api에 요청하는 함수를 여기다가 같이 구성했었는데, 이 페이지가 렌더링 될 때마다 요청하는 함수가 매번 실행되면서 api를 계속 부르는 상황 발생... (무한루프: api 값 받아옴 -> 렌더링 -> 또 받아옴  ->  또 렌더링...) 요청하는 함수는 그냥 컴포넌트에 실행하게 하면 안되고 클릭이나 어떤 액션이 있을 때만 실행하도록 로직을 짜는 것이 좋을 것 같다.
 
 import "../css/BookList.css";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-
-const BookList = ({ list }) => {
-  //console.log(list);
-
-  const hi = () => {
-    return (
-      <Link to="/BookDetail"></Link>
-    )
+const BookList = ({ attachment }) => {
+  // 현재는 모든 도서 목록을 불러오게 되어있지만, 알고리즘 완성 후에는 post 요청으로 이미지(attachment)를 보내서 추천도서 목록을 받아오는 것으로 변경될 예정.
+  const [books, setBooks] = useState();
+  const getlist = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/find");
+      console.log(response);
+      setBooks(response.data);
+    } catch (error) {
+      console.log("error");
+    }
   };
-  
+  useEffect(() => {
+    getlist();
+  }, []);
+  const hi = () => {
+    return <Link to="/BookDetail"></Link>;
+  };
   const bookdetail = () => {
-    return(
-      "/BookDetail"
-    )//db 인덱스 값으로 페이지 uri분기 만들기
-  }
+    return "/BookDetail"; //db 인덱스 값으로 페이지 uri분기 만들기
+  };
   return (
     //list.map에서 오류가 나서 list && 을 사용해 해결. 어떤 동작으로 에러가 되지 않은지는 모름..
     <>
-      {list && list.map((book) => (
-        <div  key={book[0]} onClick={hi}>
-          <Link to={bookdetail} className="listline">
-            
-            <div className="book-image">
-              <span className="listAssemble">
-                <img src={book[3]} alt="book" width="50px" />
-              </span>
-            </div>
+      {books &&
+        books.map((book) => (
+          <div key={book.id} onClick={hi}>
+            <Link to={bookdetail} className="listline">
+              <div className="book-image">
+                <span className="listAssemble">
+                  <img src={book.image} alt="book" width="50px" />
+                </span>
+              </div>
 
-            <div className="book-description">
-              <span className="listAssemble">
-                <div className="linetext">title : {book[1]}</div>
-                <div className="linetext">author : {book[2]}</div>
-              </span>
-            </div>
-          </Link>
-          <hr></hr>
-        </div>
-      ))}
+              <div className="book-description">
+                <span className="listAssemble">
+                  <div className="linetext">title : {book.title}</div>
+                  <div className="linetext">author : {book.author}</div>
+                </span>
+              </div>
+            </Link>
+            <hr></hr>
+          </div>
+        ))}
     </>
   );
 };

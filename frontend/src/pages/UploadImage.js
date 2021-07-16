@@ -18,7 +18,6 @@ const UploadImage = () => {
   const [colors, setColors] = useState(null);
   const [total, setTotal] = useState(1);
   const [label, setLabel] = useState("");
-  const [books, setBooks] = useState(null);
 
   const onAttahmentChange = (event) => {
     try {
@@ -58,16 +57,6 @@ const UploadImage = () => {
     }
   };
 
-  const getBookList = async () => {
-    try {
-      const response = await axios.get("http://localhost:5000/api/find");
-      console.log(response);
-      setBooks(response.data[0]);
-    } catch (error) {
-      console.log(error);
-    }
-    setUploadOption(4);
-  };
   // 서버 연결 테스트 코드 - test 버튼으로 동작확인
   const test = async () => {
     try {
@@ -101,13 +90,13 @@ const UploadImage = () => {
           >
             <RiGalleryUploadFill className="icon-btn gallery" />
             <div>
-              <Link to="/GallerySet">갤러리에서 등록</Link>
+              <Link to={"/GallerySet"}>갤러리에서 등록</Link>
             </div>
           </button>
-          <button onClick={getBookList} className="upload-btn gallery-btn">
+          {/* <button className="upload-btn gallery-btn">
             <RiGalleryUploadFill className="icon-btn gallery" />
             <div>책 찾기</div>
-          </button>
+          </button> */}
           <button onClick={test} className="upload-btn gallery-btn">
             <div>test</div>
           </button>
@@ -135,7 +124,14 @@ const UploadImage = () => {
             accept=".png, .jpg .jpeg"
             onChange={onAttahmentChange}
           />
-          <Link to="/BookList">
+          <Link
+            to={{
+              pathname: "/booklist",
+              state: {
+                image: attachment,
+              },
+            }}
+          >
             <button type="submit" className="submit-btn">
               입력
             </button>
@@ -161,8 +157,6 @@ const UploadImage = () => {
           label={label}
         ></Result>
       );
-    case 4:
-      return <BookList list={books}></BookList>;
     default:
       return;
   }

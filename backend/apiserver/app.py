@@ -36,9 +36,9 @@ session = Session()
 def find():
     books = Book.query.all()
     results = [
-        [book.id, book.title, book.author, book.img_url] for book in books
+        {"id":book.id, "title":book.title, "author":book.author, "image":book.img_url} for book in books
     ]
-    return jsonify([results])
+    return jsonify(results)
 
 filename = 'book_data.xlsx'
 

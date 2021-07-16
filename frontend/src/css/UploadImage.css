@@ -1,0 +1,62 @@
+.main-container{
+    margin: 0 auto;
+    width: 300px;
+    height: 300px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 5rem;
+}
+.container-title{
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+
+.img-holder {
+    margin: 0 auto;
+    width: 300px;
+    height: 300px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 5rem;
+}
+.no-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.upload-btn {
+    margin: auto;
+    width: 300px;
+    height: 100px;
+    color: #fff;
+    border-radius: 10px;
+    background-color: #3F3F3F;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+.icon-btn{
+    width: 50px;
+    height: 50px;
+    color: #0CFF6D;
+    margin-right: 20px;
+}
+.camera-btn{
+    background-color:#C4C4C4;
+    border:none;
+    color: #3F3F3F;
+}
+.photo{
+    color: #3F3F3F;
+}
+.image-upload .g-icons{
+    width: 50px;
+    height: 50px;
+    color: #0CFF6D;
+    margin-right: 20px;
+}

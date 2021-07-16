@@ -1,0 +1,141 @@
+version: "3"
+services:
+  #DB
+  postgres:
+    build: ./backend/postgres
+    container_name: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: book_list
+    ports:
+      - 5432:5432
+    networks:
+      - app-tier
+    restart: always
+
+  # model server
+  modelserver:
+    build:
+      context: ./backend/modelserver
+      dockerfile: Dockerfile
+    # command: gunicorn --bind 0.0.0.0:5000 app:app
+    ports:
+      - "8000:8000"
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=config.DevelopmentConfig
+      - SECRET_KEY=dockertest
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/db_dev
+    volumes:
+      - ./backend/modelserver/:/modelserver/
+    depends_on:
+      - postgres
+      - elasticsearch
+    links:
+      - postgres
+    networks:
+      - app-tier
+    restart: always
+
+  # backend
+  backend:
+    build:
+      context: ./backend/apiserver
+      dockerfile: Dockerfile
+    # command: gunicorn --bind 0.0.0.0:5000 app:app
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+      - APP_SETTINGS=config.DevelopmentConfig
+      - SECRET_KEY=dockertest
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/book_list
+    volumes:
+      - ./backend/apiserver:/apiserver
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    networks:
+      - app-tier
+    restart: always
+    
+
+  # frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    tty: true
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/:/frontend
+      - ./frontend/node_modules/:/frontend/node_modules
+    environment:
+      - CI=true
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      - app-tier
+    restart: always
+    
+
+
+  # elasticsearch
+  elasticsearch:
+    build: ./backend/elasticsearch
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - app-tier
+    volumes:
+      - ./backend/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    environment:
+      - "cluster.name=elasticsearch"
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+      - "XPACK_SECURITY_ENABLED=false"
+    healthcheck:
+      test: "curl http://elasticsearch:9200"
+      interval: "1s"
+      timeout: "3s"
+      retries: 60
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+  # logstash
+  # logstash:
+  #   build: ./backend/logstash
+  #   restart: always
+  #   ports:
+  #     - "5001:5001"
+  #   volumes:
+  #     - ./backend/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+  #     - ./backend/logstash/pipeline/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+  #     - ./backend/logstash/.logstash_jdbc_last_run:/root/.logstash_jdbc_last_run
+  #   environment:
+  #     LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+  #   depends_on:
+  #     - elasticsearch
+  #   networks:
+  #     - app-tier
+
+networks:
+  app-tier:
+    driver: bridge
+  # frontend:
+  #   driver: bridge
+  # backend:
+  #   driver: bridge
+  # modelserver:
+  #   driver: bridge
+volumes:
+  postgres_data:
+    driver: local
+  # appdata:
+  #   driver: local

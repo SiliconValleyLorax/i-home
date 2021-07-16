@@ -1,0 +1,25 @@
+.listline {
+    max-width: 100%;
+    display:flex;
+    flex-direction: row;
+    /* white-space: nowrap; */
+    /*nowrap으로 하면 텍스트도 줄바꿈이 안된다ㅠㅠㅠ*/
+}
+
+.listAssemble {
+    display: inline-block;
+    padding: 10px;
+    vertical-align: middle;
+    max-width: 100%;
+}
+
+.linetext {
+    max-width: 100%;
+    white-space: normal;
+    word-break: break-all;
+    max-width: 100%;
+}
+
+/*Link {
+    color: none; text-decoration: none;
+}*/

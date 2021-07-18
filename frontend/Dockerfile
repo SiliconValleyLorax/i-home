@@ -2,6 +2,7 @@
 FROM node:latest
 
 # Set working directory
+# EXPOSE 3000
 
 WORKDIR /frontend
 COPY . /frontend
@@ -21,7 +22,7 @@ COPY package-lock.json /frontend/package-lock.json
 RUN npm install --silent
 # RUN npm install react-scripts -g
 # RUN npm start
-# RUN npm run build
+RUN npm run build
 
 # Start the React app
-CMD ["npm", "start"]
+# CMD ["npm", "start"]

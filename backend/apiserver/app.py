@@ -31,6 +31,21 @@ engine = sqlalchemy.create_engine(url)
 Session = scoped_session(sessionmaker(bind=engine))
 session = Session()
 
+@app.before_first_request
+def http_first():
+    if(session.query(Book).count() == 0):
+        book_data = read_from_file(filename)
+        # db.drop_all()        
+        try:
+            for i in range(len(book_data)):
+                book_obj = Book(book_data[i][2], book_data[i][4], book_data[i][3], book_data[i][8])
+                session.add(book_obj)
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            print(500, "Error: 데이터 저장 실패")
+    else:
+        print(Book.query.count())
     
 @app.route('/api/find', methods=['GET', 'POST'])
 def find():
@@ -196,21 +211,8 @@ def get_book(id):
 
     except NoResultFound:
         print ("Requested Book Not Found")
-   
+
 
 if __name__ == "__main__":
-    if(session.query(Book).count() == 0):
-        book_data = read_from_file(filename)
-        # db.drop_all()        
-        try:
-            for i in range(len(book_data)):
-                book_obj = Book(book_data[i][2], book_data[i][4], book_data[i][3], book_data[i][8])
-                session.add(book_obj)
-            session.commit()
-        except Exception as e:
-            session.rollback()
-            print(500, "Error: 데이터 저장 실패")
-    else:
-        print(Book.query.count())
-    # app.init_db()
-    app.run(host='0.0.0.0', debug=True, port=5000)
+
+    app.run(host='0.0.0.0', debug=False, port=5000)

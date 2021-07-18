@@ -1,14 +1,10 @@
-// 제가 리액트 공부를 많이 하지는 않아서 url 바꾸는 방법을 잘 몰라서 일단 component처럼 구성하여 uploadimage페이지에 마저 넣었습니다. 무식하게 드려서 죄송해요ㅠㅠ
-// 나중에는 페이지 분리하셔야 하니까 여기다가 책 목록 출력하는 페이지 구성하시면 될 것 같아서 pages 폴더에 배치 해두었습니다. 혹시 폴더 구조 이해 안가시면 말씀해주세요!
-
-// 오래 걸린 이유 : api에 요청하는 함수를 여기다가 같이 구성했었는데, 이 페이지가 렌더링 될 때마다 요청하는 함수가 매번 실행되면서 api를 계속 부르는 상황 발생... (무한루프: api 값 받아옴 -> 렌더링 -> 또 받아옴  ->  또 렌더링...) 요청하는 함수는 그냥 컴포넌트에 실행하게 하면 안되고 클릭이나 어떤 액션이 있을 때만 실행하도록 로직을 짜는 것이 좋을 것 같다.
-
 import "../css/BookList.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import "../css/UploadImage.css";
 
-const BookList = ({ attachment }) => {
+const BookDetail = ({ attachment }) => {
   // 현재는 모든 도서 목록을 불러오게 되어있지만, 알고리즘 완성 후에는 post 요청으로 이미지(attachment)를 보내서 추천도서 목록을 받아오는 것으로 변경될 예정.
   const [books, setBooks] = useState();
   const getlist = async () => {
@@ -25,16 +21,10 @@ const BookList = ({ attachment }) => {
   }, []);
   return (
     //list.map에서 오류가 나서 list && 을 사용해 해결. 어떤 동작으로 에러가 되지 않은지는 모름..
-    <>
+    /*<>
       {books &&
-        books.map((book) => (
+        books.reduce((book) => (
           <div key={book.id}>
-            <Link to={{
-              pathname: "/bookDetail",
-              state: {
-                image: attachment,
-              },
-            }} className="listline">
               <div className="book-image">
                 <span className="listAssemble">
                   <img src={book.image} alt="book" width="50px" />
@@ -47,11 +37,31 @@ const BookList = ({ attachment }) => {
                   <div className="linetext">author : {book.author}</div>
                 </span>
               </div>
-            </Link>
             <hr></hr>
           </div>
+        ))}
+    </>*/
+    <>
+        {books && books.reduce((book) => (
+            <div key={book.id}>
+                <div className="book-image">
+                    <span className="listAssemble">
+                    <img src={book.image} width="50px" />
+                    </span>
+                </div>
+                <div className="book-description">
+                    <span className="listAssemble">
+                    <div className="linetext">title : {book.title}</div>
+                    <div className="linetext">author : {book.author}</div>
+                    <div className="linetext">description : {book.description}</div>
+                    </span>
+                </div>
+                <Link to="/classRoom">
+                        <button className="submit-btn">수업 리스트</button>
+                </Link>
+            </div>
         ))}
     </>
   );
 };
-export default BookList;
+export default BookDetail;

@@ -126,7 +126,7 @@ const UploadImage = () => {
           />
           <Link
             to={{
-              pathname: "/booklist",
+              pathname: "/bookList",
               state: {
                 image: attachment,
               },

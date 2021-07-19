@@ -18,7 +18,6 @@ const BookDetail = ({ location }) => {
       const response = await axios.get(
         `http://localhost:5000/api/book/${location.state.id}`
       );
-      console.log(response.data.title);
       setBook(response.data);
     } catch (error) {
       console.log("error");
@@ -29,7 +28,7 @@ const BookDetail = ({ location }) => {
   }, []);
   return (
     <>
-      <div key={book.id}>
+      <div>
         <div className="book-image">
           <span className="listAssemble">
             <img src={book.image} alt="book" width="50px" />

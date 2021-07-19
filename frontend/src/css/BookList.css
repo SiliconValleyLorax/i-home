@@ -17,7 +17,7 @@ a{
 
 .book-list{
     padding: 30px;
-    width: 90%;
+    width: 100%;
     margin: 0 auto;
     border-radius: 10px;
     margin-bottom: 40px;
@@ -36,9 +36,9 @@ a{
     object-fit: cover;
 }
 .book-description{
-    width: 800px;
+    width: 500px;
     padding-left: 20px;
-    margin-top: 20px;
+    margin-top: 10px;
     text-align: center;
     word-break:keep-all;
 }

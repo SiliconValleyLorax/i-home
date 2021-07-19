@@ -22,15 +22,14 @@ function App() {
         <Navbar />
         <Switch>
           <Route path="/" exact={true} component={Home}/>
+          <Route path="/uploadImage" component={UploadImage} />
+          <Route path="/uploadImage" component={UploadImage} />
+          <Route path="/classRoom" component={ClassRoom} />
+          <Route path="/cameraSet" component={CameraSet} />
+          <Route path="/gallerySet" component={GallerySet} />
+          <Route path="/bookList" component={BookList} />
+          <Route path="/bookDetail" component={BookDetail} />
         </Switch>
-      </Router>
-      <Router>
-        <Route path="/uploadImage" component={UploadImage} />
-        <Route path="/classRoom" component={ClassRoom} />
-        <Route path="/cameraSet" component={CameraSet} />
-        <Route path="/gallerySet" component={GallerySet} />
-        <Route path="/bookList" component={BookList} />
-        <Route path="/bookDetail" component={BookDetail} />
       </Router>
     </>
   );

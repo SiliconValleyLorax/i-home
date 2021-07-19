@@ -24,36 +24,37 @@ const BookList = ({ attachment }) => {
   useEffect(() => {
     getlist();
   }, []);
+  const tags=[['애벌레','모험','곤충'],['동물','놀이'],['북극곰','달','가족'],['할머니','강아지','가족']]
 
   return (
     //list.map에서 오류가 나서 list && 을 사용해 해결. 어떤 동작으로 에러가 되지 않은지는 모름..
     //라우터/스위치 태그로 값 분기 시도하기
     <>
-      {books &&
-        books.map((book) => (
-          <div key={book.id}>
-            <Link to={{
-              pathname: `/bookDetail/${book.title}`,
-              state: {
-                id: book.id
-              },
-            }} className="listline">
-              <div className="book-image">
-                <span className="listAssemble">
-                  <img src={book.image} alt="book" width="50px" />
-                </span>
-              </div>
-
-              <div className="book-description">
-                <span className="listAssemble">
-                  <div className="linetext">title : {book.title}</div>
-                  <div className="linetext">author : {book.author}</div>
-                </span>
-              </div>
-            </Link>
-            <hr></hr>
-          </div>
-        ))}
+    <div class="container">
+      <div className="book-list-title">추천 도서 목록</div>
+        {books &&
+          books.map((book) => (
+            <div key={book.id} className="book-list">
+              <Link to={{
+                pathname: `/bookDetail/${book.title}`,
+                state: {
+                  id: book.id
+                },
+              }} className="listline">
+                <div className="book-image">
+                    <img src={book.image} alt="book"/>
+                </div>
+                <div className="book-description">
+                  <span className="listAssemble">
+                    <div className="linetext title">{book.title}</div>
+                    <div className="linetext author">Author: {book.author}</div>
+                  </span>
+                </div>
+              </Link>
+            </div>
+          ))
+        }
+    </div>
     </>
   );
 };

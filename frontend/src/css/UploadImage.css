@@ -7,10 +7,10 @@
     margin-top: 5rem;
 }
 .container-title{
-    font-size: 13px;
+    font-size: 1.6rem;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 60px;
 }
 
 
@@ -30,7 +30,7 @@
 .upload-btn {
     margin: auto;
     width: 300px;
-    height: 100px;
+    height: 150px;
     color: #fff;
     border-radius: 10px;
     background-color: #3F3F3F;
@@ -39,6 +39,7 @@
     justify-content: center;
     margin-bottom: 20px;
     font-weight: bold;
+    font-size:1.1rem;
 }
 .icon-btn{
     width: 50px;

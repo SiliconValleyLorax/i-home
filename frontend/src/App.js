@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
+import Home from "./pages/Home";
 import UploadImage from "./pages/UploadImage";
 import ClassRoom from "./pages/ClassRoom";
 //booklist 페이지 추가
@@ -20,10 +21,11 @@ function App() {
       <Router>
         <Navbar />
         <Switch>
-          <Route path="/" />
+          <Route path="/"/>
         </Switch>
       </Router>
       <Router>
+        <Route path="/" component={Home} />
         <Route path="/uploadImage" component={UploadImage} />
         <Route path="/classRoom" component={ClassRoom} />
         <Route path="/cameraSet" component={CameraSet} />

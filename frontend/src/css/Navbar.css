@@ -1,6 +1,6 @@
 .navbar {
     background: #3f3f3f;
-    height: 80px;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -46,7 +46,7 @@
     justify-content: center;
     list-style: none;
     text-align: center;
-    justify-content: flex-end;
+    justify-content: flex-center;
 }
 
 .nav-item {

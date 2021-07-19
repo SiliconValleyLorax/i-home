@@ -65,7 +65,7 @@ const GallerySet = () => {
             />
             <Link to="/bookList">
                 <button type="submit" className="submit-btn">
-                입력
+                결과 확인하기
                 </button>
             </Link>
             </form>

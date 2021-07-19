@@ -20,19 +20,22 @@ const BookList = ({ attachment }) => {
       console.log("error");
     }
   };
+
   useEffect(() => {
     getlist();
   }, []);
+
   return (
     //list.map에서 오류가 나서 list && 을 사용해 해결. 어떤 동작으로 에러가 되지 않은지는 모름..
+    //라우터/스위치 태그로 값 분기 시도하기
     <>
       {books &&
         books.map((book) => (
           <div key={book.id}>
             <Link to={{
-              pathname: "/bookDetail",
+              pathname: `/bookDetail/${book.title}`,
               state: {
-                image: attachment,
+                id: book.id
               },
             }} className="listline">
               <div className="book-image">

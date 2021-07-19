@@ -10,9 +10,9 @@ import BookList from "./pages/BookList";
 import BookDetail from "./pages/BookDetail";
 import CameraSet from "./pages/CameraSet";
 import GallerySet from "./pages/GallerySet";
-import Cam from "./pages/Cam";
-import Camera from "./pages/Camera";
-import CameraPro from "./pages/CameraPro";
+//import Cam from "./pages/Cam";
+//import Camera from "./pages/Camera";
+//import CameraPro from "./pages/CameraPro";
 
 function App() {
   return (
@@ -30,12 +30,13 @@ function App() {
         <Route path="/gallerySet" component={GallerySet} />
         <Route path="/bookList" component={BookList} />
         <Route path="/bookDetail" component={BookDetail} />
-        <Route path="/cam" component={Cam} />
-        <Route path="/camera" component={Camera} />
-        <Route path="/cameraPro" component={CameraPro} />
       </Router>
     </>
   );
 }
 
 export default App;
+
+        //<Route path="/cam" component={Cam} />
+        //<Route path="/camera" component={Camera} />
+        //<Route path="/cameraPro" component={CameraPro} />

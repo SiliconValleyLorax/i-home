@@ -1,3 +1,4 @@
+from typing import Literal
 from flask import Flask, url_for, request, jsonify, render_template
 from flask_cors import CORS
 from flasgger import Swagger
@@ -7,6 +8,9 @@ import sqlalchemy
 from sqlalchemy.orm import sessionmaker, scoped_session
 from datetime import datetime
 
+from io import BytesIO
+from PIL import Image
+import base64
 
 # 함수 가져오기
 from elastic import *
@@ -95,10 +99,14 @@ def get_book_list():
     """
 
     # api 서버에서 이미지 받아오기 - 현재 byte 타입으로 들어오고 있어요
-    image = request.data
-    print(image)
+    image = request.get_data(as_text=Literal[True])
+    image = Image.open(BytesIO(base64.b64decode(image)))
+
+    ### 수아님 코드 작성 부분
+    # image를 파라미터로 넣어서 밑에 label에 string 형태로 리턴해주시면 됩니다!
 
     # label = find_label(image)
+    
     label="bear moon"
     # elastic search로 추천 도서 목록 찾기
     book_list = find_book_list(label, embeddings, session, es, text_ph)

@@ -145,18 +145,24 @@ def send_image():
 
 
     """
-    image = request.data
+    image = request.get_json()["image"].split(",")[-1]
     res = requests.post("http://modelserver:8000/model/image", image).json()
     book_list = []
-    for i in res:
-        book_list.append(dict())
-        book_list[-1]["title"] = "제목"
-        book_list[-1]["desc"] = "설명"
-        book_list[-1]["image"] = "https://m.media-amazon.com/images/I/81eB+7+CkUL._AC_UY218_.jpg"
-        # 아래의 코드와 같은 기능을 하는 코드 입니다!
-        # book_list.append({"title": title, "desc":"설명"})
-        print(type(book_list[-1]))
-    return jsonify(book_list)
+
+    try:
+        for book in res:
+            print("id: ", book[0])
+            book_detail = session.query(Book).filter(Book.id == int(book[0])+1).one()
+            bookObject = {
+            "id": book_detail.id,
+            "title": book_detail.title,
+            "author": book_detail.author,
+            "image": book_detail.img_url
+            }
+            book_list.append(bookObject)
+        return jsonify(book_list)
+    except NoResultFound:
+        print ("Requested Book Not Found")
 
 @app.route('/api/book/<int:id>', methods=['GET'])
 def get_book(id):

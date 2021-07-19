@@ -18,6 +18,6 @@ RUN pip install -r requirements.txt
 
 COPY . /apiserver/
 
-# ENTRYPOINT ["flask"]
-# CMD ["run", "--host", "0.0.0.0"]
-CMD ["python", "app.py"]
+
+# 개발용
+CMD ["python", "wsgi.py"]

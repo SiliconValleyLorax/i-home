@@ -18,4 +18,5 @@ RUN pip install -r requirements.txt
 
 COPY . /modelserver/
 
-CMD ["python", "app.py"]
+# 개발용
+CMD ["python", "wsgi.py"]

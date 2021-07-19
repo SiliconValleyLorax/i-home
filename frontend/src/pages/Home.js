@@ -12,7 +12,7 @@ const Home = () => {
             </div>
         </div>
         <div className="main-section">
-            <div class="center">
+            <div className="center">
                 <div className="description-title">
                     아이의 취향과 관심사에 맞는 영어 그림책을 추천해드려요.
                 </div>

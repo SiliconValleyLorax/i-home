@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useRef } from "react";
 import Webcam from "react-webcam";
-import axios from "axios";
 import "../css/Webcam.css";
 import { Link } from "react-router-dom";
 
@@ -12,32 +11,13 @@ const videoConstraints = {
 
 export const WebcamCapture = () => {
   const [image, setImage] = useState("");
-  // const [colors, setColors] = useState(null);
-  // const [total, setTotal] = useState(1);
-  const [label, setLabel] = useState("");
   const webcamRef = useRef(null);
 
   // eslint-disable-next-line
   const capture = useCallback(() => {
     const imageSrc = webcamRef.current.getScreenshot();
-    setImage(imageSrc);}, [webcamRef]
-  );
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post("/send_image", {
-        image: image,
-      });
-      console.log(response.data);
-      console.log(response.data[2]);
-      // setColors(response.data[0]);
-      // setTotal(response.data[1]);
-      setLabel(response.data[2]);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    setImage(imageSrc);
+  }, [webcamRef]);
 
   return (
     <div className="webcam-container">
@@ -78,21 +58,13 @@ export const WebcamCapture = () => {
           </button>
         )}
       </div>
-      <form onSubmit={onSubmit} className="container">
-        <Link to="/bookList">
+      <form className="container">
+        <Link to={{ pathname: "/bookList", state: { image: image } }}>
           <button type="submit" className="submit-btn">
             결과 확인하기
           </button>
         </Link>
-        
       </form>
-      <div className="container result-title">
-        {(label !== "") & (image !== "") ? (
-          <div>결과는 : {label}</div>
-        ) : (
-          <div></div>
-        )}
-      </div>
     </div>
   );
 };

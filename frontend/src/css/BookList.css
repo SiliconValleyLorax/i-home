@@ -14,13 +14,20 @@ a{
     padding: 50px 0;
     font-size: 1.5rem;
 }
+
 .book-list{
     padding: 30px;
+    width: 90%;
+    margin: 0 auto;
     border-radius: 10px;
     margin-bottom: 40px;
     background-color: var(--lighter-color);
     -webkit-box-shadow: 3px 5px 15px -4px rgba(0,0,0,0.74); 
     box-shadow: 3px 5px 15px -4px rgba(0,0,0,0.74);
+    display:flex;
+    flex-wrap:wrap;
+    justify-content: center;
+    align-items: center;
 }
 .book-image img{
     border-radius: 10px;
@@ -29,13 +36,18 @@ a{
     object-fit: cover;
 }
 .book-description{
-    padding: 20px;
+    width: 800px;
+    padding-left: 20px;
+    margin-top: 20px;
+    text-align: center;
+    word-break:keep-all;
 }
 
 .title{
     font-size: 1.1rem;
     font-weight: bold;
     margin-bottom: 20px;
+    word-break: keep-all;
 }
 
 .listline {
@@ -52,12 +64,10 @@ a{
 }
 
 .linetext {
-    max-width: 100%;
     white-space: normal;
-    word-break: break-all;
     max-width: 100%;
-}
+} */
 
-/*Link {
+Link {
     color: none; text-decoration: none;
-}*/
+}

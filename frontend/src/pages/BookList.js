@@ -34,13 +34,13 @@ const BookList = ({ attachment }) => {
       <div className="book-list-title">추천 도서 목록</div>
         {books &&
           books.map((book) => (
-            <div key={book.id} className="book-list">
-              <Link to={{
-                pathname: `/bookDetail/${book.title}`,
-                state: {
-                  id: book.id
+            <Link to={{
+              pathname: `/bookDetail/${book.title}`,
+              state: {
+                id: book.id
                 },
               }} className="listline">
+              <div key={book.id} className="book-list">
                 <div className="book-image">
                     <img src={book.image} alt="book"/>
                 </div>
@@ -50,8 +50,8 @@ const BookList = ({ attachment }) => {
                     <div className="linetext author">Author: {book.author}</div>
                   </span>
                 </div>
-              </Link>
             </div>
+            </Link>
           ))
         }
     </div>

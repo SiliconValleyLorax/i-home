@@ -21,11 +21,10 @@ function App() {
       <Router>
         <Navbar />
         <Switch>
-          <Route path="/"/>
+          <Route path="/" exact={true} component={Home}/>
         </Switch>
       </Router>
       <Router>
-        <Route path="/" component={Home} />
         <Route path="/uploadImage" component={UploadImage} />
         <Route path="/classRoom" component={ClassRoom} />
         <Route path="/cameraSet" component={CameraSet} />

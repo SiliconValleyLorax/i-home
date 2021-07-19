@@ -75,24 +75,18 @@ const UploadImage = () => {
           <div className="container-title">
             <span>아이가 좋아하는 장난감, 공간 등을 알려주세요</span>
           </div>
-          <button
-            onClick={() => setUploadOption(1)}
-            className="upload-btn camera-btn"
-          >
-            <AiFillCamera className="icon-btn photo" />
-            <div>
-              <Link to="/CameraSet">카메라로 등록</Link>
+          <Link to="/CameraSet" className="link_css">
+            <div className="upload-btn camera-btn">
+              <AiFillCamera className="icon-btn photo" />
+              <div>카메라로 등록</div>
             </div>
-          </button>
-          <button
-            onClick={() => setUploadOption(2)}
-            className="upload-btn gallery-btn"
-          >
-            <RiGalleryUploadFill className="icon-btn gallery" />
-            <div>
-              <Link to={"/GallerySet"}>갤러리에서 등록</Link>
+          </Link>
+          <Link to={"/GallerySet"} className="link_css">
+            <div className="upload-btn gallery-btn">
+              <RiGalleryUploadFill className="icon-btn gallery" />
+              <div>갤러리에서 등록</div>
             </div>
-          </button>
+          </Link>
           {/* <button className="upload-btn gallery-btn">
             <RiGalleryUploadFill className="icon-btn gallery" />
             <div>책 찾기</div>

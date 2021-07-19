@@ -6,20 +6,20 @@ import { Link } from "react-router-dom";
 // import Book from './Book'
 
 const UploadImage = () => {
-  const [attachment, setAttachment] = useState(
-    "https://i.stack.imgur.com/GNhxO.png"
-  );
+  // const [attachment, setAttachment] = useState(
+  //   "https://i.stack.imgur.com/GNhxO.png"
+  // );
   // 서버 연결 테스트 코드 - test 버튼으로 동작확인
-  const test = async () => {
-    try {
-      const response = await axios.post("http://localhost:5000/api/image", {
-        image: attachment,
-      });
-      console.log(response);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // const test = async () => {
+  //   try {
+  //     const response = await axios.post("http://localhost:5000/api/image", {
+  //       image: attachment,
+  //     });
+  //     console.log(response);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
   
   return(
       <>

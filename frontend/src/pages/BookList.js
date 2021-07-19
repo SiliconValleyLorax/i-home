@@ -36,16 +36,17 @@ const BookList = ({ location }) => {
         <div className="book-list-title">추천 도서 목록</div>
         {books &&
           books.map((book) => (
-            <div key={book.id} className="book-list">
-              <Link
-                to={{
-                  pathname: `/bookDetail/${book.title}`,
-                  state: {
-                    id: book.id,
-                  },
-                }}
-                className="listline"
-              >
+            <Link
+              to={{
+                pathname: `/bookDetail/${book.title}`,
+                state: {
+                  id: book.id,
+                },
+              }}
+              className="listline"
+              key={book.id}
+            >
+              <div className="book-list">
                 <div className="book-image">
                   <img src={book.image} alt="book" />
                 </div>
@@ -55,7 +56,8 @@ const BookList = ({ location }) => {
                     <div className="linetext author">Author: {book.author}</div>
                   </span>
                 </div>
-            </div>
+              </div>
+            </Link>
           ))}
       </div>
     </>

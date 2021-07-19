@@ -38,6 +38,6 @@ function App() {
 
 export default App;
 
-        //<Route path="/cam" component={Cam} />
-        //<Route path="/camera" component={Camera} />
-        //<Route path="/cameraPro" component={CameraPro} />
+//<Route path="/cam" component={Cam} />
+//<Route path="/camera" component={Camera} />
+//<Route path="/cameraPro" component={CameraPro} />

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { FiBookOpen } from "react-icons/fi";
+// import { FiBookOpen } from "react-icons/fi";
 import { FaBars, FaTimes } from "react-icons/fa";
 
 import { Button } from "./Button";
@@ -29,7 +29,11 @@ function Navbar() {
       <div className="navbar">
         <div className="navbar-container container">
           <Link to="/" className="navbar-logo">
-            <FiBookOpen className="navbar-icon" />
+            <img
+              className="navbar-icon"
+              src="https://static.wixstatic.com/media/c1706a_a39f342e884a436b925bf8254c2ec5c2~mv2.png/v1/fill/w_37,h_37,al_c,q_85,usm_0.66_1.00_0.01/KakaoTalk_20210426_150734182.webp"
+              alt="logo"
+            />
             iHome
           </Link>
           <div className="menu-icon" onClick={handleClick}>

@@ -3,8 +3,10 @@ flask_cors==3.0.10
 gunicorn==20.0.4
 elasticsearch==7.13.3
 Flask-SQLAlchemy==2.5.1
+Flask-Migrate==3.0.1
 SQLAlchemy==1.4.20
 pillow==8.3.0
+psycopg2-binary==2.9.1
 tensorflow==2.5.0
 tensorflow-hub==0.12.0
 flasgger

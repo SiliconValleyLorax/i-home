@@ -1,8 +1,11 @@
 import time
 from celery import Celery, current_task
 from celery.result import AsyncResult
-
+from elasticsearch import Elasticsearch
+from elastic import *
 celery = Celery('tasks', backend="rpc://", broker='amqp://rabbitmq:rabbitmq@rabbit:5672')
+
+es = Elasticsearch('http://elasticsearch:9200')
 
 def get_job(task_id):
     """
@@ -38,5 +41,7 @@ def find_id_from_label(label):
     str(label) -> list[Integer](idx list)
     """
     print("searching for books")
+    # book_list = find_book_list(label, embeddings, session, es, text_ph)
     time.sleep(3)
-    return [[51], [18], [24], [1], [5]]
+    book_list = []
+    return book_list

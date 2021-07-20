@@ -130,19 +130,14 @@ def result():
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
-    # print("model test called")
-    # r = tasks.examplefunc.delay(2, 3)
-    # re = r.delay()
-
-    r = tasks.find_label_from_image.s("thisisimagestring")
+    r1 = tasks.find_label_from_image.s("stringtypeimage")
     r2 = tasks.find_id_from_label.s()
-    chaining = chain((r, r2))
+    chaining = chain((r1, r2))
     chain_task = chaining()
-    # result = chain_task.get(timeout=15)
-    # print("result =", result)
-    # job = tasks.get_job(chain_task.id)
-    # while (job.state != 'SUCCESS'):
-    #     print(job.state)
-    #     time.sleep(0.5)
-    # print(job.result)
     return jsonify(str(chain_task.id))
+
+# 테스트코드
+@app.route('/simpletest', methods=['GET'])
+def simple():
+    time.sleep(5)
+    return jsonify("modelserver")

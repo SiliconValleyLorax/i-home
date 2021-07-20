@@ -10,24 +10,31 @@ const UploadImage = () => {
   //   "https://i.stack.imgur.com/GNhxO.png"
   // );
   // 서버 연결 테스트 코드 - test 버튼으로 동작확인
+  const confirmtask = async (id) => {
+    let progress = await axios.post("http://localhost:5000/api/progress", {
+      taskID: id,
+    });
+    if (progress.data === "SUCCESS") return console.log("complete");
+    setTimeout(() => confirmtask(id), 2000);
+  };
   const test = async () => {
     try {
       const response = await axios.get("http://localhost:5000/api/test");
       console.log(response.data);
       console.log("calling api/progress...");
-      let progress;
-      while (progress !== "SUCCESS") {
-        progress = await axios.post("http://localhost:5000/api/progress", {
-          taskID: response.data,
-        });
-        progress = progress.data;
-        setTimeout(() => "loading", 5000);
-      }
-      console.log(progress);
-      const finalresult = await axios.post("http://localhost:5000/api/result", {
-        taskID: response.data,
-      });
-      console.log(finalresult.data);
+      // confirmtask(response.data);
+      // setTimeout(async () => {
+      //   const finalresult = await axios.post(
+      //     "http://localhost:5000/api/result",
+      //     {
+      //       taskID: response.data,
+      //     }
+      //   );
+      //   console.log(finalresult.data);
+      // }, 30000);
+      // console.log(progress);
+
+      // console.log(finalresult.data);
     } catch (e) {
       console.log(e);
     }

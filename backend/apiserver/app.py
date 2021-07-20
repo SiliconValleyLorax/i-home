@@ -229,6 +229,23 @@ def progress():
 def result():
     task_id = request.get_json()["taskID"]
     response = requests.post("http://modelserver:8000/model/result", task_id).json()
+
+    book_list = []
+
+    # try:
+    #     for book in response:
+    #         print("id: ", book[0])
+    #         book_detail = session.query(Book).filter(Book.id == int(book[0])+1).one()
+    #         bookObject = {
+    #         "id": book_detail.id,
+    #         "title": book_detail.title,
+    #         "author": book_detail.author,
+    #         "image": book_detail.img_url
+    #         }
+    #         book_list.append(bookObject)
+    #     return jsonify(book_list)
+    # except NoResultFound:
+    #     print ("Requested Book Not Found")
     return jsonify(response)
     
 if __name__ == "__main__":

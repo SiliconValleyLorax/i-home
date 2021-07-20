@@ -21,12 +21,6 @@ const BookList = ({ location }) => {
   useEffect(() => {
     getlist();
   }, []);
-  // const tags = [
-  //   ["애벌레", "모험", "곤충"],
-  //   ["동물", "놀이"],
-  //   ["북극곰", "달", "가족"],
-  //   ["할머니", "강아지", "가족"],
-  // ];
 
   return (
     //list.map에서 오류가 나서 list && 을 사용해 해결. 어떤 동작으로 에러가 되지 않은지는 모름..
@@ -34,8 +28,9 @@ const BookList = ({ location }) => {
     <>
       <div className="container">
         <div className="book-list-title">추천 도서 목록</div>
+        <div className="book-list-sub-title">우리 아이에게 딱 맞는 그림책은?</div>
         {books &&
-          books.map((book) => (
+          books.map((book,index) => (
             <Link
               to={{
                 pathname: `/bookDetail/${book.title}`,
@@ -47,6 +42,7 @@ const BookList = ({ location }) => {
               key={book.id}
             >
               <div className="book-list">
+                <div className="book-rank">{index+1}</div>
                 <div className="book-image">
                   <img src={book.image} alt="book" />
                 </div>

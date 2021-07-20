@@ -36,9 +36,10 @@ const BookDetail = ({ location }) => {
         <img src={book.image} alt="book" width="100%" />
       </div>
       <div className="book_tag">
-        <span className="tag_css">#태그1</span>
-        <span className="tag_css">#태그2</span>
-        <span className="tag_css">#태그3</span>
+        <span className="tag_css">#가족</span>
+        <span className="tag_css">#곰</span>
+        <span className="tag_css">#동물</span> 
+        <span className="tag_css">#따듯함</span> 
       </div>
       <div className="book_author">{book.author}</div>
       <div className="book_desc">{book.desc}</div>

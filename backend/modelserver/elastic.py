@@ -1,3 +1,5 @@
+import os
+
 import tensorflow.compat.v1 as tf
 import tensorflow_hub as hub
 import pandas as pd
@@ -112,6 +114,7 @@ def insert_book_list(session, embeddings, es, text_ph):
             description=""
         try:
             text_vector=embed_text([title+description])[0]
+            print(i, title)
             doc={'idx':i+1,'title':title,'description':description, 'text-vector':text_vector}
         except:
             print('no data')
@@ -125,6 +128,7 @@ def initialize_book_list(es):
     print ("HTTP first_request")
     ## 텍스트 임베딩 모델 다운로드 
     print("Downloading pre-trained embeddings from tensorflow hub...")
+    os.environ["TFHUB_CACHE_DIR"] = "/tmp/model"
     embed = hub.load("https://tfhub.dev/google/universal-sentence-encoder/4")
     text_ph = tf.placeholder(tf.string)
     embeddings = embed(text_ph)

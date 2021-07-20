@@ -2,7 +2,7 @@
     --primary: #fff;
     --point-color: #0CFF6D;
     --base-color: #C4C4C4;
-    --lighter-color: #e4e0e0;
+    --lighter-color: #ece9e9;
     --darker-color: #3F3F3F;
 }
 
@@ -35,20 +35,30 @@
     justify-content: center;
     align-items: center;
     color: #fff;
+    font-size: 1.3rem;
+    text-align: center;
+    line-height: 2.5rem;
+    padding: 10px;
+    word-break:keep-all;
 }
+
+
 .main-section{
     max-width: 60%;
-    height: 250px;
+    height: 25rem;
     margin: 0 auto;
     background: var(--lighter-color);
 }
 .center{
-    padding-top: 70px;
+    padding-top: 5rem;
     text-align: center;
 }
 .description-title{
     font-weight: bold;
     margin-bottom: 10px;
+    font-size: 1.2rem;
+    padding: 10px;
+    word-break:keep-all;
 }
 .description-subtitle{
     margin-bottom: 30px;

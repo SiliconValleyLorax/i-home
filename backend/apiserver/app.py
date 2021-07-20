@@ -31,8 +31,7 @@ engine = sqlalchemy.create_engine(url)
 Session = scoped_session(sessionmaker(bind=engine))
 session = Session()
 
-@app.before_first_request
-def http_first():
+def initialize():
     if(session.query(Book).count() == 0):
         book_data = read_from_file(filename)
         # db.drop_all()        

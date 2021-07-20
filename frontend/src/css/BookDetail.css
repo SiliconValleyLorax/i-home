@@ -1,3 +1,11 @@
+:root{
+  --primary: #fff;
+  --point-color: #08e25f;
+  --base-color: #C4C4C4;
+  --lighter-color: #ece9e9;
+  --darker-color: #3F3F3F;
+}
+
 .book_detail {
   margin: 5%;
   text-align: center;
@@ -12,18 +20,24 @@
   padding: 5%;
   padding-left: 15%;
   padding-right: 15%;
+  background-color: #fff;
+  box-shadow: 3px 3px 3px gray;
 }
 
 .book_tag {
   display: flex;
   justify-content: space-around;
   margin: 5%;
+  font-weight: bold;
 }
 
 .tag_css {
   padding: 3%;
-  background-color: rgb(240, 240, 240);
-  box-shadow: 1px 1px 5px gray;
+  background-color: var(--point-color);
+  color:#fff;
+  /* background-color: rgb(240, 240, 240); */
+  border-radius: 15px;
+  box-shadow: 1px 1px 2px gray;
 }
 
 .book_author {
@@ -32,7 +46,21 @@
 }
 
 .book_desc {
-  padding: 5%;
-  background-color: rgb(235, 235, 235);
-  box-shadow: 3px 3px 10px gray;
+  padding: 20px;
+  background-color: #fff;
+  /* background-color: rgb(235, 235, 235); */
+  box-shadow: 3px 3px 3px gray;
+  position: relative;
+}
+.translate-btn{
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: var(--point-color);
+  border:none;
+  padding: 5px 10px;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: bold;
+  border-radius: 10px;
 }

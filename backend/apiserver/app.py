@@ -22,6 +22,7 @@ swagger = Swagger(app)
 app.config.from_object("config.DevelopmentConfig")
 db = SQLAlchemy(app)
 from models import *
+from translate import *
 db.create_all()
 CORS(app)
 
@@ -31,8 +32,7 @@ engine = sqlalchemy.create_engine(url)
 Session = scoped_session(sessionmaker(bind=engine))
 session = Session()
 
-@app.before_first_request
-def http_first():
+def initialize():
     if(session.query(Book).count() == 0):
         book_data = read_from_file(filename)
         # db.drop_all()        
@@ -211,13 +211,18 @@ def get_book(id):
             "title": book_detail.title,
             "author": book_detail.author,
             "desc": book_detail.desc,
-            "image": book_detail.img_url
+            "image": book_detail.img_url,
+            "desc_ko": get_translate(book_detail.desc)
         }
         return jsonify(bookObject)
 
     except NoResultFound:
         print ("Requested Book Not Found")
 
+@app.route('/api/testpapago')
+def test_papago():
+  text="hi my name is seoyeon"
+  return get_translate(text)
 
 if __name__ == "__main__":
 

@@ -34,7 +34,7 @@ const GallerySet = () => {
       <form className="main-container">
         <input
           type="file"
-          accept=".png, .jpg .jpeg"
+          accept=".png, .jpg, .jpeg"
           onChange={onAttahmentChange}
         />
         <Link to={{ pathname: "/bookList", state: { image: attachment } }}>

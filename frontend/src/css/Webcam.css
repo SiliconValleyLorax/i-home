@@ -1,51 +1,51 @@
-.webcam-container{
-    margin: 0 auto;
-    width: 400px;
-    height: 400px;
-    border: none;
-    border-radius: 5px;
-    margin-top: 5rem;
+.webcam-container {
+  margin: 0 auto;
+  width: 100%;
+  height: 400px;
+  border: none;
+  border-radius: 5px;
+  margin-top: 5rem;
 }
-.conatainer{
-    margin: 0 auto;
-    width: 400px;
+.conatainer {
+  margin: 0 auto;
+  width: 400px;
 }
-.webcam-btn{
-    width: 100%;
-    padding: 10px;
-    margin: 0 auto;
-    margin-top: 30px;
-    background-color: #C4C4C4;
-    color: #3F3F3F;
-    font-weight: bold;
-    border:none;
+.webcam-btn {
+  width: 100%;
+  padding: 10px;
+  margin: 0 auto;
+  margin-top: 30px;
+  background-color: #c4c4c4;
+  color: #3f3f3f;
+  font-weight: bold;
+  border: none;
 }
-.webcam-btn:hover{
-    cursor:pointer;
-    background-color: #3F3F3F;
-    color: #fff;
+.webcam-btn:hover {
+  cursor: pointer;
+  background-color: #3f3f3f;
+  color: #fff;
 }
 
-.submit-btn{
-    width: 100%;
-    padding: 15px;
-    margin: 0 auto;
-    margin-top: 30px;
-    background-color: #C4C4C4;
-    color: #3F3F3F;
-    font-size: 1.2rem;
-    border-radius: 10px;
-    font-weight: bold;
-    border:none;
+.submit-btn {
+  width: 100%;
+  padding: 15px;
+  margin: 0 auto;
+  margin-top: 30px;
+  background-color: #c4c4c4;
+  color: #3f3f3f;
+  font-size: 1.2rem;
+  border-radius: 10px;
+  font-weight: bold;
+  border: none;
 }
-.submit-btn:hover{
-    cursor:pointer;
-    background-color: #0CFF6D;
-    color: #fff;
+.submit-btn:hover {
+  cursor: pointer;
+  background-color: #0cff6d;
+  color: #fff;
 }
-.result-title{
-    text-align: center;
-    font-weight: bold;
-    font-size: 30px;
-    margin-top: 30px;
+.result-title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 30px;
+  margin-top: 30px;
 }

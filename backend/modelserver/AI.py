@@ -1,4 +1,3 @@
-
 import os
 
 for i in range(2) :
@@ -328,9 +327,10 @@ def run_inference(model, image) :
     output_dict['detection_masks_reframed'] = detection_masks_reframed.numpy()
   return output_dict
 
-def show_inference(model, image_path) :
 
-    image_np = np.array(Image.open(image_path))
+def show_inference(model, image_open) :
+
+    image_np = np.array(image_open)
 
     output_dict = run_inference(model, image_np)
 
@@ -349,20 +349,3 @@ def show_inference(model, image_path) :
     
     return dtct_result
 
-
-PATH_TO_LABELS = 'object_detection/training/label_map.pbtxt'
-category_index = label_map_util.create_category_index_from_labelmap(
-    PATH_TO_LABELS, use_display_name = True)
-
-
-# 이미지 경로 입력
-TEST_IMAGE_PATH = pathlib.Path('')
-
-
-detection_model = tf.saved_model.load('object_detection/inference_graph/saved_model')
-
-
-for image_path in TEST_IMAGE_PATH :
-    test_result = show_inference(detection_model, image_path)
-    print("result : " + test_result)
-    print()

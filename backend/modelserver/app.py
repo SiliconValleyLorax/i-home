@@ -17,7 +17,9 @@ from elastic import *
 from AI import *
 from elasticsearch import Elasticsearch
 from elasticsearch import helpers
-
+import tasks
+from celery import chain
+import time
 app = Flask(__name__)
 CORS(app)
 swagger = Swagger(app)
@@ -113,9 +115,30 @@ def get_book_list():
 
     return jsonify(book_list)
 
+@app.route('/model/progress', methods=['POST'])
+def progress():
+    print("model/progress called")
+    task_id = request.get_data(as_text=Literal[True])
+    job = tasks.get_job(task_id)
+    result = job.state
+    print("model server complete")
+    return jsonify(result)
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
-    print("model server called")
-    return jsonify("from model server")
+    # print("model test called")
+    # r = tasks.examplefunc.delay(2, 3)
+    # re = r.delay()
 
+    r = tasks.examplefunc.s(2, 3)
+    r2 = tasks.examplefunc2.s(4)
+    chaining = chain((r, r2))
+    chain_task = chaining()
+    # result = chain_task.get(timeout=15)
+    # print("result =", result)
+    # job = tasks.get_job(chain_task.id)
+    # while (job.state != 'SUCCESS'):
+    #     print(job.state)
+    #     time.sleep(0.5)
+    # print(job.result)
+    return jsonify(str(chain_task.id))

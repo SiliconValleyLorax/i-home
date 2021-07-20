@@ -74,10 +74,11 @@ def home_page():
 
 @app.route('/api/test')
 def test():
+    print("api test called")
     try:
         res = requests.get("http://modelserver:8000/test")
         print(res.json())
-        return res.json()+" and this is from api server"
+        return res.json()
     except:
         return "hello World"
 
@@ -218,6 +219,15 @@ def get_book(id):
     except NoResultFound:
         print ("Requested Book Not Found")
 
+@app.route('/api/progress', methods=['POST'])
+def progress():
+    print("api/progress called")
+    task_id = request.get_json()["taskID"]
+    print(type(task_id), task_id)
+    response = requests.post("http://modelserver:8000/model/progress", task_id)
+    print("api server compelte")
+    print(response.json())
+    return response.json()
 
 if __name__ == "__main__":
 

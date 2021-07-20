@@ -25,41 +25,47 @@ const BookList = ({ location }) => {
     getlist();
   }, []);
 
-  return (
-    //list.map에서 오류가 나서 list && 을 사용해 해결. 어떤 동작으로 에러가 되지 않은지는 모름..
-    //라우터/스위치 태그로 값 분기 시도하기
-    <>
-      <div className="container">
-        <div className="book-list-title">추천 도서 목록</div>
-        <div className="book-list-sub-title">우리 아이에게 딱 맞는 그림책은?</div>
-        {books &&
-          books.map((book,index) => (
-            <Link
-              to={{
-                pathname: `/bookDetail/${book.title}`,
-                state: {
-                  id: book.id,
-                },
-              }}
-              className="listline"
-              key={book.id}
-            >
-              <div className="book-list">
-                <div className="book-rank">{index+1}</div>
-                <div className="book-image">
-                  <img src={book.image} alt="book" />
-                </div>
-                <div className="book-description">
-                  <span className="listAssemble">
-                    <div className="linetext title">{book.title}</div>
-                    <div className="linetext author">Author: {book.author}</div>
-                  </span>
-                </div>
-              </div>
-            </Link>
-          ))}
-      </div>
-    </>
-  );
+
+  switch (loading) {
+    case true:
+      return <Loading></Loading>;
+    case false:
+      return (
+        //list.map에서 오류가 나서 list && 을 사용해 해결. 어떤 동작으로 에러가 되지 않은지는 모름..
+        //라우터/스위치 태그로 값 분기 시도하기
+        <>
+          <div className="container">
+            <div className="book-list-title">추천 도서 목록</div>
+            {books &&
+              books.map((book) => (
+                <Link
+                  to={{
+                    pathname: `/bookDetail/${book.title}`,
+                    state: {
+                      id: book.id,
+                    },
+                  }}
+                  className="listline"
+                  key={book.id}
+                >
+                  <div className="book-list">
+                    <div className="book-image">
+                      <img src={book.image} alt="book" />
+                    </div>
+                    <div className="book-description">
+                      <span className="listAssemble">
+                        <div className="linetext title">{book.title}</div>
+                        <div className="linetext author">
+                          Author: {book.author}
+                        </div>
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+          </div>
+        </>
+      );
+  }
 };
 export default BookList;

@@ -1,4 +1,4 @@
-import "../css/BookList.css";
+import "../css/BookDetail.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -45,7 +45,25 @@ const BookDetail = ({ location }) => {
           <button className="submit-btn">수업 리스트</button>
         </Link>
       </div>
-    </>
+    </>*/
+    <div className="book_detail">
+      <div className="book_title">
+        <h3>{book.title}</h3>
+      </div>
+      <div className="book_img">
+        <img src={book.image} alt="book" width="100%" />
+      </div>
+      <div className="book_tag">
+        <span className="tag_css">#태그1</span>
+        <span className="tag_css">#태그2</span>
+        <span className="tag_css">#태그3</span>
+      </div>
+      <div className="book_author">{book.author}</div>
+      <div className="book_desc">{book.desc}</div>
+      <Link to="/classRoom">
+        <button className="submit-btn">강의 신청하기</button>
+      </Link>
+    </div>
   );
 };
 export default BookDetail;

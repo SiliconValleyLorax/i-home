@@ -1,0 +1,38 @@
+.book_detail {
+  margin: 5%;
+  text-align: center;
+}
+
+.book_title {
+  margin: 5%;
+  font-weight: bold;
+}
+
+.book_img {
+  padding: 5%;
+  padding-left: 15%;
+  padding-right: 15%;
+}
+
+.book_tag {
+  display: flex;
+  justify-content: space-around;
+  margin: 5%;
+}
+
+.tag_css {
+  padding: 3%;
+  background-color: rgb(240, 240, 240);
+  box-shadow: 1px 1px 5px gray;
+}
+
+.book_author {
+  margin: 5%;
+  font-weight: bold;
+}
+
+.book_desc {
+  padding: 5%;
+  background-color: rgb(235, 235, 235);
+  box-shadow: 3px 3px 10px gray;
+}

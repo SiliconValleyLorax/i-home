@@ -5,25 +5,30 @@ from flasgger import Swagger
 
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy
-from sqlalchemy.orm import sessionmaker, scoped_session
-from datetime import datetime
+from sqlalchemy import create_engine
 
 from io import BytesIO
 from PIL import Image
 import base64
 
 # 함수 가져오기
-from elastic import *
 from AI import *
 from elasticsearch import Elasticsearch
 from elasticsearch import helpers
 
 app = Flask(__name__)
+app.config.from_object("config.DevelopmentConfig")
+db = SQLAlchemy(app)
 CORS(app)
 swagger = Swagger(app)
+url = 'postgresql://postgres:postgres@postgres/book_list'
+engine = sqlalchemy.create_engine(url)
+connection = engine.raw_connection()
+cursor = connection.cursor()
 
 es = Elasticsearch('http://elasticsearch:9200')
 
+from elastic import *
 
 def elastic_info():
     return es.info()

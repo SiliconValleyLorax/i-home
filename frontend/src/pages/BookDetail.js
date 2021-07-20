@@ -28,24 +28,6 @@ const BookDetail = ({ location }) => {
   }, []);
   return (
     <>
-      <div>
-        <div className="book-image">
-          <span className="listAssemble">
-            <img src={book.image} alt="book" width="50px" />
-          </span>
-        </div>
-        <div className="book-description">
-          <span className="listAssemble">
-            <div className="linetext">title : {book.title}</div>
-            <div className="linetext">author : {book.author}</div>
-            <div className="linetext">description : {book.desc}</div>
-          </span>
-        </div>
-        <Link to="/classRoom">
-          <button className="submit-btn">수업 리스트</button>
-        </Link>
-      </div>
-    </>*/
     <div className="book_detail">
       <div className="book_title">
         <h3>{book.title}</h3>
@@ -64,6 +46,7 @@ const BookDetail = ({ location }) => {
         <button className="submit-btn">강의 신청하기</button>
       </Link>
     </div>
+    </>
   );
 };
 export default BookDetail;

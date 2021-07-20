@@ -28,6 +28,7 @@ def find_label_from_image(image_string):
     str(image) -> str(label)
     학습시킨 AI 모델 들어가는 함수
     """
+    print("detecting label")
     time.sleep(3)
     return "bear moon"
 
@@ -36,5 +37,6 @@ def find_id_from_label(label):
     """
     str(label) -> list[Integer](idx list)
     """
+    print("searching for books")
     time.sleep(3)
     return [[51], [18], [24], [1], [5]]

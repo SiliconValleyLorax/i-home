@@ -117,12 +117,16 @@ def get_book_list():
 
 @app.route('/model/progress', methods=['POST'])
 def progress():
-    print("model/progress called")
     task_id = request.get_data(as_text=Literal[True])
     job = tasks.get_job(task_id)
     result = job.state
-    print("model server complete")
     return jsonify(result)
+
+@app.route('/model/result', methods=['POST'])
+def result():
+    task_id = request.get_data(as_text=Literal[True])
+    job = tasks.get_job(task_id)
+    return jsonify(job.result)
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
@@ -130,8 +134,8 @@ def test():
     # r = tasks.examplefunc.delay(2, 3)
     # re = r.delay()
 
-    r = tasks.examplefunc.s(2, 3)
-    r2 = tasks.examplefunc2.s(4)
+    r = tasks.find_label_from_image.s("thisisimagestring")
+    r2 = tasks.find_id_from_label.s()
     chaining = chain((r, r2))
     chain_task = chaining()
     # result = chain_task.get(timeout=15)

@@ -221,14 +221,16 @@ def get_book(id):
 
 @app.route('/api/progress', methods=['POST'])
 def progress():
-    print("api/progress called")
     task_id = request.get_json()["taskID"]
-    print(type(task_id), task_id)
     response = requests.post("http://modelserver:8000/model/progress", task_id)
-    print("api server compelte")
-    print(response.json())
     return response.json()
 
+@app.route('/api/result', methods=['POST'])
+def result():
+    task_id = request.get_json()["taskID"]
+    response = requests.post("http://modelserver:8000/model/result", task_id).json()
+    return jsonify(response)
+    
 if __name__ == "__main__":
 
     app.run(host='0.0.0.0', debug=False, port=5000)

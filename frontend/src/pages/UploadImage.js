@@ -15,10 +15,19 @@ const UploadImage = () => {
       const response = await axios.get("http://localhost:5000/api/test");
       console.log(response.data);
       console.log("calling api/progress...");
-      const response2 = await axios.post("http://localhost:5000/api/progress", {
+      let progress;
+      while (progress !== "SUCCESS") {
+        progress = await axios.post("http://localhost:5000/api/progress", {
+          taskID: response.data,
+        });
+        progress = progress.data;
+        setTimeout(() => "loading", 5000);
+      }
+      console.log(progress);
+      const finalresult = await axios.post("http://localhost:5000/api/result", {
         taskID: response.data,
       });
-      console.log(response2);
+      console.log(finalresult.data);
     } catch (e) {
       console.log(e);
     }

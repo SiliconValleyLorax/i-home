@@ -46,8 +46,21 @@
 }
 
 .book_desc {
-  padding: 5%;
+  padding: 20px;
   background-color: #fff;
   /* background-color: rgb(235, 235, 235); */
   box-shadow: 3px 3px 3px gray;
+  position: relative;
+}
+.translate-btn{
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: var(--point-color);
+  border:none;
+  padding: 5px 10px;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: bold;
+  border-radius: 10px;
 }

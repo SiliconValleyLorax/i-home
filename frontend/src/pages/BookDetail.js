@@ -13,6 +13,8 @@ const BookDetail = ({ location }) => {
     desc: 0,
     image: "",
   });
+  const [ko, setKo]=useState(0)
+
   const getbook = async () => {
     try {
       const response = await axios.get(
@@ -23,9 +25,13 @@ const BookDetail = ({ location }) => {
       console.log("error");
     }
   };
+  const getTranslate =()=>{
+     (ko? setKo(0):setKo(1));
+  }
   useEffect(() => {
     getbook();
   }, []);
+  
   return (
     <>
     <div className="book_detail">
@@ -42,7 +48,11 @@ const BookDetail = ({ location }) => {
         <span className="tag_css">#따듯함</span> 
       </div>
       <div className="book_author">{book.author}</div>
-      <div className="book_desc">{book.desc}</div>
+      <div className="book_desc">{book.desc}
+      <button onClick={getTranslate} className="translate-btn">번역 보기</button>
+      </div>
+
+      {ko ? <div></div>: <div className="book_desc">{book.desc_ko}</div>}
       <Link to="/classRoom">
         <button className="submit-btn">강의 신청하기</button>
       </Link>

@@ -36,8 +36,9 @@ const BookList = ({ location }) => {
         <>
           <div className="container">
             <div className="book-list-title">추천 도서 목록</div>
+            <div className="book-list-sub-title">우리 아이에게 딱 맞는 그림책은?</div>
             {books &&
-              books.map((book) => (
+              books.map((book,index) => (
                 <Link
                   to={{
                     pathname: `/bookDetail/${book.title}`,
@@ -49,6 +50,7 @@ const BookList = ({ location }) => {
                   key={book.id}
                 >
                   <div className="book-list">
+                  <div className="book-rank">{index+1}</div>
                     <div className="book-image">
                       <img src={book.image} alt="book" />
                     </div>

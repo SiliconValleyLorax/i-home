@@ -3,9 +3,11 @@
 
 > **AI 가 찾아주는 아이의 취향과 그림책 추천 서비스  "iHome" 을 소개합니다.**
 
-![README/Untitled.png](README/Untitled.png)
+|  |  |
+| --- | --- |
+| ![README/Untitled.png](README/Untitled.png) | ![README/Untitled%201.png](README/Untitled%201.png) |
 
-![README/Untitled%201.png](README/Untitled%201.png)
+
 
 ### Needs
 

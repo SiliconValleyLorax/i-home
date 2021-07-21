@@ -105,14 +105,8 @@ def get_book_list():
     ### 수아님 코드 작성 부분
     # image를 파라미터로 넣어서 밑에 label에 string 형태로 리턴해주시면 됩니다!
     # label = find_label(image)
-
-    PATH_TO_LABELS = 'object_detection/training/label_map.pbtxt'
-    category_index = label_map_util.create_category_index_from_labelmap(
-                    PATH_TO_LABELS, use_display_name = True)
-
-    detection_model = tf.saved_model.load('object_detection/inference_graph/saved_model')
     
-    label= show_inference(detection_model, image)
+    label= show_inference(image)
 
     # elastic search로 추천 도서 목록 찾기
     book_list = find_book_list(label, embeddings, session, es, text_ph)

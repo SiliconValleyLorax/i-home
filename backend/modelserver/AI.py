@@ -1,10 +1,5 @@
+
 import os
-
-for i in range(2) :
-    os.system('protoc object_detection/protos/*.proto --python_out=.')
-    os.system('cp object_detection/packages/tf2/setup.py .')
-    os.system('python -m pip install .')
-
 import numpy as np
 import six.moves.urllib as urllib
 import sys
@@ -84,6 +79,9 @@ def draw_bounding_box_on_image_array(image,
                              thickness, display_str_list,
                              use_normalized_coordinates)
   np.copyto(image, np.array(image_pil))
+
+
+
 def draw_bounding_box_on_image(image,
                                ymin,
                                xmin,
@@ -132,6 +130,8 @@ def draw_bounding_box_on_image(image,
         fill='black',
         font=font)
     text_bottom -= text_height - 2 * margin
+
+
 
 def visualize_boxes_and_labels_on_image_array(
     image,
@@ -328,11 +328,17 @@ def run_inference(model, image) :
   return output_dict
 
 
-def show_inference(model, image_open) :
+def show_inference(image_open) :
+
+    PATH_TO_LABELS = 'object_detection/training/label_map.pbtxt'
+    category_index = label_map_util.create_category_index_from_labelmap(
+                      PATH_TO_LABELS, use_display_name = True)
+                      
+    detection_model = tf.saved_model.load('object_detection/inference_graph/saved_model')
 
     image_np = np.array(image_open)
 
-    output_dict = run_inference(model, image_np)
+    output_dict = run_inference(detection_model, image_np)
 
     dtct_result = visualize_boxes_and_labels_on_image_array (
         image_np,
@@ -348,4 +354,6 @@ def show_inference(model, image_open) :
     display(Image.fromarray(image_np))
     
     return dtct_result
+
+
 

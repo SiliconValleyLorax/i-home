@@ -10,11 +10,10 @@ import pathlib
 
 from collections import defaultdict
 from io import StringIO
-from matplotlib import pyplot as plt
+#from matplotlib import pyplot as plt
 from PIL import Image, ImageDraw, ImageFont
 from IPython.display import display
 
-import tensorflow as tf
 from tensorflow.keras import datasets, layers, models
 
 from object_detection.utils import ops as utils_ops
@@ -26,6 +25,7 @@ import six
 from six.moves import range
 from six.moves import zip
 
+'''
 gpus = tf.config.experimental.list_physical_devices('GPU')
 if gpus :
     try :
@@ -34,9 +34,7 @@ if gpus :
 
     except RuntimeError as e :
         print(e)
-
-utils_ops.tf = tf.compat.v1
-tf.gfile = tf.io.gfile
+'''
 
 
 STANDARD_COLORS = [
@@ -64,6 +62,9 @@ STANDARD_COLORS = [
     'Teal', 'Thistle', 'Tomato', 'Turquoise', 'Violet', 'Wheat', 'White',
     'WhiteSmoke', 'Yellow', 'YellowGreen'
 ]
+
+
+
 def draw_bounding_box_on_image_array(image,
                                      ymin,
                                      xmin,
@@ -289,30 +290,34 @@ def visualize_boxes_and_labels_on_image_array(
   return final_label
 
 
-def load_model(model_name) :
-
-    base_url = 'http://download.tensorflow.org/models/object_detection/'
-    model_file = model_name + '.tar.gz'
-    model_dir = tf.keras.utils.get_file (
-        fname = model_name,
-        origin = base_url + model_file,
-        untar = True
-    )
-
-    model_dir = pathlib.Path(model_dir)/"saved_model"
-
-    model = tf.saved_model.load(str(model_dir))
-
-    return model
-
-
 def run_inference(model, image) :
-  image = np.asarray(image)
-  input_tensor = tf.convert_to_tensor(image)
+
+
+  imagee = np.asarray(image)
+  print('--------run_infenrence--------')
+  print('imagee : ')
+  print(imagee)
+  print(type(imagee))
+
+  input_tensor = tf.convert_to_tensor(imagee)
+  print('input_tensor : ')
+  print(input_tensor)
   input_tensor = input_tensor[tf.newaxis,...]
+  print('input_tensor 2 :')
+  print(input_tensor)
   model_fn = model.signatures['serving_default']
+
+  print('model_fn : ')
+  print(model_fn)
   output_dict = model_fn(input_tensor)
+
+  print('output_dict in run_inference : ')
+  print(output_dict)
+
   num_detections = int(output_dict.pop('num_detections'))
+  print('num_detections')
+  print(num_detections)
+
   output_dict = {key:value[0, :num_detections].numpy()
                 for key, value in output_dict.items()}
   output_dict['num_detections'] = num_detections
@@ -329,6 +334,9 @@ def run_inference(model, image) :
 
 
 def show_inference(image_open) :
+    
+    utils_ops.tf = tf.compat.v1
+    tf.gfile = tf.io.gfile
 
     PATH_TO_LABELS = 'object_detection/training/label_map.pbtxt'
     category_index = label_map_util.create_category_index_from_labelmap(
@@ -339,6 +347,9 @@ def show_inference(image_open) :
     image_np = np.array(image_open)
 
     output_dict = run_inference(detection_model, image_np)
+
+    print('output_dict in show_inference : ')
+    print(output_dict)
 
     dtct_result = visualize_boxes_and_labels_on_image_array (
         image_np,
@@ -354,6 +365,4 @@ def show_inference(image_open) :
     display(Image.fromarray(image_np))
     
     return dtct_result
-
-
 

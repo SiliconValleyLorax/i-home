@@ -1,18 +1,17 @@
-import os
 
-import tensorflow.compat.v1 as tf
+import tensorflow.compat.v1 as tf1
 import tensorflow_hub as hub
 import pandas as pd
 import time
 import openpyxl
-import json
+import json, os
 
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker, scoped_session
 import datetime
 from app import db, engine, cursor
-tf.compat.v1.disable_eager_execution()
+tf1.compat.v1.disable_eager_execution()
 
 class CursorByName():
     def __init__(self, cursor):
@@ -114,7 +113,6 @@ def insert_book_list(session, embeddings, es, text_ph):
             description=""
         try:
             text_vector=embed_text([title+description])[0]
-            print(i, title)
             doc={'idx':i+1,'title':title,'description':description, 'text-vector':text_vector}
         except:
             print('no data')
@@ -128,20 +126,19 @@ def initialize_book_list(es):
     print ("HTTP first_request")
     ## 텍스트 임베딩 모델 다운로드 
     print("Downloading pre-trained embeddings from tensorflow hub...")
-    os.environ["TFHUB_CACHE_DIR"] = "/tmp/model"
-    embed = hub.load("https://tfhub.dev/google/universal-sentence-encoder/4")
-    text_ph = tf.placeholder(tf.string)
+    os.environ["TFHUB_CACHE_DIR"] = "/tmp/tfhub"
+    embed = hub.load("./models/sentence-encoder/4")
+    text_ph = tf1.placeholder(tf1.string)
     embeddings = embed(text_ph)
     print("Done.")
 
     ## tensorflow session 다운로드
     print("Creating tensorflow session...")
-    session = tf.Session()
-    session.run(tf.global_variables_initializer())
-    session.run(tf.tables_initializer())
+    session = tf1.Session()
+    session.run(tf1.global_variables_initializer())
+    session.run(tf1.tables_initializer())
     print("Done.")
     
     insert_book_list(session, embeddings, es, text_ph)
 
     return embeddings, session, text_ph
-

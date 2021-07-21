@@ -1,27 +1,20 @@
 
-# import os
+import os
+import numpy as np
+import six.moves.urllib as urllib
+import sys
+import tarfile
+import tensorflow as tf
+import zipfile
+import pathlib
 
-# for i in range(2) :
-#     os.system('protoc object_detection/protos/*.proto --python_out=.')
-#     os.system('cp object_detection/packages/tf2/setup.py .')
-#     os.system('python -m pip install .')
+from collections import defaultdict
+from io import StringIO
+#from matplotlib import pyplot as plt
+from PIL import Image, ImageDraw, ImageFont
+from IPython.display import display
 
-# import numpy as np
-# import six.moves.urllib as urllib
-# import sys
-# import tarfile
-# import tensorflow as tf
-# import zipfile
-# import pathlib
-
-# from collections import defaultdict
-# from io import StringIO
-# from matplotlib import pyplot as plt
-# from PIL import Image, ImageDraw, ImageFont
-# from IPython.display import display
-
-# import tensorflow as tf
-# from tensorflow.keras import datasets, layers, models
+from tensorflow.keras import datasets, layers, models
 
 # from object_detection.utils import ops as utils_ops
 # from object_detection.utils import label_map_util
@@ -32,68 +25,73 @@
 # from six.moves import range
 # from six.moves import zip
 
-# gpus = tf.config.experimental.list_physical_devices('GPU')
-# if gpus :
-#     try :
-#         for gpu in gpus :
-#             tf.config.experimental.set_memory_growth(gpu, True)
+'''
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus :
+    try :
+        for gpu in gpus :
+            tf.config.experimental.set_memory_growth(gpu, True)
 
-#     except RuntimeError as e :
-#         print(e)
-
-# utils_ops.tf = tf.compat.v1
-# tf.gfile = tf.io.gfile
+    except RuntimeError as e :
+        print(e)
+'''
 
 
-# STANDARD_COLORS = [
-#     'AliceBlue', 'Chartreuse', 'Aqua', 'Aquamarine', 'Azure', 'Beige', 'Bisque',
-#     'BlanchedAlmond', 'BlueViolet', 'BurlyWood', 'CadetBlue', 'AntiqueWhite',
-#     'Chocolate', 'Coral', 'CornflowerBlue', 'Cornsilk', 'Crimson', 'Cyan',
-#     'DarkCyan', 'DarkGoldenRod', 'DarkGrey', 'DarkKhaki', 'DarkOrange',
-#     'DarkOrchid', 'DarkSalmon', 'DarkSeaGreen', 'DarkTurquoise', 'DarkViolet',
-#     'DeepPink', 'DeepSkyBlue', 'DodgerBlue', 'FireBrick', 'FloralWhite',
-#     'ForestGreen', 'Fuchsia', 'Gainsboro', 'GhostWhite', 'Gold', 'GoldenRod',
-#     'Salmon', 'Tan', 'HoneyDew', 'HotPink', 'IndianRed', 'Ivory', 'Khaki',
-#     'Lavender', 'LavenderBlush', 'LawnGreen', 'LemonChiffon', 'LightBlue',
-#     'LightCoral', 'LightCyan', 'LightGoldenRodYellow', 'LightGray', 'LightGrey',
-#     'LightGreen', 'LightPink', 'LightSalmon', 'LightSeaGreen', 'LightSkyBlue',
-#     'LightSlateGray', 'LightSlateGrey', 'LightSteelBlue', 'LightYellow', 'Lime',
-#     'LimeGreen', 'Linen', 'Magenta', 'MediumAquaMarine', 'MediumOrchid',
-#     'MediumPurple', 'MediumSeaGreen', 'MediumSlateBlue', 'MediumSpringGreen',
-#     'MediumTurquoise', 'MediumVioletRed', 'MintCream', 'MistyRose', 'Moccasin',
-#     'NavajoWhite', 'OldLace', 'Olive', 'OliveDrab', 'Orange', 'OrangeRed',
-#     'Orchid', 'PaleGoldenRod', 'PaleGreen', 'PaleTurquoise', 'PaleVioletRed',
-#     'PapayaWhip', 'PeachPuff', 'Peru', 'Pink', 'Plum', 'PowderBlue', 'Purple',
-#     'Red', 'RosyBrown', 'RoyalBlue', 'SaddleBrown', 'Green', 'SandyBrown',
-#     'SeaGreen', 'SeaShell', 'Sienna', 'Silver', 'SkyBlue', 'SlateBlue',
-#     'SlateGray', 'SlateGrey', 'Snow', 'SpringGreen', 'SteelBlue', 'GreenYellow',
-#     'Teal', 'Thistle', 'Tomato', 'Turquoise', 'Violet', 'Wheat', 'White',
-#     'WhiteSmoke', 'Yellow', 'YellowGreen'
-# ]
-# def draw_bounding_box_on_image_array(image,
-#                                      ymin,
-#                                      xmin,
-#                                      ymax,
-#                                      xmax,
-#                                      color='red',
-#                                      thickness=4,
-#                                      display_str_list=(),
-#                                      use_normalized_coordinates=True):
+STANDARD_COLORS = [
+    'AliceBlue', 'Chartreuse', 'Aqua', 'Aquamarine', 'Azure', 'Beige', 'Bisque',
+    'BlanchedAlmond', 'BlueViolet', 'BurlyWood', 'CadetBlue', 'AntiqueWhite',
+    'Chocolate', 'Coral', 'CornflowerBlue', 'Cornsilk', 'Crimson', 'Cyan',
+    'DarkCyan', 'DarkGoldenRod', 'DarkGrey', 'DarkKhaki', 'DarkOrange',
+    'DarkOrchid', 'DarkSalmon', 'DarkSeaGreen', 'DarkTurquoise', 'DarkViolet',
+    'DeepPink', 'DeepSkyBlue', 'DodgerBlue', 'FireBrick', 'FloralWhite',
+    'ForestGreen', 'Fuchsia', 'Gainsboro', 'GhostWhite', 'Gold', 'GoldenRod',
+    'Salmon', 'Tan', 'HoneyDew', 'HotPink', 'IndianRed', 'Ivory', 'Khaki',
+    'Lavender', 'LavenderBlush', 'LawnGreen', 'LemonChiffon', 'LightBlue',
+    'LightCoral', 'LightCyan', 'LightGoldenRodYellow', 'LightGray', 'LightGrey',
+    'LightGreen', 'LightPink', 'LightSalmon', 'LightSeaGreen', 'LightSkyBlue',
+    'LightSlateGray', 'LightSlateGrey', 'LightSteelBlue', 'LightYellow', 'Lime',
+    'LimeGreen', 'Linen', 'Magenta', 'MediumAquaMarine', 'MediumOrchid',
+    'MediumPurple', 'MediumSeaGreen', 'MediumSlateBlue', 'MediumSpringGreen',
+    'MediumTurquoise', 'MediumVioletRed', 'MintCream', 'MistyRose', 'Moccasin',
+    'NavajoWhite', 'OldLace', 'Olive', 'OliveDrab', 'Orange', 'OrangeRed',
+    'Orchid', 'PaleGoldenRod', 'PaleGreen', 'PaleTurquoise', 'PaleVioletRed',
+    'PapayaWhip', 'PeachPuff', 'Peru', 'Pink', 'Plum', 'PowderBlue', 'Purple',
+    'Red', 'RosyBrown', 'RoyalBlue', 'SaddleBrown', 'Green', 'SandyBrown',
+    'SeaGreen', 'SeaShell', 'Sienna', 'Silver', 'SkyBlue', 'SlateBlue',
+    'SlateGray', 'SlateGrey', 'Snow', 'SpringGreen', 'SteelBlue', 'GreenYellow',
+    'Teal', 'Thistle', 'Tomato', 'Turquoise', 'Violet', 'Wheat', 'White',
+    'WhiteSmoke', 'Yellow', 'YellowGreen'
+]
+
+
+
+def draw_bounding_box_on_image_array(image,
+                                     ymin,
+                                     xmin,
+                                     ymax,
+                                     xmax,
+                                     color='red',
+                                     thickness=4,
+                                     display_str_list=(),
+                                     use_normalized_coordinates=True):
   
-#   image_pil = Image.fromarray(np.uint8(image)).convert('RGB')
-#   draw_bounding_box_on_image(image_pil, ymin, xmin, ymax, xmax, color,
-#                              thickness, display_str_list,
-#                              use_normalized_coordinates)
-#   np.copyto(image, np.array(image_pil))
-# def draw_bounding_box_on_image(image,
-#                                ymin,
-#                                xmin,
-#                                ymax,
-#                                xmax,
-#                                color='red',
-#                                thickness=4,
-#                                display_str_list=(),
-#                                use_normalized_coordinates=True):
+  image_pil = Image.fromarray(np.uint8(image)).convert('RGB')
+  draw_bounding_box_on_image(image_pil, ymin, xmin, ymax, xmax, color,
+                             thickness, display_str_list,
+                             use_normalized_coordinates)
+  np.copyto(image, np.array(image_pil))
+
+
+
+def draw_bounding_box_on_image(image,
+                               ymin,
+                               xmin,
+                               ymax,
+                               xmax,
+                               color='red',
+                               thickness=4,
+                               display_str_list=(),
+                               use_normalized_coordinates=True):
   
 #   draw = ImageDraw.Draw(image)
 #   im_width, im_height = image.size
@@ -134,78 +132,80 @@
 #         font=font)
 #     text_bottom -= text_height - 2 * margin
 
-# def visualize_boxes_and_labels_on_image_array(
-#     image,
-#     boxes,
-#     classes,
-#     scores,
-#     category_index,
-#     instance_masks=None,
-#     instance_boundaries=None,
-#     keypoints=None,
-#     keypoint_scores=None,
-#     keypoint_edges=None,
-#     track_ids=None,
-#     use_normalized_coordinates=False,
-#     max_boxes_to_draw=3,
-#     min_score_thresh=0.3,
-#     agnostic_mode=False,
-#     line_thickness=4,
-#     mask_alpha=0.4,
-#     groundtruth_box_visualization_color='black',
-#     skip_boxes=False,
-#     skip_scores=False,
-#     skip_labels=False,
-#     skip_track_ids=False):
-#   global final_label
-#   box_to_display_str_map = collections.defaultdict(list)
-#   box_to_color_map = collections.defaultdict(str)
-#   box_to_instance_masks_map = {}
-#   box_to_instance_boundaries_map = {}
-#   box_to_keypoints_map = collections.defaultdict(list)
-#   box_to_keypoint_scores_map = collections.defaultdict(list)
-#   box_to_track_ids_map = {}
-#   if not max_boxes_to_draw :
-#     max_boxes_to_draw = boxes.shape[0]
-#   for i in range(boxes.shape[0]) :
-#     if max_boxes_to_draw == len(box_to_color_map) :
-#       break
-#     if scores is None or scores[i] > min_score_thresh :
-#       box = tuple(boxes[i].tolist())
-#       if instance_masks is not None :
-#         box_to_instance_masks_map[box] = instance_masks[i]
-#       if instance_boundaries is not None :
-#         box_to_instance_boundaries_map[box] = instance_boundaries[i]
-#       if keypoints is not None :
-#         box_to_keypoints_map[box].extend(keypoints[i])
-#       if keypoint_scores is not None :
-#         box_to_keypoint_scores_map[box].extend(keypoint_scores[i])
-#       if track_ids is not None :
-#         box_to_track_ids_map[box] = track_ids[i]
-#       if scores is None :
-#         box_to_color_map[box] = groundtruth_box_visualization_color
-#       else :
-#         display_str = ''
-#         if not skip_labels :
-#           if not agnostic_mode :
-#             if classes[i] in six.viewkeys(category_index) :
-#               class_name = category_index[classes[i]]['name']
-#             else :
-#               class_name = 'N/A'
-#             display_str = str(class_name)
-#         final_label = display_str
-#         if not skip_scores :
-#           if not display_str :
-#             display_str = '{}%'.format(round(100*scores[i]))
-#             final_label = display_str
-#           else :
-#             display_str = '{} : {}%'.format(display_str, round(100*scores[i]))
-#         if not skip_track_ids and track_ids is not None :
-#           if not display_str :
-#             display_str = 'ID {}'.format(track_ids[i])
-#             final_label = track_ids[i]
-#           else :
-#             display_str = '{}: ID {}'.format(display_str, track_ids[i])
+
+
+def visualize_boxes_and_labels_on_image_array(
+    image,
+    boxes,
+    classes,
+    scores,
+    category_index,
+    instance_masks=None,
+    instance_boundaries=None,
+    keypoints=None,
+    keypoint_scores=None,
+    keypoint_edges=None,
+    track_ids=None,
+    use_normalized_coordinates=False,
+    max_boxes_to_draw=3,
+    min_score_thresh=0.3,
+    agnostic_mode=False,
+    line_thickness=4,
+    mask_alpha=0.4,
+    groundtruth_box_visualization_color='black',
+    skip_boxes=False,
+    skip_scores=False,
+    skip_labels=False,
+    skip_track_ids=False):
+  global final_label
+  box_to_display_str_map = collections.defaultdict(list)
+  box_to_color_map = collections.defaultdict(str)
+  box_to_instance_masks_map = {}
+  box_to_instance_boundaries_map = {}
+  box_to_keypoints_map = collections.defaultdict(list)
+  box_to_keypoint_scores_map = collections.defaultdict(list)
+  box_to_track_ids_map = {}
+  if not max_boxes_to_draw :
+    max_boxes_to_draw = boxes.shape[0]
+  for i in range(boxes.shape[0]) :
+    if max_boxes_to_draw == len(box_to_color_map) :
+      break
+    if scores is None or scores[i] > min_score_thresh :
+      box = tuple(boxes[i].tolist())
+      if instance_masks is not None :
+        box_to_instance_masks_map[box] = instance_masks[i]
+      if instance_boundaries is not None :
+        box_to_instance_boundaries_map[box] = instance_boundaries[i]
+      if keypoints is not None :
+        box_to_keypoints_map[box].extend(keypoints[i])
+      if keypoint_scores is not None :
+        box_to_keypoint_scores_map[box].extend(keypoint_scores[i])
+      if track_ids is not None :
+        box_to_track_ids_map[box] = track_ids[i]
+      if scores is None :
+        box_to_color_map[box] = groundtruth_box_visualization_color
+      else :
+        display_str = ''
+        if not skip_labels :
+          if not agnostic_mode :
+            if classes[i] in six.viewkeys(category_index) :
+              class_name = category_index[classes[i]]['name']
+            else :
+              class_name = 'N/A'
+            display_str = str(class_name)
+        final_label = display_str
+        if not skip_scores :
+          if not display_str :
+            display_str = '{}%'.format(round(100*scores[i]))
+            final_label = display_str
+          else :
+            display_str = '{} : {}%'.format(display_str, round(100*scores[i]))
+        if not skip_track_ids and track_ids is not None :
+          if not display_str :
+            display_str = 'ID {}'.format(track_ids[i])
+            final_label = track_ids[i]
+          else :
+            display_str = '{}: ID {}'.format(display_str, track_ids[i])
 
 
 #         box_to_display_str_map[box].append(display_str)
@@ -290,79 +290,79 @@
 #   return final_label
 
 
-# def load_model(model_name) :
-
-#     base_url = 'http://download.tensorflow.org/models/object_detection/'
-#     model_file = model_name + '.tar.gz'
-#     model_dir = tf.keras.utils.get_file (
-#         fname = model_name,
-#         origin = base_url + model_file,
-#         untar = True
-#     )
-
-#     model_dir = pathlib.Path(model_dir)/"saved_model"
-
-#     model = tf.saved_model.load(str(model_dir))
-
-#     return model
+def run_inference(model, image) :
 
 
-# def run_inference(model, image) :
-#   image = np.asarray(image)
-#   input_tensor = tf.convert_to_tensor(image)
-#   input_tensor = input_tensor[tf.newaxis,...]
-#   model_fn = model.signatures['serving_default']
-#   output_dict = model_fn(input_tensor)
-#   num_detections = int(output_dict.pop('num_detections'))
-#   output_dict = {key:value[0, :num_detections].numpy()
-#                 for key, value in output_dict.items()}
-#   output_dict['num_detections'] = num_detections
-#   output_dict['detection_classes'] = output_dict['detection_classes'].astype(np.int64)
-#   if 'detection_masks' in output_dict :
-#     detection_masks_reframed = utils_ops.reframe_box_masks_to_image_masks(
-#         output_dict['detection_masks'], output_dict['detection_boxes'],
-#         image.shape[0], image.shape[1]
-#     )
-#     detection_masks_reframed = tf.cast(detection_masks_reframed > 0.5,
-#                                        tf.uint8)
-#     output_dict['detection_masks_reframed'] = detection_masks_reframed.numpy()
-#   return output_dict
+  imagee = np.asarray(image)
+  print('--------run_infenrence--------')
+  print('imagee : ')
+  print(imagee)
+  print(type(imagee))
 
-# def show_inference(model, image_path) :
+  input_tensor = tf.convert_to_tensor(imagee)
+  print('input_tensor : ')
+  print(input_tensor)
+  input_tensor = input_tensor[tf.newaxis,...]
+  print('input_tensor 2 :')
+  print(input_tensor)
+  model_fn = model.signatures['serving_default']
 
-#     image_np = np.array(Image.open(image_path))
+  print('model_fn : ')
+  print(model_fn)
+  output_dict = model_fn(input_tensor)
 
-#     output_dict = run_inference(model, image_np)
+  print('output_dict in run_inference : ')
+  print(output_dict)
 
-#     dtct_result = visualize_boxes_and_labels_on_image_array (
-#         image_np,
-#         output_dict['detection_boxes'],
-#         output_dict['detection_classes'],
-#         output_dict['detection_scores'],
-#         category_index,
-#         instance_masks = output_dict.get('detection_masks_reframed', None),
-#         use_normalized_coordinates = True,
-#         line_thickness = 8
-#     )
+  num_detections = int(output_dict.pop('num_detections'))
+  print('num_detections')
+  print(num_detections)
+
+  output_dict = {key:value[0, :num_detections].numpy()
+                for key, value in output_dict.items()}
+  output_dict['num_detections'] = num_detections
+  output_dict['detection_classes'] = output_dict['detection_classes'].astype(np.int64)
+  if 'detection_masks' in output_dict :
+    detection_masks_reframed = utils_ops.reframe_box_masks_to_image_masks(
+        output_dict['detection_masks'], output_dict['detection_boxes'],
+        image.shape[0], image.shape[1]
+    )
+    detection_masks_reframed = tf.cast(detection_masks_reframed > 0.5,
+                                       tf.uint8)
+    output_dict['detection_masks_reframed'] = detection_masks_reframed.numpy()
+  return output_dict
+
+
+def show_inference(image_open) :
+    
+    utils_ops.tf = tf.compat.v1
+    tf.gfile = tf.io.gfile
+
+    PATH_TO_LABELS = 'object_detection/training/label_map.pbtxt'
+    category_index = label_map_util.create_category_index_from_labelmap(
+                      PATH_TO_LABELS, use_display_name = True)
+                      
+    detection_model = tf.saved_model.load('object_detection/inference_graph/saved_model')
+
+    image_np = np.array(image_open)
+
+    output_dict = run_inference(detection_model, image_np)
+
+    print('output_dict in show_inference : ')
+    print(output_dict)
+
+    dtct_result = visualize_boxes_and_labels_on_image_array (
+        image_np,
+        output_dict['detection_boxes'],
+        output_dict['detection_classes'],
+        output_dict['detection_scores'],
+        category_index,
+        instance_masks = output_dict.get('detection_masks_reframed', None),
+        use_normalized_coordinates = True,
+        line_thickness = 8
+    )
 
 #     display(Image.fromarray(image_np))
     
 #     return dtct_result
 
-
-# PATH_TO_LABELS = 'object_detection/training/label_map.pbtxt'
-# category_index = label_map_util.create_category_index_from_labelmap(
-#     PATH_TO_LABELS, use_display_name = True)
-
-
-# # 이미지 경로 입력
-# TEST_IMAGE_PATH = pathlib.Path('')
-
-
-# detection_model = tf.saved_model.load('object_detection/inference_graph/saved_model')
-
-
-# for image_path in TEST_IMAGE_PATH :
-#     test_result = show_inference(detection_model, image_path)
-#     print("result : " + test_result)
-#     print()

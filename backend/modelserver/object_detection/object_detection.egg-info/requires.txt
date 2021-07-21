@@ -1,0 +1,15 @@
+avro-python3
+apache-beam
+pillow
+lxml
+matplotlib
+Cython
+contextlib2
+tf-slim
+six
+pycocotools
+lvis
+scipy
+pandas
+google-cloud-bigquery==1.21.0
+tf-models-official

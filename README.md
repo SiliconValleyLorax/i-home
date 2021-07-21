@@ -1,18 +1,11 @@
-# README.md
-
-[frontend.md](https://www.notion.so/frontend-md-a409800999f24d65aaea409d9d4379ba)
-
-[backend.md](https://www.notion.so/backend-md-31adfd86d4744ae69bec9a1d51647f47)
-
----
 
 ## 00. Project Introduction
 
 > **AI 가 찾아주는 아이의 취향과 그림책 추천 서비스  "iHome" 을 소개합니다.**
 
-![README%20md%20978993d0e9df4555be6e64a5c77da5d8/Untitled.png](README%20md%20978993d0e9df4555be6e64a5c77da5d8/Untitled.png)
+![README/Untitled.png](README/Untitled.png)
 
-![README%20md%20978993d0e9df4555be6e64a5c77da5d8/Untitled%201.png](README%20md%20978993d0e9df4555be6e64a5c77da5d8/Untitled%201.png)
+![README/Untitled%201.png](README/Untitled%201.png)
 
 ### Needs
 
@@ -33,13 +26,13 @@
 
 아이 취향에 알맞는 도서를 추천해주는 AI 서비스다.**
 
-![README%20md%20978993d0e9df4555be6e64a5c77da5d8/Untitled%202.png](README%20md%20978993d0e9df4555be6e64a5c77da5d8/Untitled%202.png)
+![README/Untitled%202.png](README/Untitled%202.png)
 
 ---
 
 ## 01. Software Architecture
 
-![README%20md%20978993d0e9df4555be6e64a5c77da5d8/Untitled%203.png](README%20md%20978993d0e9df4555be6e64a5c77da5d8/Untitled%203.png)
+![README/Untitled%203.png](README/Untitled%203.png)
 
  
 

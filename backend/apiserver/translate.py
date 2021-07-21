@@ -3,7 +3,7 @@ import requests
   
 def get_translate(text):
     client_id = "BoXtYwBYv40KFcnzVLfh" # 개발자센터에서 발급받은 Client ID 값
-    client_secret = "mIXFhjay1M" # 개발자센터에서 발급받은 Client Secret 값
+    client_secret = "***" # 개발자센터에서 발급받은 Client Secret 값
     data = {'text' : text,
             'source' : 'en',
             'target': 'ko'}

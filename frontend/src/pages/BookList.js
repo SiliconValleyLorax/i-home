@@ -1,6 +1,7 @@
 import "../css/BookList.css";
 import { Link } from "react-router-dom";
 import Loading from "../components/Loading";
+import Loading2 from "../components/Loading2";
 import axios from "axios";
 import { Component, useEffect, useState } from "react";
 
@@ -28,7 +29,7 @@ const BookList = ({ location }) => {
 
   switch (loading) {
     case true:
-      return <Loading></Loading>;
+      return <Loading2></Loading2>;
     case false:
       return (
         //list.map에서 오류가 나서 list && 을 사용해 해결. 어떤 동작으로 에러가 되지 않은지는 모름..

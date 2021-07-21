@@ -16,14 +16,14 @@ from IPython.display import display
 
 from tensorflow.keras import datasets, layers, models
 
-# from object_detection.utils import ops as utils_ops
-# from object_detection.utils import label_map_util
-# from object_detection.utils import visualization_utils as vis_util
+from object_detection.utils import ops as utils_ops
+from object_detection.utils import label_map_util
+from object_detection.utils import visualization_utils as vis_util
 
-# import collections
-# import six
-# from six.moves import range
-# from six.moves import zip
+import collections
+import six
+from six.moves import range
+from six.moves import zip
 
 '''
 gpus = tf.config.experimental.list_physical_devices('GPU')
@@ -93,44 +93,44 @@ def draw_bounding_box_on_image(image,
                                display_str_list=(),
                                use_normalized_coordinates=True):
   
-#   draw = ImageDraw.Draw(image)
-#   im_width, im_height = image.size
-#   if use_normalized_coordinates:
-#     (left, right, top, bottom) = (xmin * im_width, xmax * im_width,
-#                                   ymin * im_height, ymax * im_height)
-#   else:
-#     (left, right, top, bottom) = (xmin, xmax, ymin, ymax)
-#   if thickness > 0:
-#     draw.line([(left, top), (left, bottom), (right, bottom), (right, top),
-#                (left, top)],
-#               width=thickness,
-#               fill=color)
-#   try:
-#     font = ImageFont.truetype('arial.ttf', 24)
-#   except IOError:
-#     font = ImageFont.load_default()
+  draw = ImageDraw.Draw(image)
+  im_width, im_height = image.size
+  if use_normalized_coordinates:
+    (left, right, top, bottom) = (xmin * im_width, xmax * im_width,
+                                  ymin * im_height, ymax * im_height)
+  else:
+    (left, right, top, bottom) = (xmin, xmax, ymin, ymax)
+  if thickness > 0:
+    draw.line([(left, top), (left, bottom), (right, bottom), (right, top),
+               (left, top)],
+              width=thickness,
+              fill=color)
+  try:
+    font = ImageFont.truetype('arial.ttf', 24)
+  except IOError:
+    font = ImageFont.load_default()
 
-#   display_str_heights = [font.getsize(ds)[1] for ds in display_str_list]
+  display_str_heights = [font.getsize(ds)[1] for ds in display_str_list]
 
-#   total_display_str_height = (1 + 2 * 0.05) * sum(display_str_heights)
-#   if top > total_display_str_height:
-#     text_bottom = top
-#   else:
-#     text_bottom = bottom + total_display_str_height
+  total_display_str_height = (1 + 2 * 0.05) * sum(display_str_heights)
+  if top > total_display_str_height:
+    text_bottom = top
+  else:
+    text_bottom = bottom + total_display_str_height
 
-#   for display_str in display_str_list[::-1]:
-#     text_width, text_height = font.getsize(display_str)
-#     margin = np.ceil(0.05 * text_height)
-#     draw.rectangle(
-#         [(left, text_bottom - text_height - 2 * margin), (left + text_width,
-#                                                           text_bottom)],
-#         fill=color)
-#     draw.text(
-#         (left + margin, text_bottom - text_height - margin),
-#         display_str,
-#         fill='black',
-#         font=font)
-#     text_bottom -= text_height - 2 * margin
+  for display_str in display_str_list[::-1]:
+    text_width, text_height = font.getsize(display_str)
+    margin = np.ceil(0.05 * text_height)
+    draw.rectangle(
+        [(left, text_bottom - text_height - 2 * margin), (left + text_width,
+                                                          text_bottom)],
+        fill=color)
+    draw.text(
+        (left + margin, text_bottom - text_height - margin),
+        display_str,
+        fill='black',
+        font=font)
+    text_bottom -= text_height - 2 * margin
 
 
 
@@ -208,86 +208,86 @@ def visualize_boxes_and_labels_on_image_array(
             display_str = '{}: ID {}'.format(display_str, track_ids[i])
 
 
-#         box_to_display_str_map[box].append(display_str)
-#         if agnostic_mode :
-#           box_to_color_map[box] = 'DarkOrange'
-#         elif track_ids is not None :
-#           prime_multipler = _get_multiplier_for_color_randomness()
-#           box_to_color_map[box] = STANDARD_COLORS [
-#               (prime_multipler * track_ids[i]) % len(STANDARD_COLORS)
-#           ]
-#         else :
-#           box_to_color_map[box] = STANDARD_COLORS [
-#               classes[i] % len(STANDARD_COLORS)
-#           ]
+        box_to_display_str_map[box].append(display_str)
+        if agnostic_mode :
+          box_to_color_map[box] = 'DarkOrange'
+        elif track_ids is not None :
+          prime_multipler = _get_multiplier_for_color_randomness()
+          box_to_color_map[box] = STANDARD_COLORS [
+              (prime_multipler * track_ids[i]) % len(STANDARD_COLORS)
+          ]
+        else :
+          box_to_color_map[box] = STANDARD_COLORS [
+              classes[i] % len(STANDARD_COLORS)
+          ]
 
 
-#   final_percent = 1
-#   global final_box
-#   global final_color
-#   for box, colour in box_to_color_map.items() :
-#     not_include_list = box_to_display_str_map[box][0].split()
-#     label = not_include_list[0]
-#     percent = not_include_list[-1]
-#     percent = int(percent[0:2])
+  final_percent = 1
+  global final_box
+  global final_color
+  for box, colour in box_to_color_map.items() :
+    not_include_list = box_to_display_str_map[box][0].split()
+    label = not_include_list[0]
+    percent = not_include_list[-1]
+    percent = int(percent[0:2])
 
-#     if percent > final_percent :
-#       final_percent = percent
-#       final_label = label
-#       final_box = box
-#       final_color = colour
+    if percent > final_percent :
+      final_percent = percent
+      final_label = label
+      final_box = box
+      final_color = colour
 
-#   final_list = []
-#   final_comp = final_label + ' : ' + str(final_percent) +'%'
-#   final_list.append(final_comp)
+  final_list = []
+  final_comp = final_label + ' : ' + str(final_percent) +'%'
+  final_list.append(final_comp)
 
 
-#   for box, color in box_to_color_map.items() :
-#     ymin, xmin, ymax, xmax = final_box
-#     if instance_masks is not None :
-#       draw_mask_on_image_array (
-#           image,
-#           box_to_instance_masks_map[box],
-#           color='red',
-#           alpha=1.0
-#       ) 
-#     if instance_boundaries is not None :
-#       draw_mask_on_image_array (
-#           image,
-#           box_to_instance_boundaries_map[box],
-#           color='red',
-#           alpha=1.0
-#       )
+  for box, color in box_to_color_map.items() :
+    ymin, xmin, ymax, xmax = final_box
+    if instance_masks is not None :
+      draw_mask_on_image_array (
+          image,
+          box_to_instance_masks_map[box],
+          color='red',
+          alpha=1.0
+      ) 
+    if instance_boundaries is not None :
+      draw_mask_on_image_array (
+          image,
+          box_to_instance_boundaries_map[box],
+          color='red',
+          alpha=1.0
+      )
 
-#     draw_bounding_box_on_image_array (
-#         image, 
-#         ymin,
-#         xmin,
-#         ymax,
-#         xmax,
-#         color = final_color,
-#         thickness=0 if skip_boxes else line_thickness,
-#         display_str_list = final_list,
-#         use_normalized_coordinates = use_normalized_coordinates
-#       )
+    draw_bounding_box_on_image_array (
+        image, 
+        ymin,
+        xmin,
+        ymax,
+        xmax,
+        color = final_color,
+        thickness=0 if skip_boxes else line_thickness,
+        display_str_list = final_list,
+        use_normalized_coordinates = use_normalized_coordinates
+      )
 
-#     if keypoints is not None :
-#       keypoint_scores_for_box = None
-#       if box_to_keypoint_scores_map :
-#         keypoint_scores_for_box = box_to_keypoint_scores_map[box]
-#       draw_keypoints_on_image_array (
-#           image,
-#           box_to_keypoints_map[box],
-#           keypoint_scores_for_box,
-#           min_score_thresh = min_score_thresh,
-#           color=color,
-#           radius=line_thickness/2,
-#           use_normalized_coordinates = use_normalized_coordinates,
-#           keypoint_edges = keypoint_edges,
-#           keypoint_edge_color = color,
-#           keypoint_edge_width = line_thickness//2
-#       )
-#   return final_label
+    if keypoints is not None :
+      keypoint_scores_for_box = None
+      if box_to_keypoint_scores_map :
+        keypoint_scores_for_box = box_to_keypoint_scores_map[box]
+      draw_keypoints_on_image_array (
+          image,
+          box_to_keypoints_map[box],
+          keypoint_scores_for_box,
+          min_score_thresh = min_score_thresh,
+          color=color,
+          radius=line_thickness/2,
+          use_normalized_coordinates = use_normalized_coordinates,
+          keypoint_edges = keypoint_edges,
+          keypoint_edge_color = color,
+          keypoint_edge_width = line_thickness//2
+      )
+  return final_label
 
 
 def run_inference(model, image) :
@@ -362,7 +362,6 @@ def show_inference(image_open) :
         line_thickness = 8
     )
 
-#     display(Image.fromarray(image_np))
+    display(Image.fromarray(image_np))
     
-#     return dtct_result
-
+    return dtct_result

@@ -16,9 +16,11 @@ a{
     padding: 50px 0;
     padding-bottom: 20px;
     font-size: 1.5rem;
+    font-weight: bold;
 }
 .book-list-sub-title{
     text-align: center;
+    font-size: 1.3rem;
     padding-bottom: 50px;
 }
 .book-list{

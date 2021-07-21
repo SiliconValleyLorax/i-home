@@ -25,10 +25,10 @@ export const WebcamCapture = () => {
         {image === "" ? (
           <Webcam
             audio={false}
-            height={380}
+            height={350}
             ref={webcamRef}
             screenshotFormat="image/jpeg"
-            width={380}
+            width="100%"
             videoConstraints={videoConstraints}
           />
         ) : (
@@ -42,7 +42,7 @@ export const WebcamCapture = () => {
               e.preventDefault();
               setImage("");
             }}
-            className="webcam-btn"
+            className="webcam-btn submit-btn"
           >
             Retake Image
           </button>
@@ -52,7 +52,7 @@ export const WebcamCapture = () => {
               e.preventDefault();
               capture();
             }}
-            className="webcam-btn "
+            className="webcam-btn submit-btn"
           >
             캡쳐하기
           </button>

@@ -20,26 +20,26 @@ const UploadImage = () => {
   //     console.log(e);
   //   }
   // };
-  
-  return(
-      <>
+
+  return (
+    <>
       <div className="main-container">
-          <div className="container-title">
-            <span>아이가 좋아하는 장난감, 공간 등을 알려주세요</span>
+        <div className="container-title">
+          <span>아이가 좋아하는 장난감, 공간 등을 알려주세요</span>
+        </div>
+        <Link to="/CameraSet" className="link_css">
+          <div className="upload-btn camera-btn">
+            <AiFillCamera className="icon-btn photo" />
+            카메라로 등록
           </div>
-          <Link to="/CameraSet">
-            <button className="upload-btn camera-btn">
-              <AiFillCamera className="icon-btn photo" />
-              카메라로 등록
-            </button>
-          </Link>
-          <Link to={"/GallerySet"}>
-            <button className="upload-btn gallery-btn">
-              <RiGalleryUploadFill className="icon-btn gallery" />
-              갤러리로 등록
-            </button>
-          </Link>
-          {/* <button onClick={test} className="upload-btn gallery-btn">
+        </Link>
+        <Link to={"/GallerySet"} className="link_css">
+          <div className="upload-btn gallery-btn">
+            <RiGalleryUploadFill className="icon-btn gallery" />
+            갤러리로 등록
+          </div>
+        </Link>
+        {/* <button onClick={test} className="upload-btn gallery-btn">
             <div>test</div>
           </button> */}
       </div>

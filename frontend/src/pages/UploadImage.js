@@ -5,39 +5,55 @@ import { RiGalleryUploadFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 // import Book from './Book'
 import axios from "axios";
+import { useState } from "react";
 const UploadImage = () => {
   // const [attachment, setAttachment] = useState(
   //   "https://i.stack.imgur.com/GNhxO.png"
   // );
   // 서버 연결 테스트 코드 - test 버튼으로 동작확인
-  const confirmtask = async (id) => {
-    let progress = await axios.post("http://localhost:5000/api/progress", {
-      taskID: id,
-    });
-    if (progress.data === "SUCCESS") return console.log("complete");
-    setTimeout(() => confirmtask(id), 2000);
-  };
-  const test = async () => {
-    try {
-      const response = await axios.get("http://localhost:5000/api/test");
-      console.log(response.data);
-      console.log("calling api/progress...");
-      // confirmtask(response.data);
-      // setTimeout(async () => {
-      //   const finalresult = await axios.post(
-      //     "http://localhost:5000/api/result",
-      //     {
-      //       taskID: response.data,
-      //     }
-      //   );
-      //   console.log(finalresult.data);
-      // }, 30000);
-      // console.log(progress);
 
-      // console.log(finalresult.data);
-    } catch (e) {
-      console.log(e);
-    }
+  const test = async () => {
+    let taskID;
+    const getTaskID = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/test");
+        taskID = response.data;
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    const getResult = async () => {
+      try {
+        const response = await axios.post("http://localhost:5000/api/result", {
+          taskID: taskID,
+        });
+        console.log(response.data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    const confirmtask = async () => {
+      console.log(taskID);
+      try {
+        const finalresult = await axios.post(
+          "http://localhost:5000/api/progress",
+          {
+            taskID: taskID,
+          }
+        );
+        console.log(finalresult.data);
+        if (finalresult.data !== "SUCCESS") {
+          setTimeout(() => confirmtask(), 2000);
+          return;
+        } else getResult();
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getTaskID();
+    confirmtask();
   };
 
   return (

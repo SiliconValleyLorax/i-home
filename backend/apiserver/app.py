@@ -1,6 +1,7 @@
 from io import BytesIO
 import io
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect
+from sqlalchemy.orm import exc
 from flask_cors import CORS
 from flasgger import Swagger
 from PIL import Image
@@ -221,13 +222,19 @@ def get_book(id):
 
 @app.route('/api/progress', methods=['POST'])
 def progress():
-    task_id = request.get_json()["taskID"]
+    try:
+        task_id = request.get_json()["taskID"]
+    except:
+        return jsonify("CAN NOT FIND ID")
     response = requests.post("http://modelserver:8000/model/progress", task_id)
     return response.json()
 
 @app.route('/api/result', methods=['POST'])
 def result():
-    task_id = request.get_json()["taskID"]
+    try:
+      task_id = request.get_json()["taskID"]
+    except:
+      return jsonify("Failed to get book list")
     response = requests.post("http://modelserver:8000/model/result", task_id).json()
 
     book_list = []

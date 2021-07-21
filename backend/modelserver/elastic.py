@@ -1,10 +1,33 @@
-import tensorflow.compat.v1 as tf
+
+import tensorflow.compat.v1 as tf1
 import tensorflow_hub as hub
 import pandas as pd
 import time
 import openpyxl
-tf.compat.v1.disable_eager_execution()
+import json, os
 
+from flask_sqlalchemy import SQLAlchemy
+import sqlalchemy
+from sqlalchemy.orm import sessionmaker, scoped_session
+import datetime
+from app import db, engine, cursor
+tf1.compat.v1.disable_eager_execution()
+
+class CursorByName():
+    def __init__(self, cursor):
+        self._cursor = cursor
+    
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        row = self._cursor.__next__()
+
+        return { description[0]: row[col] for col, description in enumerate(self._cursor.description) }
+
+def default(o):
+    if isinstance(o, (datetime.date, datetime.datetime)):
+        return o.isoformat()
 
 def find_book_list(label, embeddings, session, es, text_ph):
     
@@ -52,8 +75,12 @@ def insert_book_list(session, embeddings, es, text_ph):
         vectors = session.run(embeddings, feed_dict={text_ph: text})
         return [vector.tolist() for vector in vectors]
 
+    cursor.execute("select * from books")
+    # data = list(cursor.fetchall())
+    data = []
+    for row in CursorByName(cursor):
+        data.append(json.loads(json.dumps(row, default=default)))
     
-    data=pd.read_excel('./book_data.xlsx', header=1)
     index_name="book_test"
     if es.indices.exists(index=index_name):
         es.indices.delete(index=index_name)
@@ -79,15 +106,14 @@ def insert_book_list(session, embeddings, es, text_ph):
     })
     # 데이터 집어넣기
     for i in range(len(data)):
-        title=data.loc[i,:]['Title']
+        title = data[i]['title']
         try:
-            description=data.loc[i,:]['Description'].replace("\n"," ").replace("'",'').replace('"','').strip()
+            description=data[i]['desc'].replace("\n"," ").replace("'",'').replace('"','').strip()
         except:
-            description=str(data.loc[i,:]['Description'])
+            description=""
         try:
             text_vector=embed_text([title+description])[0]
-            doc={'idx':i,'title':title,'description':description, 'text-vector':text_vector}
-            print(i,title)
+            doc={'idx':i+1,'title':title,'description':description, 'text-vector':text_vector}
         except:
             print('no data')
             print('마지막 인덱스', i)
@@ -100,19 +126,19 @@ def initialize_book_list(es):
     print ("HTTP first_request")
     ## 텍스트 임베딩 모델 다운로드 
     print("Downloading pre-trained embeddings from tensorflow hub...")
-    embed = hub.load("https://tfhub.dev/google/universal-sentence-encoder/4")
-    text_ph = tf.placeholder(tf.string)
+    os.environ["TFHUB_CACHE_DIR"] = "/tmp/tfhub"
+    embed = hub.load("./models/sentence-encoder/4")
+    text_ph = tf1.placeholder(tf1.string)
     embeddings = embed(text_ph)
     print("Done.")
 
     ## tensorflow session 다운로드
     print("Creating tensorflow session...")
-    session = tf.Session()
-    session.run(tf.global_variables_initializer())
-    session.run(tf.tables_initializer())
+    session = tf1.Session()
+    session.run(tf1.global_variables_initializer())
+    session.run(tf1.tables_initializer())
     print("Done.")
     
     insert_book_list(session, embeddings, es, text_ph)
 
     return embeddings, session, text_ph
-

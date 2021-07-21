@@ -40,6 +40,7 @@ def http_first():
             for i in range(len(book_data)):
                 book_obj = Book(book_data[i][2], book_data[i][4], book_data[i][3], book_data[i][8])
                 session.add(book_obj)
+                print(book_obj)
             session.commit()
         except Exception as e:
             session.rollback()

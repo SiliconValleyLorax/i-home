@@ -5,25 +5,30 @@ from flasgger import Swagger
 
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy
-from sqlalchemy.orm import sessionmaker, scoped_session
-from datetime import datetime
+from sqlalchemy import create_engine
 
 from io import BytesIO
 from PIL import Image
 import base64
 
 # 함수 가져오기
-from elastic import *
 from AI import *
 from elasticsearch import Elasticsearch
 from elasticsearch import helpers
 
 app = Flask(__name__)
+app.config.from_object("config.DevelopmentConfig")
+db = SQLAlchemy(app)
 CORS(app)
 swagger = Swagger(app)
+url = 'postgresql://postgres:postgres@postgres/book_list'
+engine = sqlalchemy.create_engine(url)
+connection = engine.raw_connection()
+cursor = connection.cursor()
 
 es = Elasticsearch('http://elasticsearch:9200')
 
+from elastic import *
 
 def elastic_info():
     return es.info()
@@ -89,25 +94,27 @@ def get_book_list():
         BookID:
         type: integer
         example: 1
-
     responses:
         200:
         description: A list of IDs of Books
         schema:
             $ref: "#/definitions/Booklist"
-    추천 도서 목록을 리턴
     """
 
     # api 서버에서 이미지 받아오기 - 현재 byte 타입으로 들어오고 있어요
     image = request.get_data(as_text=Literal[True])
     image = Image.open(BytesIO(base64.b64decode(image)))
+    print('type of image(app.pyy) : ')
+    print(type(image))
 
     ### 수아님 코드 작성 부분
     # image를 파라미터로 넣어서 밑에 label에 string 형태로 리턴해주시면 됩니다!
-    # label = find_label(image)
-    
-    label= show_inference(image)
 
+    # label = find_label(image)
+    label= show_inference(image)
+    print('label : ')
+    print(label)
+    
     # elastic search로 추천 도서 목록 찾기
     book_list = find_book_list(label, embeddings, session, es, text_ph)
 

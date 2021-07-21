@@ -57,7 +57,7 @@ Tensorflow의 universal-sentence-encoder를 사용해 책 리스트의 텍스트
 - API Server : Flask
 - Model Server : Flask
 - Database : PostgreSQL
-- Message Broker / Worker : RabbitMQ, Worker
+- Message Broker / Worker : RabbitMQ, Celery
 
 ### Frontend
 

@@ -77,7 +77,7 @@ def home_page():
 def test():
     print("api test called")
     try:
-        res = requests.get("http://modelserver:8000/test")
+        res = requests.get("http://modelserver:7000/test")
         print(res.json())
         return res.json()
     except:
@@ -148,7 +148,7 @@ def send_image():
 
     """
     image = request.get_json()["image"].split(",")[-1]
-    res = requests.post("http://modelserver:8000/model/image", image).json()
+    res = requests.post("http://modelserver:7000/model/image", image).json()
     book_list = []
 
     try:
@@ -226,7 +226,7 @@ def progress():
         task_id = request.get_json()["taskID"]
     except:
         return jsonify("CAN NOT FIND ID")
-    response = requests.post("http://modelserver:8000/model/progress", task_id)
+    response = requests.post("http://modelserver:7000/model/progress", task_id)
     return response.json()
 
 @app.route('/api/result', methods=['POST'])
@@ -235,7 +235,7 @@ def result():
       task_id = request.get_json()["taskID"]
     except:
       return jsonify("Failed to get book list")
-    response = requests.post("http://modelserver:8000/model/result", task_id).json()
+    response = requests.post("http://modelserver:7000/model/result", task_id).json()
 
     book_list = []
 

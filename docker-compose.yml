@@ -22,7 +22,7 @@ services:
       context: ./backend/modelserver
       dockerfile: Dockerfile
     ports:
-      - "8000:8000"
+      - "7000:7000"
     environment:
       - FLASK_ENV=development
       - APP_SETTINGS=config.DevelopmentConfig

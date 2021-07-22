@@ -1,9 +1,8 @@
 import "../css/BookList.css";
 import { Link } from "react-router-dom";
-import Loading from "../components/Loading";
 import Loading2 from "../components/Loading2";
 import axios from "axios";
-import { Component, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const BookList = ({ location }) => {
   // 현재는 모든 도서 목록을 불러오게 되어있지만, 알고리즘 완성 후에는 post 요청으로 이미지(attachment)를 보내서 추천도서 목록을 받아오는 것으로 변경될 예정.
@@ -26,7 +25,6 @@ const BookList = ({ location }) => {
     getlist();
   }, []);
 
-
   switch (loading) {
     case true:
       return <Loading2></Loading2>;
@@ -37,9 +35,11 @@ const BookList = ({ location }) => {
         <>
           <div className="container">
             <div className="book-list-title">추천 도서 목록</div>
-            <div className="book-list-sub-title">우리 아이에게 딱 맞는 그림책은?</div>
+            <div className="book-list-sub-title">
+              우리 아이에게 딱 맞는 그림책은?
+            </div>
             {books &&
-              books.map((book,index) => (
+              books.map((book, index) => (
                 <Link
                   to={{
                     pathname: `/bookDetail/${book.title}`,
@@ -51,7 +51,7 @@ const BookList = ({ location }) => {
                   key={book.id}
                 >
                   <div className="book-list">
-                  <div className="book-rank">{index+1}</div>
+                    <div className="book-rank">{index + 1}</div>
                     <div className="book-image">
                       <img src={book.image} alt="book" />
                     </div>
@@ -69,6 +69,8 @@ const BookList = ({ location }) => {
           </div>
         </>
       );
+    default:
+      return;
   }
 };
 export default BookList;

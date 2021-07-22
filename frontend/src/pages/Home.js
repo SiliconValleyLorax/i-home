@@ -6,7 +6,7 @@ const Home = () => {
   return (
     <>
       <div className="main-image">
-        <img src={imgUrl} alt="main-image"></img>
+        <img src={imgUrl} alt="main"></img>
         <div className="main-description">
           <div>
             나도 몰랐던 우리 아이 취향, <br /> AI가 찾아준다고?

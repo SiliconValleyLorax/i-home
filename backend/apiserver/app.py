@@ -76,7 +76,7 @@ def home_page():
 @app.route('/api/test')
 def test():
     try:
-        res = requests.get("http://modelserver:8000/test")
+        res = requests.get("http://modelserver:7000/test")
         print(res.json())
         return res.json()+" and this is from api server"
     except:
@@ -147,7 +147,7 @@ def send_image():
 
     """
     image = request.get_json()["image"].split(",")[-1]
-    res = requests.post("http://modelserver:8000/model/image", image).json()
+    res = requests.post("http://modelserver:7000/model/image", image).json()
     book_list = []
 
     try:

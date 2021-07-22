@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { FiBookOpen } from "react-icons/fi";
 import { FaBars, FaTimes } from "react-icons/fa";
 
 import { Button } from "./Button";
@@ -61,7 +60,7 @@ function Navbar() {
             </li>
             <li className="nav-btn">
               {button ? (
-                <Link to="/sign-up" className="btn-link" >
+                <Link to="/sign-up" className="btn-link">
                   <Button buttonStyle="btn--outline">Sign Up</Button>
                 </Link>
               ) : (

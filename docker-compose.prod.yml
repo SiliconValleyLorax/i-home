@@ -21,9 +21,9 @@ services:
     build:
       context: ./backend/modelserver
       dockerfile: Dockerfile
-    command: gunicorn -b 0.0.0.0:8000 -w 3 -t 240 wsgi:app
+    command: gunicorn -w 1 -b 0.0.0.0:7000 wsgi:app
     ports:
-      - "8000:8000"
+      - "7000:7000"
     environment:
       - APP_SETTINGS=config.DevelopmentConfig
       - SECRET_KEY=dockertest
@@ -60,7 +60,6 @@ services:
     networks:
       - app-tier
     restart: always
-    
 
   # frontend
   frontend:
@@ -76,8 +75,6 @@ services:
     networks:
       - app-tier
     tty: true
-    
-
 
   # elasticsearch
   elasticsearch:
@@ -144,4 +141,3 @@ networks:
 volumes:
   postgres_data:
   build_folder:
-

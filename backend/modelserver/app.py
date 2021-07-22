@@ -111,7 +111,8 @@ def get_book_list():
     # image를 파라미터로 넣어서 밑에 label에 string 형태로 리턴해주시면 됩니다!
 
     # label = find_label(image)
-    label= show_inference(image)
+    # label= show_inference(image)
+    label = "bear moon"
     print('label : ')
     print(label)
     

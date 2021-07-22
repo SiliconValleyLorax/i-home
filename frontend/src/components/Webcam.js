@@ -4,8 +4,8 @@ import "../css/Webcam.css";
 import { Link } from "react-router-dom";
 
 const videoConstraints = {
-  width: 300,
-  height: 300,
+  width: 500,
+  height: 500,
   facingMode: "user",
 };
 
@@ -36,14 +36,15 @@ export const WebcamCapture = () => {
 
   return (
     <div className="webcam-container">
-      <div className="webcam-img">
+      <div className="webcam-img" style={{ margin: 0 }}>
         {image === "" || image === null ? (
           <Webcam
             audio={false}
-            height={350}
+            height="100%"
             ref={webcamRef}
             screenshotFormat="image/jpeg"
             width="100%"
+            max-width="100px;"
             videoConstraints={videoConstraints}
           />
         ) : (

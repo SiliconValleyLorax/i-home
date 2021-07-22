@@ -47,6 +47,7 @@ const GallerySet = () => {
           type="file"
           accept=".png, .jpg, .jpeg"
           onChange={onAttahmentChange}
+          className="submit-btn"
         />
         <Link to={{ pathname: `/${gotolist}`, state: { image: attachment } }}>
           <button

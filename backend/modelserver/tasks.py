@@ -1,13 +1,9 @@
 import time
-from celery import Celery, current_task
+from celery import Celery, Task
 from celery.result import AsyncResult
-from elasticsearch import Elasticsearch
 from elastic import *
-import random
 
 celery = Celery('tasks', backend="rpc://", broker='amqp://rabbitmq:rabbitmq@rabbit:5672')
-
-# es = Elasticsearch('http://elasticsearch:9200')
 
 def get_job_state(task_id):
     """
@@ -26,12 +22,33 @@ def get_job_result(task_id):
         return "Failed to get job result"
     return job.result
 
-# def http_first():
-#     print("initializing...")
-#     global embeddings
-#     global session
-#     global text_ph
-#     embeddings, session, text_ph = initialize_book_list(es)
+class ElasticTask(Task):
+    _embeddings = None
+    _session = None
+    _text_ph = None
+    _es = None
+    _star = None
+    @property
+    def embeddings(self):
+        if self._embeddings == None:
+            self._embeddings, self._session, self._text_ph = initialize_book_list()
+        return self._embeddings
+    @property
+    def session(self):
+        if self._session == None:
+            self._embeddings, self._session, self._text_ph = initialize_book_list()
+        return self._session
+    @property
+    def text_ph(self):
+        if self._text_ph == None:
+            self._embeddings, self._session, self._text_ph = initialize_book_list()
+        return self._text_ph
+    
+    @property
+    def es(self):
+        if self._es == None:
+            self._es = getEs()
+        return self._es
 
 @celery.task()
 def examplefunc(a, b):
@@ -55,13 +72,20 @@ def find_label_from_image(image_string):
     time.sleep(3)
     return "bear moon"
 
-@celery.task()
+@celery.task(base=ElasticTask)
 def find_id_from_label(label):
     """
     str(label) -> list[Integer](idx list)
     """
     print("searching for books")
-    # book_list = find_book_list(label, embeddings, session, es, text_ph)
     time.sleep(3)
-    book_list = [random.random()]
+    embeddings = find_id_from_label.embeddings
+    session = find_id_from_label.session
+    text_ph = find_id_from_label.text_ph
+    es = find_id_from_label.es
+    print("celery task get :", embeddings, session, text_ph, es)
+    book_list = find_book_list(label, embeddings, session, es, text_ph)
+
+
+    # DB에 결과 집어 넣고 return "Complete" / 사실 리턴 값 필요 없음...
     return book_list

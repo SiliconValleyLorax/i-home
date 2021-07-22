@@ -28,14 +28,13 @@ const UploadImage = () => {
         const response = await axios.post("http://localhost:5000/api/result", {
           taskID: taskID,
         });
-        console.log(response.data);
+        console.log(taskID, response.data);
       } catch (e) {
         console.log(e);
       }
     };
 
     const confirmtask = async () => {
-      console.log(taskID);
       try {
         const finalresult = await axios.post(
           "http://localhost:5000/api/progress",
@@ -43,7 +42,7 @@ const UploadImage = () => {
             taskID: taskID,
           }
         );
-        console.log(finalresult.data);
+        console.log(taskID, finalresult.data);
         if (finalresult.data !== "SUCCESS") {
           setTimeout(() => confirmtask(), 2000);
           return;
@@ -74,9 +73,9 @@ const UploadImage = () => {
             갤러리로 등록
           </div>
         </Link>
-        {/* <button onClick={test} className="upload-btn gallery-btn">
-            <div>test</div>
-          </button> */}
+        <button onClick={test} className="upload-btn gallery-btn">
+          <div>test</div>
+        </button>
       </div>
     </>
   );

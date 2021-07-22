@@ -1,4 +1,3 @@
-
 import tensorflow.compat.v1 as tf1
 import tensorflow_hub as hub
 import pandas as pd
@@ -10,8 +9,31 @@ from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker, scoped_session
 import datetime
-from app import db, engine, cursor
+# from app import db, engine, cursor
+
+# db = SQLAlchemy()
+url = 'postgresql://postgres:postgres@postgres/book_list'
+engine = sqlalchemy.create_engine(url)
+connection = engine.raw_connection()
+cursor = connection.cursor()
+
 tf1.compat.v1.disable_eager_execution()
+from elasticsearch import Elasticsearch
+es = Elasticsearch('http://elasticsearch:9200')
+embeddings = "initial embedding"
+session = "initial session"
+text_ph = "initail text ph"
+
+def getStar():
+    print("==========star========")
+    return "star"
+def getEs():
+    return Elasticsearch('http://elasticsearch:9200')
+# def start_initialize():
+#     global embeddings
+#     global session
+#     global text_ph
+#     embeddings, session, text_ph = initialize_book_list()
 
 class CursorByName():
     def __init__(self, cursor):
@@ -30,7 +52,7 @@ def default(o):
         return o.isoformat()
 
 def find_book_list(label, embeddings, session, es, text_ph):
-    
+    print(embeddings, session, text_ph)
     def embed_text(text):
         vectors = session.run(embeddings, feed_dict={text_ph: text})
         return [vector.tolist() for vector in vectors]
@@ -69,7 +91,7 @@ def find_book_list(label, embeddings, session, es, text_ph):
         result.append(tmp)
     return result
 
-def insert_book_list(session, embeddings, es, text_ph):
+def insert_book_list(embeddings, session, text_ph):
 # 텍스트 임베딩 함수
     def embed_text(text):
         vectors = session.run(embeddings, feed_dict={text_ph: text})
@@ -122,7 +144,8 @@ def insert_book_list(session, embeddings, es, text_ph):
         
     es.indices.refresh(index=index_name)
 
-def initialize_book_list(es):
+def initialize_book_list():
+    
     print ("HTTP first_request")
     ## 텍스트 임베딩 모델 다운로드 
     print("Downloading pre-trained embeddings from tensorflow hub...")
@@ -138,7 +161,6 @@ def initialize_book_list(es):
     session.run(tf1.global_variables_initializer())
     session.run(tf1.tables_initializer())
     print("Done.")
-    
-    insert_book_list(session, embeddings, es, text_ph)
-
+    insert_book_list(embeddings, session, text_ph)
+    print(embeddings, session, text_ph)
     return embeddings, session, text_ph

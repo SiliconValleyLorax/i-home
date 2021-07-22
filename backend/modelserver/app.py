@@ -1,5 +1,5 @@
 from typing import Literal
-from flask import Flask, url_for, request, jsonify, render_template
+from flask import Flask, url_for, request, jsonify
 from flask_cors import CORS
 from flasgger import Swagger
 
@@ -19,44 +19,11 @@ from celery import chain
 import time
 app = Flask(__name__)
 app.config.from_object("config.DevelopmentConfig")
-db = SQLAlchemy(app)
+
 CORS(app)
 swagger = Swagger(app)
+
 import tasks
-url = 'postgresql://postgres:postgres@postgres/book_list'
-engine = sqlalchemy.create_engine(url)
-connection = engine.raw_connection()
-cursor = connection.cursor()
-
-es = Elasticsearch('http://elasticsearch:9200')
-
-from elastic import *
-
-def elastic_info():
-    return es.info()
-
-def elastic_health():
-    return es.cluster.health()
-
-result=[]
-@app.before_first_request
-def http_first():
-    global embeddings
-    global session
-    global text_ph
-    embeddings, session, text_ph = initialize_book_list(es)
-
-
-
-@app.route('/info')
-def api_info():
-
-    return jsonify(elastic_info())
-
-@app.route('/health')
-def api_health():
-    return jsonify(elastic_health())
-
 
 # 책 라벨로 유사도 검색
 @app.route('/search')
@@ -120,10 +87,12 @@ def get_book_list():
     print(label)
     
     # elastic search로 추천 도서 목록 찾기
-    book_list = find_book_list(label, embeddings, session, es, text_ph)
+    # book_list = find_book_list(label)
+    book_list = []
 
     return jsonify(book_list)
 
+# ========
 @app.route('/model/progress', methods=['POST'])
 def progress():
     task_id = request.get_data(as_text=Literal[True])
@@ -141,6 +110,7 @@ def result():
     except:
         return jsonify("Can not find result")
     return jsonify(result)
+# ========= DB에 결과 저장하면 사용할 일 없음.
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():

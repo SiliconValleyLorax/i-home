@@ -23,7 +23,7 @@ const BookList = ({ location }) => {
 
   useEffect(() => {
     getlist();
-  });
+  }, []);
 
   switch (loading) {
     case true:

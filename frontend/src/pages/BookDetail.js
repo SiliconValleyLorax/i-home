@@ -30,7 +30,7 @@ const BookDetail = ({ location }) => {
   };
   useEffect(() => {
     getbook();
-  });
+  }, []);
 
   return (
     <>

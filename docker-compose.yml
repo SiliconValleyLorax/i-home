@@ -33,6 +33,8 @@ services:
     depends_on:
       - postgres
       - elasticsearch
+      - rabbit
+      - worker
     links:
       - postgres
     networks:
@@ -102,6 +104,29 @@ services:
       memlock:
         soft: -1
         hard: -1
+
+  rabbit:
+    hostname: rabbit
+    image: "rabbitmq:3-management"
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbitmq
+      - RABBITMQ_DEFAULT_PASS=rabbitmq
+    networks:
+      - app-tier
+
+  worker:
+    build:
+      context: ./backend/modelserver
+      dockerfile: Dockerfile
+    command: celery -A tasks.celery worker --loglevel=info
+    depends_on:
+      - rabbit
+      - postgres
+    networks:
+      - app-tier
 
   # logstash
   # logstash:

@@ -4,22 +4,57 @@ import { RiGalleryUploadFill } from "react-icons/ri";
 //booklist 페이지 전환 위해 임포트
 import { Link } from "react-router-dom";
 // import Book from './Book'
-
+import axios from "axios";
+import { useState } from "react";
 const UploadImage = () => {
   // const [attachment, setAttachment] = useState(
   //   "https://i.stack.imgur.com/GNhxO.png"
   // );
   // 서버 연결 테스트 코드 - test 버튼으로 동작확인
-  // const test = async () => {
-  //   try {
-  //     const response = await axios.post("http://localhost:5000/api/image", {
-  //       image: attachment,
-  //     });
-  //     console.log(response);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
+
+  const test = async () => {
+    let taskID;
+    const getTaskID = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/test");
+        taskID = response.data;
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    const getResult = async () => {
+      try {
+        const response = await axios.post("http://localhost:5000/api/result", {
+          taskID: taskID,
+        });
+        console.log(response.data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    const confirmtask = async () => {
+      console.log(taskID);
+      try {
+        const finalresult = await axios.post(
+          "http://localhost:5000/api/progress",
+          {
+            taskID: taskID,
+          }
+        );
+        console.log(finalresult.data);
+        if (finalresult.data !== "SUCCESS") {
+          setTimeout(() => confirmtask(), 2000);
+          return;
+        } else getResult();
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getTaskID();
+    confirmtask();
+  };
 
   return (
     <>

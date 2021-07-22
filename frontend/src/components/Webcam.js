@@ -12,17 +12,32 @@ const videoConstraints = {
 export const WebcamCapture = () => {
   const [image, setImage] = useState("");
   const webcamRef = useRef(null);
-
+  const [fcheck, setFcheck] = useState(0);
+  const [gotolist, setGotolist] = useState("CameraSet");
   // eslint-disable-next-line
   const capture = useCallback(() => {
     const imageSrc = webcamRef.current.getScreenshot();
     setImage(imageSrc);
+    setFcheck(1);
+    if (imageSrc === null) {
+      alert("카메라를 확인해주세요.");
+      window.location.reload();
+    } else {
+      setGotolist("bookList");
+    }
   }, [webcamRef]);
+
+  const test_validation = () => {
+    if (fcheck === 0) {
+      alert("사진을 찍어주세요");
+      window.location.reload();
+    }
+  };
 
   return (
     <div className="webcam-container">
       <div className="webcam-img">
-        {image === "" ? (
+        {image === "" || image === null ? (
           <Webcam
             audio={false}
             height={350}
@@ -59,7 +74,13 @@ export const WebcamCapture = () => {
         )}
       </div>
       <form className="container">
-        <Link to={{ pathname: "/bookList", state: { image: image } }}>
+        <Link
+          to={{
+            pathname: `/${gotolist}`,
+            state: { image: image },
+          }}
+          onClick={test_validation}
+        >
           <button type="submit" className="submit-btn">
             결과 확인하기
           </button>

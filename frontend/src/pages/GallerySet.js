@@ -6,7 +6,8 @@ const GallerySet = () => {
   const [attachment, setAttachment] = useState(
     "https://i.stack.imgur.com/GNhxO.png"
   );
-  const [fcheck, setFcheck]=useState(0);
+  const [fcheck, setFcheck] = useState(0);
+  const [gotolist, setGotolist] = useState("GallerySet");
 
   const onAttahmentChange = (event) => {
     try {
@@ -24,16 +25,17 @@ const GallerySet = () => {
       };
       reader.readAsDataURL(theAttachment);
     } catch (error) {
-
       return;
     }
   };
-  const test_validation = ()=>{
-    if(fcheck===0){
-      alert("이미지를 등록해주세요.")
-      window.location.reload()
+  const test_validation = () => {
+    if (fcheck === 0) {
+      alert("사진을 등록해주세요.");
+      window.location.reload();
+    } else {
+      setGotolist("bookList");
     }
-  }
+  };
 
   return (
     <>
@@ -46,8 +48,12 @@ const GallerySet = () => {
           accept=".png, .jpg, .jpeg"
           onChange={onAttahmentChange}
         />
-        <Link to={{ pathname: "/bookList", state: { image: attachment } }}>
-          <button type="submit" className="submit-btn" onClick={test_validation}>
+        <Link to={{ pathname: `/${gotolist}`, state: { image: attachment } }}>
+          <button
+            type="submit"
+            className="submit-btn"
+            onClick={test_validation}
+          >
             결과 확인하기
           </button>
         </Link>

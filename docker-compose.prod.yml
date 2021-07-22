@@ -21,7 +21,7 @@ services:
     build:
       context: ./backend/modelserver
       dockerfile: Dockerfile
-    command: gunicorn -w 1 -b 0.0.0.0:8000 wsgi:app
+    command: gunicorn -b 0.0.0.0:8000 -w 3 -t 240 wsgi:app
     ports:
       - "8000:8000"
     environment:
@@ -44,7 +44,7 @@ services:
     build:
       context: ./backend/apiserver
       dockerfile: Dockerfile
-    command: gunicorn -w 1 -b 0.0.0.0:5000 wsgi:app
+    command: gunicorn -b 0.0.0.0:5000 -w 3 -t 240 wsgi:app
     ports:
       - "5000:5000"
     environment:
@@ -103,22 +103,25 @@ services:
         soft: -1
         hard: -1
 
-  # logstash
-  # logstash:
-  #   build: ./backend/logstash
-  #   restart: always
-  #   ports:
-  #     - "5001:5001"
-  #   volumes:
-  #     - ./backend/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
-  #     - ./backend/logstash/pipeline/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-  #     - ./backend/logstash/.logstash_jdbc_last_run:/root/.logstash_jdbc_last_run
-  #   environment:
-  #     LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-  #   depends_on:
-  #     - elasticsearch
-  #   networks:
-  #     - app-tier
+
+  #kibana
+  kibana:
+    container_name: kibana
+    image: kibana:7.9.0
+    ports:
+      - 5601:5601
+    networks:
+      - app-tier
+    environment:
+      ELASTICSERCH_UTL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    environment:
+      - TZ=Asia/Seoul
+    restart: always
+    depends_on:
+      - elasticsearch
+
+
   nginx:
     build: ./nginx
     ports:

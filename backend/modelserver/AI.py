@@ -300,11 +300,17 @@ def run_inference(model, image) :
   print(type(imagee))
 
   input_tensor = tf.convert_to_tensor(imagee)
+  print('tf :')
+  print(tf)
+  print('tf.convert_to_tensor :')
+  print(tf.convert_to_tensor)
+
   print('input_tensor : ')
   print(input_tensor)
   input_tensor = input_tensor[tf.newaxis,...]
   print('input_tensor 2 :')
   print(input_tensor)
+  
   model_fn = model.signatures['serving_default']
 
   print('model_fn : ')
@@ -334,9 +340,18 @@ def run_inference(model, image) :
 
 
 def show_inference(image_open) :
-    
+
+
     utils_ops.tf = tf.compat.v1
     tf.gfile = tf.io.gfile
+    print('tf ver :')
+    print(tf.__version__)
+
+    print('eager execute :')
+    print(tf.executing_eagerly())
+
+    print("tf in show_inference : ")
+    print(tf)
 
     PATH_TO_LABELS = 'object_detection/training/label_map.pbtxt'
     category_index = label_map_util.create_category_index_from_labelmap(

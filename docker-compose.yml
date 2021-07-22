@@ -106,22 +106,6 @@ services:
         soft: -1
         hard: -1
 
-  # logstash
-  # logstash:
-  #   build: ./backend/logstash
-  #   restart: always
-  #   ports:
-  #     - "5001:5001"
-  #   volumes:
-  #     - ./backend/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
-  #     - ./backend/logstash/pipeline/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-  #     - ./backend/logstash/.logstash_jdbc_last_run:/root/.logstash_jdbc_last_run
-  #   environment:
-  #     LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-  #   depends_on:
-  #     - elasticsearch
-  #   networks:
-  #     - app-tier
 
 networks:
   app-tier:
@@ -130,5 +114,5 @@ networks:
 volumes:
   postgres_data:
     driver: local
-  # appdata:
-  #   driver: local
+  logs:
+    driver: local

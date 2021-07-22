@@ -1,4 +1,4 @@
-from typing import Literal
+from typing_extensions import Literal
 from flask import Flask, url_for, request, jsonify, render_template
 from flask_cors import CORS
 from flasgger import Swagger
@@ -39,10 +39,8 @@ def elastic_health():
 result=[]
 @app.before_first_request
 def http_first():
-    global embeddings
-    global session
-    global text_ph
-    embeddings, session, text_ph = initialize_book_list(es)
+    global embed
+    embed = initialize_book_list(es)
 
 
 
@@ -57,13 +55,6 @@ def api_health():
     return jsonify(elastic_health())
 
 
-# 책 라벨로 유사도 검색
-@app.route('/search')
-def api_search():
-    label="bear moon"
-    # elastic search로 추천 도서 목록 찾기
-    book_list = find_book_list(label, embeddings, session, es, text_ph)
-    return jsonify(book_list)
     
 
 @app.route('/')
@@ -116,10 +107,11 @@ def get_book_list():
     print(label)
     
     # elastic search로 추천 도서 목록 찾기
-    book_list = find_book_list(label, embeddings, session, es, text_ph)
+    label="Caterpillar"
+    book_list = find_book_list(label, embed, es)
 
     return jsonify(book_list)
-
+# 
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():

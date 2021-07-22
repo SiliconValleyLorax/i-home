@@ -1,17 +1,18 @@
 
-import tensorflow.compat.v1 as tf1
+import tensorflow as tf
 import tensorflow_hub as hub
 import pandas as pd
 import time
 import openpyxl
 import json, os
-
+import numpy as np
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker, scoped_session
 import datetime
 from app import db, engine, cursor
-tf1.compat.v1.disable_eager_execution()
+from object_detection.utils import ops as utils_ops
+
 
 class CursorByName():
     def __init__(self, cursor):
@@ -29,14 +30,13 @@ def default(o):
     if isinstance(o, (datetime.date, datetime.datetime)):
         return o.isoformat()
 
-def find_book_list(label, embeddings, session, es, text_ph):
+def find_book_list(label, embed, es):
     
-    def embed_text(text):
-        vectors = session.run(embeddings, feed_dict={text_ph: text})
-        return [vector.tolist() for vector in vectors]
     
     query=label
-    query_vector=embed_text([query])[0]
+
+    embeddings=embed([query])
+    query_vector=np.array(embeddings[0]).tolist()
     index_name="book_test"
     script_query={
         "script_score":{
@@ -69,11 +69,9 @@ def find_book_list(label, embeddings, session, es, text_ph):
         result.append(tmp)
     return result
 
-def insert_book_list(session, embeddings, es, text_ph):
+def insert_book_list(embed, es):
 # 텍스트 임베딩 함수
-    def embed_text(text):
-        vectors = session.run(embeddings, feed_dict={text_ph: text})
-        return [vector.tolist() for vector in vectors]
+
 
     cursor.execute("select * from books")
     # data = list(cursor.fetchall())
@@ -112,7 +110,8 @@ def insert_book_list(session, embeddings, es, text_ph):
         except:
             description=""
         try:
-            text_vector=embed_text([title+description])[0]
+            embeddings=embed([title+description])
+            text_vector=np.array(embeddings[0]).tolist()
             doc={'idx':i+1,'title':title,'description':description, 'text-vector':text_vector}
         except:
             print('no data')
@@ -127,18 +126,10 @@ def initialize_book_list(es):
     ## 텍스트 임베딩 모델 다운로드 
     print("Downloading pre-trained embeddings from tensorflow hub...")
     os.environ["TFHUB_CACHE_DIR"] = "/tmp/tfhub"
-    embed = hub.load("./models/sentence-encoder/4")
-    text_ph = tf1.placeholder(tf1.string)
-    embeddings = embed(text_ph)
+    embed = hub.KerasLayer("./models/sentence-encoder/4")
     print("Done.")
 
-    ## tensorflow session 다운로드
-    print("Creating tensorflow session...")
-    session = tf1.Session()
-    session.run(tf1.global_variables_initializer())
-    session.run(tf1.tables_initializer())
-    print("Done.")
     
-    insert_book_list(session, embeddings, es, text_ph)
+    insert_book_list(embed, es)
 
-    return embeddings, session, text_ph
+    return embed

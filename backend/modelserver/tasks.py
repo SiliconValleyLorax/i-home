@@ -1,4 +1,3 @@
-import time
 from celery import Celery, Task
 from celery.result import AsyncResult
 from elastic import *
@@ -91,7 +90,6 @@ def find_label_from_image(image):
     print("detecting label")
     image = Image.open(BytesIO(base64.b64decode(image)))
     label= show_inference(image)
-    time.sleep(3)
     return label
 
 @celery.task(base=ElasticTask)
@@ -100,7 +98,6 @@ def find_id_from_label(label):
     str(label) -> list[Integer](idx list)
     """
     print("searching for books")
-    time.sleep(3)
     embed = find_id_from_label.embed
     es = find_id_from_label.es
     print("celery task get :", embed, es)

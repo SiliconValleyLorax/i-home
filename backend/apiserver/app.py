@@ -10,14 +10,12 @@ import json
 import requests
 import pandas as pd
 import openpyxl
-
 # from torchvision import models
 # import torchvision.transforms as transforms
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.orm.exc import NoResultFound
-
 app = Flask(__name__)
 swagger = Swagger(app)
 app.config.from_object("config.DevelopmentConfig")
@@ -26,13 +24,10 @@ from models import *
 from translate import *
 db.create_all()
 CORS(app)
-
-
 url = 'postgresql://postgres:postgres@postgres/book_list'
 engine = sqlalchemy.create_engine(url)
 Session = scoped_session(sessionmaker(bind=engine))
 session = Session()
-
 def initialize():
     if(session.query(Book).count() == 0):
         book_data = read_from_file(filename)
@@ -49,7 +44,6 @@ def initialize():
             print(500, "Error: 데이터 저장 실패")
     else:
         print(Book.query.count())
-    
 @app.route('/api/find', methods=['GET', 'POST'])
 def find():
     books = Book.query.all()
@@ -57,9 +51,7 @@ def find():
         {"id":book.id, "title":book.title, "author":book.author, "image":book.img_url} for book in books
     ]
     return jsonify(results)
-
 filename = 'Book.xlsx'
-
 def read_from_file(filepath):
     workbook = openpyxl.load_workbook(filename=filepath)
     sheet = workbook.worksheets[0]
@@ -70,11 +62,9 @@ def read_from_file(filepath):
             tmp[-1].append(cell.value)
     print(len(tmp))
     return tmp
-
 @app.route('/')
 def home_page():
     return "home page"
-
 @app.route('/api/test')
 def test():
     print("api test called")
@@ -84,7 +74,6 @@ def test():
         return res.json()
     except:
         return "hello World"
-
 @app.route('/api/send_image_ex', methods=['POST'])
 def send_image_ex():
     image = request.get_json()["image"].split(",")[-1]
@@ -104,7 +93,6 @@ def send_image_ex():
         # 편의를 위해 to hex
         color_array.append([rgb_array[i][0], '#{:02x}{:02x}{:02x}'.format(rgb_array[i][1][0], rgb_array[i][1][1], rgb_array[i][1][2])])
     return jsonify([color_array, x*y, class_name])
-
 @app.route('/api/image', methods=['POST'])
 def send_image():
     """
@@ -146,17 +134,13 @@ def send_image():
         description: A list of Books
         schema:
           $ref: "#/definitions/Booklist"
-
-
     """
     image = request.get_json()["image"].split(",")[-1]
     res = requests.post("http://modelserver:7000/model/image", image).json()
     return jsonify(res)
-
 @app.route('/api/book/<int:id>', methods=['GET'])
 def get_book(id):
     """
-
     DB에서 id에 해당하는 책 정보 불러오기
     ---
     parameters:
@@ -166,7 +150,6 @@ def get_book(id):
         example: 1
         required: true
         description: Numeric id of the book to get
-
     definitions:
       Book_info:
         type: object
@@ -191,7 +174,6 @@ def get_book(id):
         description: An information of the Book
         schema:
           $ref: "#/definitions/Book_info"
-
     """
     try:
         book_detail = session.query(Book).filter(Book.id == id).one()
@@ -204,14 +186,34 @@ def get_book(id):
             "desc_ko": get_translate(book_detail.desc)
         }
         return jsonify(bookObject)
-
     except NoResultFound:
         print ("Requested Book Not Found")
-
 @app.route('/api/testpapago')
 def test_papago():
   text="hi my name is seoyeon"
   return get_translate(text)
+class CursorByName():
+    def __init__(self, cursor):
+        self._cursor = cursor
+    def __iter__(self):
+        return self
+    def __next__(self):
+        row = self._cursor.__next__()
+        return { description[0]: row[col] for col, description in enumerate(self._cursor.description) }
+
+
+def get_data(task_id):
+  book_list = None
+  results = []
+  connection = engine.raw_connection()
+  cursor = connection.cursor()
+  cursor.execute("select * from task_results")
+  for row in CursorByName(cursor):
+    results.append(row)
+  for i in range(len(results)):
+    if(results[i]["id"] == task_id):
+      book_list = results[i]["result"]
+  return book_list
 
 @app.route('/api/result', methods=['POST'])
 def result():
@@ -221,21 +223,13 @@ def result():
     except:
       data["state"] = "PROCESSING"
       return data
-
-    try:
-      # DB에 결과가 생성되었는지 확인
-      # task_id : task 실행시 발급했던 uuid
-      # task_id를 바탕으로 DB에 결과가 생성되었는지 확인
-      # 생성되었을 경우 task_result에서 result를 꺼내서 book_list에 대입
-      book_list = [{"id": 12, "score": 1.2742893},{"id": 2, "score": 1.241637},{"id": 3, "score": 1.2252356},{"id": 6, "score": 1.2251492},{"id": 30, "score": 1.2043386}]
-      result
-      data["state"] = "SUCCESS"
-    except:
-      # 생성되지 않았을 경우
-      data["state"] = "PROCESSING"
-      return jsonify(data)
-
-    # DB에서 꺼내온 task결과를 바탕으로 책의 상세정보를 DB에서 찾아서 보낸다.
+    
+    book_list = None
+    while (book_list == None):
+      book_list = get_data(task_id)
+    print(book_list)
+    data["state"] = "SUCCESS"
+    
     try:
         book_info_list = []
         for book in book_list:

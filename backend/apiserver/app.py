@@ -39,7 +39,8 @@ def initialize():
         # db.drop_all()        
         try:
             for i in range(len(book_data)):
-                book_obj = Book(book_data[i][2], book_data[i][4], book_data[i][3], book_data[i][8])
+                # book_obj = Book(book_data[i][2], book_data[i][4], book_data[i][3], book_data[i][8])
+                book_obj = Book(book_data[i][0], book_data[i][1], book_data[i][2], book_data[i][3], book_data[i][4], book_data[i][5])
                 session.add(book_obj)
                 print(book_obj)
             session.commit()
@@ -57,13 +58,13 @@ def find():
     ]
     return jsonify(results)
 
-filename = 'book_data.xlsx'
+filename = 'Book.xlsx'
 
 def read_from_file(filepath):
     workbook = openpyxl.load_workbook(filename=filepath)
     sheet = workbook.worksheets[0]
     tmp = []
-    for i in range(3,sheet.max_row+1): 
+    for i in range(2,sheet.max_row+1): 
         tmp.append([]) 
         for cell in sheet[i]: 
             tmp[-1].append(cell.value)

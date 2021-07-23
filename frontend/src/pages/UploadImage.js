@@ -19,6 +19,7 @@ const UploadImage = () => {
       try {
         const response = await axios.get("http://localhost:5000/api/test");
         taskID = response.data;
+        console.log(taskID);
       } catch (e) {
         console.log(e);
       }
@@ -26,34 +27,23 @@ const UploadImage = () => {
 
     const getResult = async () => {
       try {
-        const response = await axios.post("http://localhost:5000/api/result", {
-          taskID: taskID,
-        });
-        console.log(taskID, response.data);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-
-    const confirmtask = async () => {
-      try {
         const finalresult = await axios.post(
-          "http://localhost:5000/api/progress",
+          "http://localhost:5000/api/result",
           {
             taskID: taskID,
           }
         );
         console.log(taskID, finalresult.data);
-        if (finalresult.data !== "SUCCESS") {
-          setTimeout(() => confirmtask(), 2000);
+        if (finalresult.data === "PROCESSING") {
+          setTimeout(() => getResult(), 2000);
           return;
-        } else getResult();
+        } else return;
       } catch (e) {
         console.log(e);
       }
     };
     getTaskID();
-    confirmtask();
+    // confirmtask();
   };
 
   function openFile() {

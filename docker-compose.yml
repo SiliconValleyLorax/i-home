@@ -27,7 +27,7 @@ services:
       - FLASK_ENV=development
       - APP_SETTINGS=config.DevelopmentConfig
       - SECRET_KEY=dockertest
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/db_dev
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/book_list
     volumes:
       - ./backend/modelserver/:/modelserver/
     depends_on:

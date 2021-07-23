@@ -10,13 +10,14 @@ from sqlalchemy import create_engine
 from io import BytesIO
 from PIL import Image
 import base64
-
+import uuid
 # 함수 가져오기
 from AI import *
 from elasticsearch import Elasticsearch
 from elasticsearch import helpers
 from celery import chain
 import time
+
 app = Flask(__name__)
 app.config.from_object("config.DevelopmentConfig")
 
@@ -105,8 +106,12 @@ def result():
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():
+    random_id = uuid.uuid4()
+    print(random_id)
     task1 = tasks.find_label_from_image.s("stringtypeimage")
     task2 = tasks.find_id_from_label.s()
-    chaining = chain((task1, task2))
+    task3 = tasks.insert_data.s(random_id)
+    chaining = chain((task1, task2, task3))
     chain_task = chaining()
-    return jsonify(str(chain_task.id))
+    # return jsonify(str(chain_task.id))
+    return jsonify(str(random_id))

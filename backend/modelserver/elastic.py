@@ -19,9 +19,6 @@ cursor = connection.cursor()
 
 from elasticsearch import Elasticsearch
 es = Elasticsearch('http://elasticsearch:9200')
-embeddings = "initial embedding"
-session = "initial session"
-text_ph = "initail text ph"
 
 def getEs():
     return Elasticsearch('http://elasticsearch:9200')
@@ -65,7 +62,7 @@ def find_book_list(label, embed, es):
         body={
             "size": 5,
             "query":script_query,
-            "_source": {"includes":["idx","title","description"]}
+            "_source": {"includes":["idx"]}
         }
     )
     result=[]
@@ -77,7 +74,7 @@ def find_book_list(label, embed, es):
         print("id: {}, score: {}".format(hit["_id"], hit["_score"]))
         print(hit["_source"])
         print()
-        tmp=[hit["_id"], hit["_score"],hit["_source"]]
+        tmp={"id":hit["_source"]["idx"], "score":hit["_score"]}
         result.append(tmp)
     return result
 

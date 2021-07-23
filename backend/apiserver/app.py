@@ -154,8 +154,8 @@ def send_image():
 
     try:
         for book in res:
-            print("id: ", book[0])
-            book_detail = session.query(Book).filter(Book.id == int(book[0])+1).one()
+            print("id: ", book["id"])
+            book_detail = session.query(Book).filter(Book.id == int(book["id"])+1).one()
             bookObject = {
             "id": book_detail.id,
             "title": book_detail.title,
@@ -238,6 +238,9 @@ def progress():
 @app.route('/api/result', methods=['POST'])
 def result():
     try:
+      # DB에 결과가 생성되었는지 확인
+      # 생성되지 않았을 경우 -> return "PROCESSING"
+      # 생성되었을 경우 -> return book_list
       task_id = request.get_json()["taskID"]
     except:
       return jsonify("Failed to get book list")

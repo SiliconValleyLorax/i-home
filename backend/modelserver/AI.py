@@ -36,6 +36,10 @@ if gpus :
         print(e)
 '''
 
+utils_ops.tf = tf.compat.v1
+tf.gfile = tf.io.gfile
+
+detection_model = tf.saved_model.load('object_detection/inference_graph/saved_model')
 
 STANDARD_COLORS = [
     'AliceBlue', 'Chartreuse', 'Aqua', 'Aquamarine', 'Azure', 'Beige', 'Bisque',
@@ -292,42 +296,22 @@ def visualize_boxes_and_labels_on_image_array(
 
 def run_inference(model, image) :
 
-
   imagee = np.asarray(image)
-  print('--------run_infenrence--------')
-  print('imagee : ')
-  print(imagee)
-  print(type(imagee))
 
   input_tensor = tf.convert_to_tensor(imagee)
-  print('tf :')
-  print(tf)
-  print('tf.convert_to_tensor :')
-  print(tf.convert_to_tensor)
-
-  print('input_tensor : ')
-  print(input_tensor)
   input_tensor = input_tensor[tf.newaxis,...]
-  print('input_tensor 2 :')
-  print(input_tensor)
-  
+
   model_fn = model.signatures['serving_default']
 
-  print('model_fn : ')
-  print(model_fn)
   output_dict = model_fn(input_tensor)
 
-  print('output_dict in run_inference : ')
-  print(output_dict)
-
   num_detections = int(output_dict.pop('num_detections'))
-  print('num_detections')
-  print(num_detections)
 
   output_dict = {key:value[0, :num_detections].numpy()
                 for key, value in output_dict.items()}
   output_dict['num_detections'] = num_detections
   output_dict['detection_classes'] = output_dict['detection_classes'].astype(np.int64)
+
   if 'detection_masks' in output_dict :
     detection_masks_reframed = utils_ops.reframe_box_masks_to_image_masks(
         output_dict['detection_masks'], output_dict['detection_boxes'],
@@ -336,35 +320,21 @@ def run_inference(model, image) :
     detection_masks_reframed = tf.cast(detection_masks_reframed > 0.5,
                                        tf.uint8)
     output_dict['detection_masks_reframed'] = detection_masks_reframed.numpy()
+    
   return output_dict
 
 
 def show_inference(image_open) :
 
-
-    utils_ops.tf = tf.compat.v1
-    tf.gfile = tf.io.gfile
-    print('tf ver :')
-    print(tf.__version__)
-
-    print('eager execute :')
-    print(tf.executing_eagerly())
-
-    print("tf in show_inference : ")
-    print(tf)
-
     PATH_TO_LABELS = 'object_detection/training/label_map.pbtxt'
     category_index = label_map_util.create_category_index_from_labelmap(
                       PATH_TO_LABELS, use_display_name = True)
                       
-    detection_model = tf.saved_model.load('object_detection/inference_graph/saved_model')
+    #detection_model = tf.saved_model.load('object_detection/inference_graph/saved_model')
 
     image_np = np.array(image_open)
 
     output_dict = run_inference(detection_model, image_np)
-
-    print('output_dict in show_inference : ')
-    print(output_dict)
 
     dtct_result = visualize_boxes_and_labels_on_image_array (
         image_np,

@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import GallerySet from "./GallerySet";
 // import Book from './Book'
-
+import axios from "axios";
+import { useState } from "react";
 const UploadImage = () => {
   const [option, setOption] = useState(0);
   const [attachment, setAttachment] = useState(

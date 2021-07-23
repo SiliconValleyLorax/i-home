@@ -1,6 +1,7 @@
 from io import BytesIO
 import io
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect
+from sqlalchemy.orm import exc
 from flask_cors import CORS
 from flasgger import Swagger
 from PIL import Image
@@ -75,10 +76,11 @@ def home_page():
 
 @app.route('/api/test')
 def test():
+    print("api test called")
     try:
         res = requests.get("http://modelserver:7000/test")
         print(res.json())
-        return res.json()+" and this is from api server"
+        return res.json()
     except:
         return "hello World"
 
@@ -224,7 +226,38 @@ def get_book(id):
 def test_papago():
   text="hi my name is seoyeon"
   return get_translate(text)
+@app.route('/api/progress', methods=['POST'])
+def progress():
+    try:
+        task_id = request.get_json()["taskID"]
+    except:
+        return jsonify("CAN NOT FIND ID")
+    response = requests.post("http://modelserver:7000/model/progress", task_id)
+    return response.json()
 
-if __name__ == "__main__":
+@app.route('/api/result', methods=['POST'])
+def result():
+    try:
+      task_id = request.get_json()["taskID"]
+    except:
+      return jsonify("Failed to get book list")
+    response = requests.post("http://modelserver:7000/model/result", task_id).json()
 
-    app.run(host='0.0.0.0', debug=False, port=5000)
+    book_list = []
+
+    # try:
+    #     for book in response:
+    #         print("id: ", book[0])
+    #         book_detail = session.query(Book).filter(Book.id == int(book[0])+1).one()
+    #         bookObject = {
+    #         "id": book_detail.id,
+    #         "title": book_detail.title,
+    #         "author": book_detail.author,
+    #         "image": book_detail.img_url
+    #         }
+    #         book_list.append(bookObject)
+    #     return jsonify(book_list)
+    # except NoResultFound:
+    #     print ("Requested Book Not Found")
+    return jsonify(response)
+    

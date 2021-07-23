@@ -1,4 +1,3 @@
-
 import tensorflow as tf
 import tensorflow_hub as hub
 import pandas as pd
@@ -10,9 +9,23 @@ from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker, scoped_session
 import datetime
-from app import db, engine, cursor
-from object_detection.utils import ops as utils_ops
+# from app import db, engine, cursor
 
+# db = SQLAlchemy()
+url = 'postgresql://postgres:postgres@postgres/book_list'
+engine = sqlalchemy.create_engine(url)
+connection = engine.raw_connection()
+cursor = connection.cursor()
+
+tf1.compat.v1.disable_eager_execution()
+from elasticsearch import Elasticsearch
+es = Elasticsearch('http://elasticsearch:9200')
+embeddings = "initial embedding"
+session = "initial session"
+text_ph = "initail text ph"
+
+def getEs():
+    return Elasticsearch('http://elasticsearch:9200')
 
 class CursorByName():
     def __init__(self, cursor):
@@ -121,7 +134,8 @@ def insert_book_list(embed, es):
         
     es.indices.refresh(index=index_name)
 
-def initialize_book_list(es):
+def initialize_book_list():
+    
     print ("HTTP first_request")
     ## 텍스트 임베딩 모델 다운로드 
     print("Downloading pre-trained embeddings from tensorflow hub...")

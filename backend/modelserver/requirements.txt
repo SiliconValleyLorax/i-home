@@ -33,3 +33,5 @@ scipy
 pandas
 google-cloud-bigquery==1.21.0
 tf-models-official
+
+celery==5.1

@@ -17,7 +17,6 @@ engine = sqlalchemy.create_engine(url)
 connection = engine.raw_connection()
 cursor = connection.cursor()
 
-tf1.compat.v1.disable_eager_execution()
 from elasticsearch import Elasticsearch
 es = Elasticsearch('http://elasticsearch:9200')
 embeddings = "initial embedding"
@@ -142,7 +141,6 @@ def initialize_book_list():
     os.environ["TFHUB_CACHE_DIR"] = "/tmp/tfhub"
     embed = hub.KerasLayer("./models/sentence-encoder/4")
     print("Done.")
-
     
     insert_book_list(embed, es)
 

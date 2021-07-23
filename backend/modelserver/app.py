@@ -25,16 +25,6 @@ swagger = Swagger(app)
 
 import tasks
 
-# 책 라벨로 유사도 검색
-@app.route('/search')
-def api_search():
-    label="bear moon"
-    # elastic search로 추천 도서 목록 찾기
-    # book_list = find_book_list(label, tasks.embeddings, tasks.session, es, tasks.text_ph)
-    book_list = []
-    return jsonify(book_list)
-    
-
 @app.route('/')
 def home_page():
     return "home page_model server"
@@ -88,7 +78,7 @@ def get_book_list():
     
     # elastic search로 추천 도서 목록 찾기
     label="Caterpillar"
-    book_list = find_book_list(label, embed, es)
+    book_list = tasks.find_id_from_label(label)
 
     return jsonify(book_list)
 # 

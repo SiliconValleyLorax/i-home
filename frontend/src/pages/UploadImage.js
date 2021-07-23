@@ -7,23 +7,55 @@ import { useState } from "react";
 import GallerySet from "./GallerySet";
 // import Book from './Book'
 import axios from "axios";
-import { useState } from "react";
 const UploadImage = () => {
   const [option, setOption] = useState(0);
   const [attachment, setAttachment] = useState(
     "https://i.stack.imgur.com/GNhxO.png"
   );
-  // 서버 연결 테스트 코드 - test 버튼으로 동작확인
-  // const test = async () => {
-  //   try {
-  //     const response = await axios.post("http://localhost:5000/api/image", {
-  //       image: attachment,
-  //     });
-  //     console.log(response);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
+
+  const test = async () => {
+    let taskID;
+    const getTaskID = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/test");
+        taskID = response.data;
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    const getResult = async () => {
+      try {
+        const response = await axios.post("http://localhost:5000/api/result", {
+          taskID: taskID,
+        });
+        console.log(taskID, response.data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    const confirmtask = async () => {
+      try {
+        const finalresult = await axios.post(
+          "http://localhost:5000/api/progress",
+          {
+            taskID: taskID,
+          }
+        );
+        console.log(taskID, finalresult.data);
+        if (finalresult.data !== "SUCCESS") {
+          setTimeout(() => confirmtask(), 2000);
+          return;
+        } else getResult();
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getTaskID();
+    confirmtask();
+  };
+
   function openFile() {
     var input = document.createElement("input");
 
@@ -66,9 +98,9 @@ const UploadImage = () => {
               갤러리로 등록
             </div>
           </div>
-          {/* <button onClick={test} className="upload-btn gallery-btn">
-              <div>test</div>
-            </button> */}
+          <button onClick={test} className="upload-btn gallery-btn">
+            <div>test</div>
+          </button>
         </div>
       </>
     );

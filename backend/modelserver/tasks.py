@@ -2,31 +2,19 @@ import time
 from celery import Celery, Task
 from celery.result import AsyncResult
 from elastic import *
+from io import BytesIO
+from PIL import Image
+import base64
 # from flask_app import app
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, String, Integer
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
-
+from AI import show_inference
 celery = Celery('tasks', backend="db+postgresql://postgres:postgres@postgres:5432/book_list", broker='amqp://rabbitmq:rabbitmq@rabbit:5672')
 
-Base = declarative_base()
-url = 'postgresql://postgres:postgres@postgres/book_list'
-engine = sqlalchemy.create_engine(url)
-Session = scoped_session(sessionmaker(bind=engine))
-session = Session()
-# db = SQLAlchemy(app)
-class TaskResult(Base):
-    __tablename__ = 'task_results'
-    id = Column(String, primary_key=True)
-    result = Column(ARRAY(JSONB))
-    
-    def __init__(self, id, result):
-        self.id = id
-        self.result = result
-    def __repr__(self):
-        return f"<Task {self.id}>"
+# es = Elasticsearch('http://elasticsearch:9200')
 
 # db.create_all()
 # TaskResult.__table__.drop(engine)
@@ -81,14 +69,16 @@ class ElasticTask(Task):
 
 
 @celery.task()
-def find_label_from_image(image_string):
+def find_label_from_image(image):
     """
     str(image) -> str(label)
     학습시킨 AI 모델 들어가는 함수
     """
     print("detecting label")
+    image = Image.open(BytesIO(base64.b64decode(image)))
+    label= show_inference(image)
     time.sleep(3)
-    return "bear moon"
+    return label
 
 @celery.task(base=ElasticTask)
 def find_id_from_label(label):

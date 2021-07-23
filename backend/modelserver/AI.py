@@ -295,34 +295,34 @@ def run_inference(model, image) :
 
   imagee = np.asarray(image)
   print('--------run_infenrence--------')
-  print('imagee : ')
-  print(imagee)
-  print(type(imagee))
+  # print('imagee : ')
+  # print(imagee)
+  # print(type(imagee))
 
   input_tensor = tf.convert_to_tensor(imagee)
-  print('tf :')
-  print(tf)
-  print('tf.convert_to_tensor :')
-  print(tf.convert_to_tensor)
+  # print('tf :')
+  # print(tf)
+  # print('tf.convert_to_tensor :')
+  # print(tf.convert_to_tensor)
 
-  print('input_tensor : ')
-  print(input_tensor)
+  # print('input_tensor : ')
+  # print(input_tensor)
   input_tensor = input_tensor[tf.newaxis,...]
-  print('input_tensor 2 :')
-  print(input_tensor)
+  # print('input_tensor 2 :')
+  # print(input_tensor)
   
   model_fn = model.signatures['serving_default']
 
   print('model_fn : ')
-  print(model_fn)
+  # print(model_fn)
   output_dict = model_fn(input_tensor)
 
   print('output_dict in run_inference : ')
-  print(output_dict)
+  # print(output_dict)
 
   num_detections = int(output_dict.pop('num_detections'))
   print('num_detections')
-  print(num_detections)
+  # print(num_detections)
 
   output_dict = {key:value[0, :num_detections].numpy()
                 for key, value in output_dict.items()}
@@ -351,7 +351,7 @@ def show_inference(image_open) :
     print(tf.executing_eagerly())
 
     print("tf in show_inference : ")
-    print(tf)
+    # print(tf)
 
     PATH_TO_LABELS = 'object_detection/training/label_map.pbtxt'
     category_index = label_map_util.create_category_index_from_labelmap(
@@ -364,7 +364,7 @@ def show_inference(image_open) :
     output_dict = run_inference(detection_model, image_np)
 
     print('output_dict in show_inference : ')
-    print(output_dict)
+    # print(output_dict)
 
     dtct_result = visualize_boxes_and_labels_on_image_array (
         image_np,

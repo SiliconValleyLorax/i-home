@@ -150,22 +150,7 @@ def send_image():
     """
     image = request.get_json()["image"].split(",")[-1]
     res = requests.post("http://modelserver:7000/model/image", image).json()
-    book_list = []
-
-    try:
-        for book in res:
-            print("id: ", book["id"])
-            book_detail = session.query(Book).filter(Book.id == int(book["id"])+1).one()
-            bookObject = {
-            "id": book_detail.id,
-            "title": book_detail.title,
-            "author": book_detail.author,
-            "image": book_detail.img_url
-            }
-            book_list.append(bookObject)
-        return jsonify(book_list)
-    except NoResultFound:
-        print ("Requested Book Not Found")
+    return jsonify(res)
 
 @app.route('/api/book/<int:id>', methods=['GET'])
 def get_book(id):
@@ -226,41 +211,45 @@ def get_book(id):
 def test_papago():
   text="hi my name is seoyeon"
   return get_translate(text)
-@app.route('/api/progress', methods=['POST'])
-def progress():
-    try:
-        task_id = request.get_json()["taskID"]
-    except:
-        return jsonify("CAN NOT FIND ID")
-    response = requests.post("http://modelserver:7000/model/progress", task_id)
-    return response.json()
 
 @app.route('/api/result', methods=['POST'])
 def result():
+    data = {"state":"", "result":[]}
     try:
       # DB에 결과가 생성되었는지 확인
       # 생성되지 않았을 경우 -> return "PROCESSING"
       # 생성되었을 경우 -> return book_list
       task_id = request.get_json()["taskID"]
     except:
-      return jsonify("Failed to get book list")
-    response = requests.post("http://modelserver:7000/model/result", task_id).json()
+      data["state"] = "PROCESSING"
+      return data
 
-    book_list = []
+    try:
+      # task_id : task 실행시 발급했던 uuid
+      # task_id를 바탕으로 DB에 결과가 생성되었는지 확인
+      # 생성되었을 경우 task_result에서 result를 꺼내서 book_list에 대입
+      book_list = [{"id": 12, "score": 1.2742893},{"id": 52, "score": 1.241637},{"id": 3, "score": 1.2252356},{"id": 6, "score": 1.2251492},{"id": 30, "score": 1.2043386}]
+      result
+      data["state"] = "SUCCESS"
+    except:
+      # 생성되지 않았을 경우
+      data["state"] = "PROCESSING"
+      return jsonify(data)
 
-    # try:
-    #     for book in response:
-    #         print("id: ", book[0])
-    #         book_detail = session.query(Book).filter(Book.id == int(book[0])+1).one()
-    #         bookObject = {
-    #         "id": book_detail.id,
-    #         "title": book_detail.title,
-    #         "author": book_detail.author,
-    #         "image": book_detail.img_url
-    #         }
-    #         book_list.append(bookObject)
-    #     return jsonify(book_list)
-    # except NoResultFound:
-    #     print ("Requested Book Not Found")
-    return jsonify(response)
-    
+    # DB에서 꺼내온 task결과를 바탕으로 책의 상세정보를 DB에서 찾아서 보낸다.
+    try:
+        book_info_list = []
+        for book in book_list:
+            book_detail = session.query(Book).filter(Book.id == book["id"]+1).one()
+            bookObject = {
+            "id": book_detail.id,
+            "title": book_detail.title,
+            "author": book_detail.author,
+            "image": book_detail.img_url
+            }
+            book_info_list.append(bookObject)
+        data["result"] = book_info_list
+    except NoResultFound:
+        data["state"] = "FAILURE"
+        print ("Requested Book Not Found")
+    return jsonify(data)

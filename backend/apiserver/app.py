@@ -200,7 +200,7 @@ def get_book(id):
             "title": book_detail.title,
             "author": book_detail.author,
             "desc": book_detail.desc,
-            "image": book_detail.img_url,
+            "image": book_detail.img_src,
             "desc_ko": get_translate(book_detail.desc)
         }
         return jsonify(bookObject)
@@ -217,19 +217,17 @@ def test_papago():
 def result():
     data = {"state":"", "result":[]}
     try:
-      # DB에 결과가 생성되었는지 확인
-      # 생성되지 않았을 경우 -> return "PROCESSING"
-      # 생성되었을 경우 -> return book_list
       task_id = request.get_json()["taskID"]
     except:
       data["state"] = "PROCESSING"
       return data
 
     try:
+      # DB에 결과가 생성되었는지 확인
       # task_id : task 실행시 발급했던 uuid
       # task_id를 바탕으로 DB에 결과가 생성되었는지 확인
       # 생성되었을 경우 task_result에서 result를 꺼내서 book_list에 대입
-      book_list = [{"id": 12, "score": 1.2742893},{"id": 52, "score": 1.241637},{"id": 3, "score": 1.2252356},{"id": 6, "score": 1.2251492},{"id": 30, "score": 1.2043386}]
+      book_list = [{"id": 12, "score": 1.2742893},{"id": 2, "score": 1.241637},{"id": 3, "score": 1.2252356},{"id": 6, "score": 1.2251492},{"id": 30, "score": 1.2043386}]
       result
       data["state"] = "SUCCESS"
     except:
@@ -241,12 +239,12 @@ def result():
     try:
         book_info_list = []
         for book in book_list:
-            book_detail = session.query(Book).filter(Book.id == book["id"]+1).one()
+            book_detail = session.query(Book).filter(Book.id == book["id"]).one()
             bookObject = {
             "id": book_detail.id,
             "title": book_detail.title,
-            "author": book_detail.author,
-            "image": book_detail.img_url
+            "slogan": book_detail.slogan,
+            "image": book_detail.img_src
             }
             book_info_list.append(bookObject)
         data["result"] = book_info_list

@@ -14,11 +14,22 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from AI import show_inference
 celery = Celery('tasks', backend="db+postgresql://postgres:postgres@postgres:5432/book_list", broker='amqp://rabbitmq:rabbitmq@rabbit:5672')
 
-# es = Elasticsearch('http://elasticsearch:9200')
+Base = declarative_base()
+url = 'postgresql://postgres:postgres@postgres/book_list'
+engine = sqlalchemy.create_engine(url)
+Session = scoped_session(sessionmaker(bind=engine))
+session = Session()
 
-# db.create_all()
-# TaskResult.__table__.drop(engine)
-# TaskResult.__table__.create(engine)
+class TaskResult(Base):
+    __tablename__ = 'task_results'
+    id = Column(String, primary_key=True)
+    result = Column(ARRAY(JSONB))
+    
+    def __init__(self, id, result):
+        self.id = id
+        self.result = result
+    def __repr__(self):
+        return f"<Task {self.id}>"
 
 
 class DB(Task):

@@ -78,7 +78,7 @@ const BookList = ({ location }) => {
                       <span className="listAssemble">
                         <div className="linetext title">{book.title}</div>
                         <div className="linetext author">
-                          Author: {book.author}
+                          Slogan: {book.slogan}
                         </div>
                       </span>
                     </div>

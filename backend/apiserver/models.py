@@ -13,16 +13,16 @@ class Book(db.Model):
     author = db.Column(db.String(), nullable=False)
     img_src = db.Column(db.String(), nullable=False)
     desc = db.Column(db.String())
-    kr_slogran = db.Column(db.String())
+    slogan = db.Column(db.String())
     created_at = db.Column(db.TIMESTAMP, index=True, default=datetime.now)
     updated_at =db.Column(db.TIMESTAMP, index=True, default=datetime.now, onupdate=datetime.now)
-    def __init__(self, category, title, author, img_src, desc, kr_slogran):
+    def __init__(self, category, title, author, img_src, desc, slogan):
         # self.id = id
         self.category = category
         self.title = title
         self.author = author
         self.img_src = img_src
         self.desc = desc
-        self.kr_slogran = kr_slogran
+        self.slogan = slogan
     def __repr__(self):
         return f"<Book: {self.title}>"

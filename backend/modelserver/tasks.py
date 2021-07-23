@@ -25,10 +25,13 @@ class DB(Task):
     _check = False
         
     def insert(self, random_id, result):
-        if not self._check:
-            TaskResult.__table__.drop(engine)
-            TaskResult.__table__.create(engine)
-            self._check = True
+        # if not self._check:
+        #     TaskResult.__table__.drop(engine)
+        #     TaskResult.__table__.create(engine)
+        #     self._check = True
+        # if not engine.dialects.has_table(engine, TaskResult):
+        #     TaskResult.__table__.create(engine)
+        TaskResult.__table__.create(engine, checkfirst=True)
         task_obj = TaskResult(id=random_id, result=result)
         session.add(task_obj)
         session.commit()

@@ -11,8 +11,8 @@ from io import BytesIO
 from PIL import Image
 import base64
 import uuid
+
 # 함수 가져오기
-from AI import *
 from elasticsearch import Elasticsearch
 from elasticsearch import helpers
 from celery import chain
@@ -62,47 +62,27 @@ def get_book_list():
 
     """
 
-    # api 서버에서 이미지 받아오기
+    # get image from api server
     image = request.get_data(as_text=Literal[True])
-    image = Image.open(BytesIO(base64.b64decode(image)))
-    print('type of image(app.pyy) : ')
-    print(type(image))
 
-    ### 수아님 코드 작성 부분
-    # image를 파라미터로 넣어서 밑에 label에 string 형태로 리턴해주시면 됩니다!
+    # generate uuid to distinguish each job
+    random_id = uuid.uuid4()
 
-    # label = find_label(image)
-    label= show_inference(image)
-    #label = "bear moon"
-    print('label : ')
-    print(label)
+    # 1. object detection from the image
+    # 2. similarity search
+    # 3. save result in DB
+    # chain 3 subtasks
+
+    task1 = tasks.find_label_from_image.s(image)
+    task2 = tasks.find_id_from_label.s()
+    task3 = tasks.insert_data.s(random_id)
+    chaining = chain((task1, task2, task3))
     
-    # elastic search로 추천 도서 목록 찾기
-    label="Caterpillar"
-    book_list = tasks.find_id_from_label(label)
-
-    return jsonify(book_list)
-# 
-
-# ========
-@app.route('/model/progress', methods=['POST'])
-def progress():
-    task_id = request.get_data(as_text=Literal[True])
-    try:
-        result = tasks.get_job_state(task_id)
-    except:
-        return jsonify("failed to get job")
-    return jsonify(result)
-
-@app.route('/model/result', methods=['POST'])
-def result():
-    task_id = request.get_data(as_text=Literal[True])
-    try:
-        result = tasks.get_job_result(task_id)
-    except:
-        return jsonify("Can not find result")
-    return jsonify(result)
-# ========= DB에 결과 저장하면 사용할 일 없음.
+    # execute task
+    chaining()
+    
+    # return uuid
+    return jsonify(str(random_id))
 
 @app.route('/test', methods=['GET', 'POST'])
 def test():

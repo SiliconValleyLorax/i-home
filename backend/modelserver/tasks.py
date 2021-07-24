@@ -1,22 +1,24 @@
-import time
 from celery import Celery, Task
 from celery.result import AsyncResult
 from elastic import *
+from io import BytesIO
+from PIL import Image
+import base64
 # from flask_app import app
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, String, Integer
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
-
-celery = Celery('tasks', backend="db+postgresql://postgres:postgres@postgres:5432/book_list", broker='amqp://rabbitmq:rabbitmq@rabbit:5672')
+from AI import show_inference
+celery = Celery('tasks', backend="db+postgresql://postgres:postgres@postgres:5432/ihome_db", broker='amqp://rabbitmq:rabbitmq@rabbit:5672')
 
 Base = declarative_base()
-url = 'postgresql://postgres:postgres@postgres/book_list'
+url = 'postgresql://postgres:postgres@postgres/ihome_db'
 engine = sqlalchemy.create_engine(url)
 Session = scoped_session(sessionmaker(bind=engine))
 session = Session()
-# db = SQLAlchemy(app)
+
 class TaskResult(Base):
     __tablename__ = 'task_results'
     id = Column(String, primary_key=True)
@@ -28,19 +30,18 @@ class TaskResult(Base):
     def __repr__(self):
         return f"<Task {self.id}>"
 
-# db.create_all()
-# TaskResult.__table__.drop(engine)
-# TaskResult.__table__.create(engine)
-
 
 class DB(Task):
     _check = False
         
     def insert(self, random_id, result):
-        if not self._check:
-            TaskResult.__table__.drop(engine)
-            TaskResult.__table__.create(engine)
-            self._check = True
+        # if not self._check:
+        #     TaskResult.__table__.drop(engine)
+        #     TaskResult.__table__.create(engine)
+        #     self._check = True
+        # if not engine.dialects.has_table(engine, TaskResult):
+        #     TaskResult.__table__.create(engine)
+        TaskResult.__table__.create(engine, checkfirst=True)
         task_obj = TaskResult(id=random_id, result=result)
         session.add(task_obj)
         session.commit()
@@ -81,14 +82,15 @@ class ElasticTask(Task):
 
 
 @celery.task()
-def find_label_from_image(image_string):
+def find_label_from_image(image):
     """
     str(image) -> str(label)
     학습시킨 AI 모델 들어가는 함수
     """
     print("detecting label")
-    time.sleep(3)
-    return "bear moon"
+    image = Image.open(BytesIO(base64.b64decode(image)))
+    label= show_inference(image)
+    return label
 
 @celery.task(base=ElasticTask)
 def find_id_from_label(label):
@@ -96,7 +98,6 @@ def find_id_from_label(label):
     str(label) -> list[Integer](idx list)
     """
     print("searching for books")
-    time.sleep(3)
     embed = find_id_from_label.embed
     es = find_id_from_label.es
     print("celery task get :", embed, es)

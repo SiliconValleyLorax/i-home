@@ -8,17 +8,36 @@ const BookList = ({ location }) => {
   // 현재는 모든 도서 목록을 불러오게 되어있지만, 알고리즘 완성 후에는 post 요청으로 이미지(attachment)를 보내서 추천도서 목록을 받아오는 것으로 변경될 예정.
   const [books, setBooks] = useState();
   const [loading, setLoading] = useState(true);
-  const getlist = async () => {
-    try {
-      const response = await axios.post("http://localhost:5000/api/image", {
-        image: location.state.image,
+
+  const getResult = (taskId) => {
+    axios
+      .post("http://localhost:5000/api/result", { taskID: taskId })
+      .then((response) => {
+        if (response.data.state === "PROCESSING") {
+          console.log(taskId, response.data.state);
+          setTimeout(() => getResult(taskId), 2000);
+        } else if (response.data.state === "SUCCESS") {
+          setBooks(response.data.result);
+          setLoading(false);
+        } else console.log(response.data, "Failed to get bookList from server");
+      })
+      .catch(() => {
+        console.log("Failed to get bookList from server");
       });
-      console.log(response);
-      setBooks(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.log("failed to send image to api server");
-    }
+  };
+
+  const getlist = () => {
+    axios
+      .post("http://localhost:5000/api/image", {
+        image: location.state.image,
+      })
+      .then((response) => {
+        console.log(response.data);
+        getResult(response.data);
+      })
+      .catch(() => {
+        console.log("failed to send image to api server");
+      });
   };
 
   useEffect(() => {
@@ -59,7 +78,7 @@ const BookList = ({ location }) => {
                       <span className="listAssemble">
                         <div className="linetext title">{book.title}</div>
                         <div className="linetext author">
-                          Author: {book.author}
+                          Slogan: {book.slogan}
                         </div>
                       </span>
                     </div>

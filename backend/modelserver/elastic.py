@@ -12,7 +12,7 @@ import datetime
 # from app import db, engine, cursor
 
 # db = SQLAlchemy()
-url = 'postgresql://postgres:postgres@postgres/book_list'
+url = 'postgresql://postgres:postgres@postgres/ihome_db'
 engine = sqlalchemy.create_engine(url)
 connection = engine.raw_connection()
 cursor = connection.cursor()

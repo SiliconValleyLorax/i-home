@@ -88,9 +88,9 @@ const UploadImage = () => {
               갤러리로 등록
             </div>
           </div>
-          <button onClick={test} className="upload-btn gallery-btn">
+          {/* <button onClick={test} className="upload-btn gallery-btn">
             <div>test</div>
-          </button>
+          </button> */}
         </div>
       </>
     );

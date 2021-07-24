@@ -10,14 +10,12 @@ import json
 import requests
 import pandas as pd
 import openpyxl
-
 # from torchvision import models
 # import torchvision.transforms as transforms
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.orm.exc import NoResultFound
-
 app = Flask(__name__)
 swagger = Swagger(app)
 app.config.from_object("config.DevelopmentConfig")
@@ -26,20 +24,18 @@ from models import *
 from translate import *
 db.create_all()
 CORS(app)
-
-
-url = 'postgresql://postgres:postgres@postgres/book_list'
+url = 'postgresql://postgres:postgres@postgres/ihome_db'
 engine = sqlalchemy.create_engine(url)
 Session = scoped_session(sessionmaker(bind=engine))
 session = Session()
-
 def initialize():
     if(session.query(Book).count() == 0):
         book_data = read_from_file(filename)
         # db.drop_all()        
         try:
             for i in range(len(book_data)):
-                book_obj = Book(book_data[i][2], book_data[i][4], book_data[i][3], book_data[i][8])
+                # book_obj = Book(book_data[i][2], book_data[i][4], book_data[i][3], book_data[i][8])
+                book_obj = Book(book_data[i][0], book_data[i][1], book_data[i][2], book_data[i][3], book_data[i][4], book_data[i][5])
                 session.add(book_obj)
                 print(book_obj)
             session.commit()
@@ -48,7 +44,6 @@ def initialize():
             print(500, "Error: 데이터 저장 실패")
     else:
         print(Book.query.count())
-    
 @app.route('/api/find', methods=['GET', 'POST'])
 def find():
     books = Book.query.all()
@@ -56,24 +51,20 @@ def find():
         {"id":book.id, "title":book.title, "author":book.author, "image":book.img_url} for book in books
     ]
     return jsonify(results)
-
-filename = 'book_data.xlsx'
-
+filename = 'Book.xlsx'
 def read_from_file(filepath):
     workbook = openpyxl.load_workbook(filename=filepath)
     sheet = workbook.worksheets[0]
     tmp = []
-    for i in range(3,sheet.max_row+1): 
+    for i in range(2,sheet.max_row+1): 
         tmp.append([]) 
         for cell in sheet[i]: 
             tmp[-1].append(cell.value)
     print(len(tmp))
     return tmp
-
 @app.route('/')
 def home_page():
     return "home page"
-
 @app.route('/api/test')
 def test():
     print("api test called")
@@ -83,7 +74,6 @@ def test():
         return res.json()
     except:
         return "hello World"
-
 @app.route('/api/send_image_ex', methods=['POST'])
 def send_image_ex():
     image = request.get_json()["image"].split(",")[-1]
@@ -103,7 +93,6 @@ def send_image_ex():
         # 편의를 위해 to hex
         color_array.append([rgb_array[i][0], '#{:02x}{:02x}{:02x}'.format(rgb_array[i][1][0], rgb_array[i][1][1], rgb_array[i][1][2])])
     return jsonify([color_array, x*y, class_name])
-
 @app.route('/api/image', methods=['POST'])
 def send_image():
     """
@@ -145,32 +134,13 @@ def send_image():
         description: A list of Books
         schema:
           $ref: "#/definitions/Booklist"
-
-
     """
     image = request.get_json()["image"].split(",")[-1]
     res = requests.post("http://modelserver:7000/model/image", image).json()
-    book_list = []
-
-    try:
-        for book in res:
-            print("id: ", book["id"])
-            book_detail = session.query(Book).filter(Book.id == int(book["id"])+1).one()
-            bookObject = {
-            "id": book_detail.id,
-            "title": book_detail.title,
-            "author": book_detail.author,
-            "image": book_detail.img_url
-            }
-            book_list.append(bookObject)
-        return jsonify(book_list)
-    except NoResultFound:
-        print ("Requested Book Not Found")
-
+    return jsonify(res)
 @app.route('/api/book/<int:id>', methods=['GET'])
 def get_book(id):
     """
-
     DB에서 id에 해당하는 책 정보 불러오기
     ---
     parameters:
@@ -180,7 +150,6 @@ def get_book(id):
         example: 1
         required: true
         description: Numeric id of the book to get
-
     definitions:
       Book_info:
         type: object
@@ -205,7 +174,6 @@ def get_book(id):
         description: An information of the Book
         schema:
           $ref: "#/definitions/Book_info"
-
     """
     try:
         book_detail = session.query(Book).filter(Book.id == id).one()
@@ -214,53 +182,69 @@ def get_book(id):
             "title": book_detail.title,
             "author": book_detail.author,
             "desc": book_detail.desc,
-            "image": book_detail.img_url,
+            "image": book_detail.img_src,
             "desc_ko": get_translate(book_detail.desc)
         }
         return jsonify(bookObject)
-
     except NoResultFound:
         print ("Requested Book Not Found")
-
 @app.route('/api/testpapago')
 def test_papago():
   text="hi my name is seoyeon"
   return get_translate(text)
-@app.route('/api/progress', methods=['POST'])
-def progress():
-    try:
-        task_id = request.get_json()["taskID"]
-    except:
-        return jsonify("CAN NOT FIND ID")
-    response = requests.post("http://modelserver:7000/model/progress", task_id)
-    return response.json()
+class CursorByName():
+    def __init__(self, cursor):
+        self._cursor = cursor
+    def __iter__(self):
+        return self
+    def __next__(self):
+        row = self._cursor.__next__()
+        return { description[0]: row[col] for col, description in enumerate(self._cursor.description) }
+
+
+def get_data(task_id):
+  book_list = None
+  results = []
+  connection = engine.raw_connection()
+  cursor = connection.cursor()
+  cursor.execute("select * from task_results")
+  for row in CursorByName(cursor):
+    results.append(row)
+  for i in range(len(results)):
+    if(results[i]["id"] == task_id):
+      book_list = results[i]["result"]
+  return book_list
 
 @app.route('/api/result', methods=['POST'])
 def result():
+    data = {"state":"", "result":[]}
     try:
-      # DB에 결과가 생성되었는지 확인
-      # 생성되지 않았을 경우 -> return "PROCESSING"
-      # 생성되었을 경우 -> return book_list
       task_id = request.get_json()["taskID"]
     except:
-      return jsonify("Failed to get book list")
-    response = requests.post("http://modelserver:7000/model/result", task_id).json()
-
-    book_list = []
-
-    # try:
-    #     for book in response:
-    #         print("id: ", book[0])
-    #         book_detail = session.query(Book).filter(Book.id == int(book[0])+1).one()
-    #         bookObject = {
-    #         "id": book_detail.id,
-    #         "title": book_detail.title,
-    #         "author": book_detail.author,
-    #         "image": book_detail.img_url
-    #         }
-    #         book_list.append(bookObject)
-    #     return jsonify(book_list)
-    # except NoResultFound:
-    #     print ("Requested Book Not Found")
-    return jsonify(response)
+      data["state"] = "PROCESSING"
+      return data
+    try:
+      book_list = None
+      while (book_list == None):
+        book_list = get_data(task_id)
+      print(book_list)
+      data["state"] = "SUCCESS"
+    except:
+      data["state"] = "PROCESSING"
     
+    try:
+        book_info_list = []
+        for book in book_list:
+            book_detail = session.query(Book).filter(Book.id == book["id"]).one()
+            bookObject = {
+            "id": book_detail.id,
+            "title": book_detail.title,
+            "slogan": book_detail.slogan,
+            "image": book_detail.img_src
+            }
+            book_info_list.append(bookObject)
+        data["result"] = book_info_list
+    except NoResultFound:
+        data["state"] = "FAILURE"
+        print ("Requested Book Not Found")
+    return jsonify(data)

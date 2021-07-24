@@ -228,6 +228,9 @@ def result():
         if book_list == None:
             data["state"] = "PROCESSING"
             return jsonify(data)
+        elif book_list == []:
+            data["state"] = "FAIL"
+            return jsonify(data)
         else:
             data["state"] = "SUCCESS"
     except:

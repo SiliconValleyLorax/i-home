@@ -67,6 +67,13 @@ STANDARD_COLORS = [
     'WhiteSmoke', 'Yellow', 'YellowGreen'
 ]
 
+def getModel():
+    utils_ops.tf = tf.compat.v1
+    tf.gfile = tf.io.gfile
+
+    detection_model = tf.saved_model.load('object_detection/inference_graph/saved_model')
+    print("getModel() called")
+    return detection_model
 
 
 def draw_bounding_box_on_image_array(image,
@@ -323,15 +330,15 @@ def run_inference(model, image) :
   return output_dict
 
 
-def show_inference(image_open) :
+def show_inference(detection_model, image_open) :
 
     PATH_TO_LABELS = 'object_detection/training/label_map.pbtxt'
     category_index = label_map_util.create_category_index_from_labelmap(
                       PATH_TO_LABELS, use_display_name = True)
-    utils_ops.tf = tf.compat.v1
-    tf.gfile = tf.io.gfile
+    # utils_ops.tf = tf.compat.v1
+    # tf.gfile = tf.io.gfile
 
-    detection_model = tf.saved_model.load('object_detection/inference_graph/saved_model')                  
+    # detection_model = tf.saved_model.load('object_detection/inference_graph/saved_model')                  
 
     image_np = np.array(image_open)
 

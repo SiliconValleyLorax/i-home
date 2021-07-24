@@ -19,6 +19,10 @@ const BookList = ({ location }) => {
         } else if (response.data.state === "SUCCESS") {
           setBooks(response.data.result);
           setLoading(false);
+        } else if (response.data.state === "FAIL") {
+          console.log("Can't find label");
+          setBooks(response.data.result);
+          setLoading(false);
         } else console.log(response.data, "Failed to get bookList from server");
       })
       .catch(() => {

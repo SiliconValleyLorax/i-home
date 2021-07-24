@@ -46,23 +46,6 @@ class DB(Task):
         session.add(task_obj)
         session.commit()
 
-def get_job_state(task_id):
-    """
-    return celery job from task id
-    """
-    try:
-        job = AsyncResult(task_id, app=celery)
-    except:
-        return "Failed to get state"
-    return job.state
-
-def get_job_result(task_id):
-    try:
-        job = AsyncResult(task_id, app=celery)
-    except:
-        return "Failed to get job result"
-    return job.result
-
 class ElasticTask(Task):
     _embed = None
     _es = None
@@ -79,9 +62,16 @@ class ElasticTask(Task):
             self._es = getEs()
         return self._es
 
+class AITask(Task):
+    _model = None
 
+    @property
+    def model(self):
+        if self._model == None:
+            self._model = getModel()
+        return self._model
 
-@celery.task()
+@celery.task(base=AITask)
 def find_label_from_image(image):
     """
     str(image) -> str(label)
@@ -89,7 +79,11 @@ def find_label_from_image(image):
     """
     print("detecting label")
     image = Image.open(BytesIO(base64.b64decode(image)))
-    label= show_inference(image)
+    model = find_label_from_image.model
+    try:
+        label= show_inference(model, image)
+    except:
+        return None
     return label
 
 @celery.task(base=ElasticTask)
@@ -97,17 +91,17 @@ def find_id_from_label(label):
     """
     str(label) -> list[Integer](idx list)
     """
+    if label == None:
+        return []
     print("searching for books")
     embed = find_id_from_label.embed
     es = find_id_from_label.es
-    print("celery task get :", embed, es)
     book_list = find_book_list(label, embed, es)
 
-    # DB에 결과 집어 넣고 return "Complete" / 사실 리턴 값 필요 없음...
     return book_list
 
 @celery.task(base=DB)
 def insert_data(idList, random_id):
-    #데이터 넣기
+    # DB에 데이터 저장
     insert_data.insert(random_id, idList)
     return "SUCCESS"

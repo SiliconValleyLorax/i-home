@@ -36,10 +36,10 @@ if gpus :
         print(e)
 '''
 
-utils_ops.tf = tf.compat.v1
-tf.gfile = tf.io.gfile
+# utils_ops.tf = tf.compat.v1
+# tf.gfile = tf.io.gfile
 
-detection_model = tf.saved_model.load('object_detection/inference_graph/saved_model')
+# detection_model = tf.saved_model.load('object_detection/inference_graph/saved_model')
 
 STANDARD_COLORS = [
     'AliceBlue', 'Chartreuse', 'Aqua', 'Aquamarine', 'Azure', 'Beige', 'Bisque',
@@ -295,7 +295,6 @@ def visualize_boxes_and_labels_on_image_array(
 
 
 def run_inference(model, image) :
-
   imagee = np.asarray(image)
 
   input_tensor = tf.convert_to_tensor(imagee)
@@ -329,8 +328,10 @@ def show_inference(image_open) :
     PATH_TO_LABELS = 'object_detection/training/label_map.pbtxt'
     category_index = label_map_util.create_category_index_from_labelmap(
                       PATH_TO_LABELS, use_display_name = True)
-                      
-    #detection_model = tf.saved_model.load('object_detection/inference_graph/saved_model')
+    utils_ops.tf = tf.compat.v1
+    tf.gfile = tf.io.gfile
+
+    detection_model = tf.saved_model.load('object_detection/inference_graph/saved_model')                  
 
     image_np = np.array(image_open)
 

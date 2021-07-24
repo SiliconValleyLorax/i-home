@@ -203,7 +203,6 @@ class CursorByName():
 
 
 def get_data(task_id):
-  book_list = None
   results = []
   connection = engine.raw_connection()
   cursor = connection.cursor()
@@ -212,25 +211,28 @@ def get_data(task_id):
     results.append(row)
   for i in range(len(results)):
     if(results[i]["id"] == task_id):
-      book_list = results[i]["result"]
-  return book_list
+      return results[i]["result"]       
+  return None
 
 @app.route('/api/result', methods=['POST'])
 def result():
     data = {"state":"", "result":[]}
     try:
-      task_id = request.get_json()["taskID"]
+        task_id = request.get_json()["taskID"]
     except:
-      data["state"] = "PROCESSING"
-      return data
+        data["state"] = "PROCESSING"
+        return jsonify(data)
     try:
-      book_list = None
-      while (book_list == None):
         book_list = get_data(task_id)
-      print(book_list)
-      data["state"] = "SUCCESS"
+        print(book_list)
+        if book_list == None:
+            data["state"] = "PROCESSING"
+            return jsonify(data)
+        else:
+            data["state"] = "SUCCESS"
     except:
-      data["state"] = "PROCESSING"
+        data["state"] = "PROCESSING"
+        return jsonify(data)
     
     try:
         book_info_list = []

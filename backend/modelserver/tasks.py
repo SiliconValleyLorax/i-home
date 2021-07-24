@@ -10,7 +10,7 @@ from sqlalchemy import Column, String, Integer
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
-from AI import show_inference
+from AI import *
 celery = Celery('tasks', backend="db+postgresql://postgres:postgres@postgres:5432/ihome_db", broker='amqp://rabbitmq:rabbitmq@rabbit:5672')
 
 Base = declarative_base()

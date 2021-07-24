@@ -107,6 +107,9 @@ def insert_book_list(embed, es):
                 "text-vector":{
                     "type": "dense_vector",
                     "dims": 512
+                },
+                "category":{
+                    "type": "keyword"
                 }
             }
         }
@@ -114,14 +117,15 @@ def insert_book_list(embed, es):
     # 데이터 집어넣기
     for i in range(len(data)):
         title = data[i]['title']
+        category = data[i]["category"]
         try:
             description=data[i]['desc'].replace("\n"," ").replace("'",'').replace('"','').strip()
         except:
             description=""
         try:
-            embeddings=embed([title+description])
+            embeddings=embed([title+description+category])
             text_vector=np.array(embeddings[0]).tolist()
-            doc={'idx':i+1,'title':title,'description':description, 'text-vector':text_vector}
+            doc={'idx':i+1,'title':title,'description':description, 'text-vector':text_vector, "category":category}
         except:
             print('no data')
             print('마지막 인덱스', i)

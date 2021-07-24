@@ -28,16 +28,21 @@ url = 'postgresql://postgres:postgres@postgres/ihome_db'
 engine = sqlalchemy.create_engine(url)
 Session = scoped_session(sessionmaker(bind=engine))
 session = Session()
-def initialize():
+
+@app.before_first_request
+def https_first_request():
     if(session.query(Book).count() == 0):
         book_data = read_from_file(filename)
+        print(book_data)
         # db.drop_all()        
         try:
             for i in range(len(book_data)):
                 # book_obj = Book(book_data[i][2], book_data[i][4], book_data[i][3], book_data[i][8])
                 book_obj = Book(book_data[i][0], book_data[i][1], book_data[i][2], book_data[i][3], book_data[i][4], book_data[i][5])
+                print(book_data[i][0], book_data[i][1], book_data[i][2], book_data[i][3], book_data[i][4], book_data[i][5])
                 session.add(book_obj)
                 print(book_obj)
+                print('book object 들어감')
             session.commit()
         except Exception as e:
             session.rollback()
@@ -246,6 +251,7 @@ def result():
             }
             book_info_list.append(bookObject)
         data["result"] = book_info_list
+
     except NoResultFound:
         data["state"] = "FAILURE"
         print ("Requested Book Not Found")

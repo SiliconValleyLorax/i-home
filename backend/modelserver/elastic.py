@@ -41,7 +41,6 @@ def default(o):
 
 def find_book_list(label, embed, es):
     
-    
     query=label
 
     embeddings=embed([query])
@@ -123,7 +122,7 @@ def insert_book_list(embed, es):
         except:
             description=""
         try:
-            embeddings=embed([title+description+category])
+            embeddings=embed([title*10+' '+description+' '+(category+' ')*10])
             text_vector=np.array(embeddings[0]).tolist()
             doc={'idx':i+1,'title':title,'description':description, 'text-vector':text_vector, "category":category}
         except:

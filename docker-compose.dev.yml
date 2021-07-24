@@ -21,18 +21,20 @@ services:
     build:
       context: ./backend/modelserver
       dockerfile: Dockerfile
-    command: gunicorn -w 1 -b 0.0.0.0:7000 wsgi:app
     ports:
       - "7000:7000"
     environment:
+      - FLASK_ENV=development
       - APP_SETTINGS=config.DevelopmentConfig
       - SECRET_KEY=dockertest
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/db_dev
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/ihome_db
     volumes:
       - ./backend/modelserver/:/modelserver/
     depends_on:
       - postgres
       - elasticsearch
+      - rabbit
+      - worker
     links:
       - postgres
     networks:
@@ -44,10 +46,10 @@ services:
     build:
       context: ./backend/apiserver
       dockerfile: Dockerfile
-    command: gunicorn -b 0.0.0.0:5000 -w 3 -t 240 wsgi:app
     ports:
       - "5000:5000"
     environment:
+      - FLASK_ENV=development
       - APP_SETTINGS=config.DevelopmentConfig
       - SECRET_KEY=dockertest
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/ihome_db
@@ -66,15 +68,18 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      args:
-        API_URL: "*"
+    tty: true
+    ports:
+      - "3000:3000"
     volumes:
       - ./frontend/:/frontend
-      - build_folder:/frontend/build
       - ./frontend/node_modules/:/frontend/node_modules
+    environment:
+      - CI=true
+      - CHOKIDAR_USEPOLLING=true
     networks:
       - app-tier
-    tty: true
+    restart: always
 
   # elasticsearch
   elasticsearch:
@@ -100,37 +105,26 @@ services:
         soft: -1
         hard: -1
 
-
-  #kibana
-  kibana:
-    container_name: kibana
-    image: kibana:7.9.0
+  rabbit:
+    hostname: rabbit
+    image: "rabbitmq:3-management"
     ports:
-      - 5601:5601
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbitmq
+      - RABBITMQ_DEFAULT_PASS=rabbitmq
     networks:
       - app-tier
-    environment:
-      ELASTICSERCH_UTL: http://elasticsearch:9200
-      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
-    environment:
-      - TZ=Asia/Seoul
-    restart: always
-    depends_on:
-      - elasticsearch
 
-
-  nginx:
-    build: ./nginx
-    ports:
-      - "8080:8080"
-      - "8081:8081"
-    volumes:
-      - build_folder:/var/www/frontend
+  worker:
+    build:
+      context: ./backend/modelserver
+      dockerfile: Dockerfile
+    command: celery -A tasks.celery worker --loglevel=info
     depends_on:
-      - frontend
-      - backend
-      - modelserver
-    restart: "on-failure"
+      - rabbit
+      - postgres
     networks:
       - app-tier
 
@@ -140,4 +134,6 @@ networks:
 
 volumes:
   postgres_data:
-  build_folder:
+    driver: local
+  # appdata:
+  #   driver: local

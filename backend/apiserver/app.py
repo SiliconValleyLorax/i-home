@@ -24,7 +24,7 @@ from models import *
 from translate import *
 db.create_all()
 CORS(app)
-url = 'postgresql://postgres:postgres@postgres/book_list'
+url = 'postgresql://postgres:postgres@postgres/ihome_db'
 engine = sqlalchemy.create_engine(url)
 Session = scoped_session(sessionmaker(bind=engine))
 session = Session()
@@ -223,12 +223,14 @@ def result():
     except:
       data["state"] = "PROCESSING"
       return data
-    
-    book_list = None
-    while (book_list == None):
-      book_list = get_data(task_id)
-    print(book_list)
-    data["state"] = "SUCCESS"
+    try:
+      book_list = None
+      while (book_list == None):
+        book_list = get_data(task_id)
+      print(book_list)
+      data["state"] = "SUCCESS"
+    except:
+      data["state"] = "PROCESSING"
     
     try:
         book_info_list = []

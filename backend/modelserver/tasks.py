@@ -11,10 +11,10 @@ from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 from AI import show_inference
-celery = Celery('tasks', backend="db+postgresql://postgres:postgres@postgres:5432/book_list", broker='amqp://rabbitmq:rabbitmq@rabbit:5672')
+celery = Celery('tasks', backend="db+postgresql://postgres:postgres@postgres:5432/ihome_db", broker='amqp://rabbitmq:rabbitmq@rabbit:5672')
 
 Base = declarative_base()
-url = 'postgresql://postgres:postgres@postgres/book_list'
+url = 'postgresql://postgres:postgres@postgres/ihome_db'
 engine = sqlalchemy.create_engine(url)
 Session = scoped_session(sessionmaker(bind=engine))
 session = Session()

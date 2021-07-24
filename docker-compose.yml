@@ -9,7 +9,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: book_list
+      POSTGRES_DB: ihome_db
     ports:
       - 5432:5432
     networks:
@@ -27,7 +27,7 @@ services:
       - FLASK_ENV=development
       - APP_SETTINGS=config.DevelopmentConfig
       - SECRET_KEY=dockertest
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/book_list
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/ihome_db
     volumes:
       - ./backend/modelserver/:/modelserver/
     depends_on:
@@ -52,7 +52,7 @@ services:
       - FLASK_ENV=development
       - APP_SETTINGS=config.DevelopmentConfig
       - SECRET_KEY=dockertest
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/book_list
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/ihome_db
     volumes:
       - ./backend/apiserver:/apiserver
     depends_on:

@@ -1,12 +1,13 @@
 import "../css/BookList.css";
 import "../css/Main.css";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Loading2 from "../components/Loading2";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
 const BookList = ({ location }) => {
-  // 현재는 모든 도서 목록을 불러오게 되어있지만, 알고리즘 완성 후에는 post 요청으로 이미지(attachment)를 보내서 추천도서 목록을 받아오는 것으로 변경될 예정.
+  // 현재는 모든 도서 목록을 불러오게 되어있지만, 알고리즘 완성 후에는 post 요청으로 이미지(attachment)를 보내서 추천도서 목록을 받아오는 것으로 변경될 예정.\
+
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [phrase, setPhrase] = useState("책을 찾을 수 없어요");
@@ -38,6 +39,7 @@ const BookList = ({ location }) => {
   };
 
   const getlist = () => {
+    if (location.state === undefined) return;
     axios
       .post(
         "http://localhost:5000/api/image",
@@ -69,6 +71,9 @@ const BookList = ({ location }) => {
   useEffect(() => {
     getlist();
   }, []);
+  if (location.state === undefined) {
+    return <Redirect to="/" />;
+  }
   switch (loading) {
     case true:
       return <Loading2></Loading2>;

@@ -1,21 +1,16 @@
-from io import BytesIO
-import io
-from flask import Flask, request, jsonify, redirect
-from sqlalchemy.orm import exc
+import json
+from flask import Flask, request, jsonify
+from sqlalchemy.sql.expression import false, true
 from flask_cors import CORS
 from flasgger import Swagger
-from PIL import Image
-import base64
-import json
 import requests
-import pandas as pd
 import openpyxl
-# from torchvision import models
-# import torchvision.transforms as transforms
+
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.orm.exc import NoResultFound
+
 app = Flask(__name__)
 swagger = Swagger(app)
 app.config.from_object("config.DevelopmentConfig")
@@ -31,6 +26,7 @@ session = Session()
 
 @app.before_first_request
 def https_first_request():
+    filename = 'Book.xlsx'
     if(session.query(Book).count() == 0):
         book_data = read_from_file(filename)
         print(book_data)
@@ -49,14 +45,7 @@ def https_first_request():
             print(500, "Error: 데이터 저장 실패")
     else:
         print(Book.query.count())
-@app.route('/api/find', methods=['GET', 'POST'])
-def find():
-    books = Book.query.all()
-    results = [
-        {"id":book.id, "title":book.title, "author":book.author, "image":book.img_url} for book in books
-    ]
-    return jsonify(results)
-filename = 'Book.xlsx'
+
 def read_from_file(filepath):
     workbook = openpyxl.load_workbook(filename=filepath)
     sheet = workbook.worksheets[0]
@@ -67,43 +56,25 @@ def read_from_file(filepath):
             tmp[-1].append(cell.value)
     print(len(tmp))
     return tmp
+    
 @app.route('/')
 def home_page():
-    return "home page"
-@app.route('/api/test')
-def test():
-    print("api test called")
-    try:
-        res = requests.get("http://modelserver:7000/test")
-        print(res.json())
-        return res.json()
-    except:
-        return "hello World"
-@app.route('/api/send_image_ex', methods=['POST'])
-def send_image_ex():
-    image = request.get_json()["image"].split(",")[-1]
-    image = Image.open(BytesIO(base64.b64decode(image)))
-    try:
-        class_name = '0','모델 결과 (아직 모델 안들어갔음!! )'
-    except:
-        class_name='객체 검출 실패'
-    rgb_array = []
-    rgb_image = image.convert("RGB")
-    x, y = image.size
-    rgb_array = rgb_image.getcolors(x*y)
-    rgb_array.sort(key=lambda x:x[0], reverse=True)
-    color_array = []
-    # 임의로 30개 설정, 만약 다섯개보다 적을 경우 (거의 그럴 일 없겠지만) 예외 처리 필요
-    for i in range(30):
-        # 편의를 위해 to hex
-        color_array.append([rgb_array[i][0], '#{:02x}{:02x}{:02x}'.format(rgb_array[i][1][0], rgb_array[i][1][1], rgb_array[i][1][2])])
-    return jsonify([color_array, x*y, class_name])
+    return "api server"
+
+def check_image_type(image_header):
+    image_type = image_header.split("/")[-1].split(";")[0].upper()
+    accepted_list = ["JPG", "JPEG", "PNG", "HEIC"]
+    print("type:", image_type)
+    if image_type in accepted_list:
+        return True
+    return False
+
 @app.route('/api/image', methods=['POST'])
 def send_image():
     """
-    이미지를 model server에 넘기고, 추천 그림책 리스트 받아서 리턴한다.
+    이미지를 model server에 넘기고, modelserver에서 받은 uuid를 반환한다.
     ---
-    description: Post a image to api server
+    description: Post a image to model server and return uuid from model server
     parameters:
       - name: body
         in: body
@@ -115,39 +86,34 @@ def send_image():
             type: string
             example: "toy.jpg"
     definitions:
-      Booklist:
-        type: array
-        items:
-          $ref: "#/definitions/Book"
-      Book:
-        type: object
-        properties:
-          id:
-            type: integer
-            example: 1
-          title:
-            type: string
-            example: "The Very Hungry Caterpillar"
-          author:
-            type: string
-            example: "by Eric Carle"
-          image:
-            type: string
-            example: "https://m.media-amazon.com/images/I/71KilybDOoL._AC_UY218_.jpg"
+      uuid:
+        type: string
+        example: "8e770c08-f118-48a3-97ba-32a5367da94c"
     responses:
       200:
-        description: A list of Books
+        description: unique id
         schema:
-          $ref: "#/definitions/Booklist"
+          $ref: "#/definitions/uuid"
+      400:
+        description: failed to read image
     """
-    image = request.get_json()["image"].split(",")[-1]
-    res = requests.post("http://modelserver:7000/model/image", image).json()
-    return jsonify(res)
+    if request.method != "POST":
+        return jsonify(None), 405
+    try:
+        image = request.get_json()["image"].split(",")
+        if not check_image_type(image[0]):
+            return jsonify(None), 400
+        res = requests.post("http://modelserver:7000/model/image", image[-1]).json()
+        return jsonify(res)
+    except:
+        return jsonify(None), 400
+
 @app.route('/api/book/<int:id>', methods=['GET'])
 def get_book(id):
     """
     DB에서 id에 해당하는 책 정보 불러오기
     ---
+    description: get information of the book
     parameters:
       - name: id
         in: path
@@ -174,12 +140,21 @@ def get_book(id):
           desc:
             type: string
             example: "THE all-time classic picture book, from generation to generation, sold somewhere in the world every 30 seconds! A sturdy and beautiful book to give as a gift for new babies, baby showers, birthdays, and other new beginnings!"
+          desc_ko:
+            type: string
+            example: "세대에서 세대에 걸쳐 전 세계 어디선가 30초마다 팔리는 고전 그림책! 아기들, 아기 샤워, 생일, 그리고 다른 새로운 시작들을 위해 선물로 줄 튼튼하고 아름다운 책!"
     responses:
       200:
-        description: An information of the Book
+        description: the information of the Book
         schema:
           $ref: "#/definitions/Book_info"
+      404:
+        description: Can't find the information of requested book 
+      405:
+        description: Invalid request
     """
+    if request.method != 'GET':
+        return jsonify("INVALID request"), 405
     try:
         book_detail = session.query(Book).filter(Book.id == id).one()
         bookObject = {
@@ -190,13 +165,16 @@ def get_book(id):
             "image": book_detail.img_src,
             "desc_ko": get_translate(book_detail.desc)
         }
-        return jsonify(bookObject)
+        return jsonify(bookObject), 200
     except NoResultFound:
         print ("Requested Book Not Found")
+        return jsonify("Failed to get book information"), 404
+
 @app.route('/api/testpapago')
 def test_papago():
   text="hi my name is seoyeon"
   return get_translate(text)
+
 class CursorByName():
     def __init__(self, cursor):
         self._cursor = cursor
@@ -221,26 +199,81 @@ def get_data(task_id):
 
 @app.route('/api/result', methods=['POST'])
 def result():
+    """
+    uuid를 받아 해당 id에 해당하는 Task의 현재 상황과 결과를 반환한다.
+    ---
+    parameters:
+      - name: body
+        in: body
+        type: string
+        example: "8e770c08-f118-48a3-97ba-32a5367da94c"
+        required: true
+        description: uuid to distinguish tasks
+    definitions:
+      response:
+        type: object
+        properties:
+          state:
+            type: string
+            enum: ["SUCCESS", "PROCESSING", "FAIL"]
+          result:
+            type: array
+            items:
+              $ref: "#/definitions/book"
+      book:
+        type: object
+        properties:
+          id:
+            type: integer
+            example: 31
+          title:
+            type: string
+            example: "School Bus"
+          image:
+            type: string
+            example: "https://images-na.ssl-images-amazon.com/images/I/51-tr+wUaWL._SY404_BO1,204,203,200_.jpg"
+          slogan:
+            type: string
+            example: "노란 버스를 타고 학교에 가요!"
+    responses:
+      200:
+        description: An information of the Book
+        schema:
+          $ref: "#/definitions/response"
+      202:
+        description: still processing
+        examples:
+          application/json: {"state":"PROCESSING", "result":[]}          
+      405:
+        description: Invalid request
+      500:
+        description: failed to find label
+        examples:
+          application/json: {"state":"FAIL", "result":[]}
+      
+    """
+    if request.method != "POST":
+      return jsonify("INVALID request"), 405
+
     data = {"state":"", "result":[]}
     try:
         task_id = request.get_json()["taskID"]
     except:
         data["state"] = "PROCESSING"
-        return jsonify(data)
+        return jsonify(data), 202
     try:
         book_list = get_data(task_id)
-        print(book_list)
         if book_list == None:
             data["state"] = "PROCESSING"
-            return jsonify(data)
+            return jsonify(data), 202
         elif book_list == []:
             data["state"] = "FAIL"
-            return jsonify(data)
+            return jsonify(data), 500
         else:
             data["state"] = "SUCCESS"
     except:
         data["state"] = "PROCESSING"
-        return jsonify(data)
+        return jsonify(data), 202
     
     try:
         book_info_list = []
@@ -258,4 +291,4 @@ def result():
     except NoResultFound:
         data["state"] = "FAILURE"
         print ("Requested Book Not Found")
-    return jsonify(data)
+    return jsonify(data), 200

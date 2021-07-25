@@ -9,7 +9,8 @@ const BookList = ({ location }) => {
   // 현재는 모든 도서 목록을 불러오게 되어있지만, 알고리즘 완성 후에는 post 요청으로 이미지(attachment)를 보내서 추천도서 목록을 받아오는 것으로 변경될 예정.
   const [books, setBooks] = useState();
   const [loading, setLoading] = useState(true);
-  const [image, setImage] = useState(null);
+  const [phrase, setPhrase] = useState("");
+
   const getResult = (taskId) => {
     axios
       .post("http://localhost:5000/api/result", { taskID: taskId })
@@ -20,10 +21,12 @@ const BookList = ({ location }) => {
         } else if (response.data.state === "SUCCESS") {
           setBooks(response.data.result);
           setLoading(false);
+          setPhrase("이런 책을 추천해요");
         } else if (response.data.state === "FAIL") {
           console.log("Can't find label");
           setBooks(response.data.result);
           setLoading(false);
+          setPhrase("책을 찾을 수 없어요");
         } else console.log(response.data, "Failed to get bookList from server");
       })
       .catch(() => {
@@ -42,6 +45,9 @@ const BookList = ({ location }) => {
       })
       .catch(() => {
         console.log("failed to send image to api server");
+        setLoading(false);
+        setBooks([]);
+        setPhrase("책을 찾을 수 없어요");
       });
   };
 
@@ -57,7 +63,7 @@ const BookList = ({ location }) => {
         <>
           <div className="home-container">
             {/* <div className="book-list-title">추천 도서 목록</div> */}
-            <div className="book-list-sub-title">이런 책을 추천해요</div>
+            <div className="book-list-sub-title">{phrase}</div>
             {books &&
               books.map((book, index) => (
                 <div className="book-list" key={book.id}>

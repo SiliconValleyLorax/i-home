@@ -21,6 +21,14 @@ const BookDetail = ({ location }) => {
         `http://localhost:5000/api/book/${location.state.id}`
       );
       setBook(response.data);
+      // setBook({
+      //   author: "by Eric Carle",
+      //   desc: "THE all-time classic picture book, from generation to generation, sold somewhere in the world every 30 seconds! A sturdy and beautiful book to give as a gift for new babies, baby showers, birthdays, and other new beginnings!",
+      //   id: 1,
+      //   image: "https://m.media-amazon.com/images/I/71KilybDOoL._AC_UY218_.jpg",
+      //   title: "The Very Hungry Caterpillar",
+      //   slogan: "한줄평입니다...",
+      // });
     } catch (error) {
       console.log("error");
     }
@@ -35,30 +43,21 @@ const BookDetail = ({ location }) => {
   return (
     <>
       <div className="book_detail">
+        <div>
+          <img src={book.image} alt="book" width="100%" className="book_img" />
+        </div>
         <div className="book_title">
           <h3>{book.title}</h3>
         </div>
-        <div className="book_img">
-          <img src={book.image} alt="book" width="100%" />
-        </div>
-        <div className="book_tag">
-          <span className="tag_css">#가족</span>
-          <span className="tag_css">#곰</span>
-          <span className="tag_css">#동물</span>
-          <span className="tag_css">#따듯함</span>
-        </div>
         <div className="book_author">{book.author}</div>
-        <div className="book_desc">
-          {book.desc}
+        <div className="book_desc">{book.desc}</div>
+        <div>
           <button onClick={getTranslate} className="translate-btn">
             번역 보기
           </button>
         </div>
 
         {ko ? <div></div> : <div className="book_desc">{book.desc_ko}</div>}
-        <Link to="/classRoom">
-          <button className="submit-btn">강의 신청하기</button>
-        </Link>
       </div>
     </>
   );

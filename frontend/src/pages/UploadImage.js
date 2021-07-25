@@ -74,7 +74,7 @@ const UploadImage = () => {
       <>
         <div className="main-container">
           <div className="container-title">
-            <span>아이가 좋아하는 장난감, 공간 등을 알려주세요</span>
+            <span>아이가 좋아하는 장난감을 등록해주세요</span>
           </div>
           <Link to="/CameraSet" className="link_css">
             <div className="upload-btn camera-btn">

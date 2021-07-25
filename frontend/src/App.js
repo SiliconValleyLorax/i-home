@@ -10,7 +10,6 @@ import ClassRoom from "./pages/ClassRoom";
 import BookList from "./pages/BookList";
 import BookDetail from "./pages/BookDetail";
 import CameraSet from "./pages/CameraSet";
-import GallerySet from "./pages/GallerySet";
 import ScrollToTop from "./ScrollTop";
 //import Cam from "./pages/Cam";
 //import Camera from "./pages/Camera";

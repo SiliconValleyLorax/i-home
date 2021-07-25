@@ -9,7 +9,7 @@ const BookList = ({ location }) => {
   // 현재는 모든 도서 목록을 불러오게 되어있지만, 알고리즘 완성 후에는 post 요청으로 이미지(attachment)를 보내서 추천도서 목록을 받아오는 것으로 변경될 예정.
   const [books, setBooks] = useState();
   const [loading, setLoading] = useState(true);
-
+  const [image, setImage] = useState(null);
   const getResult = (taskId) => {
     axios
       .post("http://localhost:5000/api/result", { taskID: taskId })
@@ -60,7 +60,7 @@ const BookList = ({ location }) => {
             <div className="book-list-sub-title">이런 책을 추천해요</div>
             {books &&
               books.map((book, index) => (
-                <div className="book-list">
+                <div className="book-list" key={book.id}>
                   {/* <div className="book-rank">{index + 1}</div> */}
                   <Link
                     to={{
@@ -68,7 +68,6 @@ const BookList = ({ location }) => {
                       state: { id: book.id },
                     }}
                     className="listline"
-                    key={book.id}
                   >
                     <div className="book-image">
                       <img src={book.image} alt="book" />

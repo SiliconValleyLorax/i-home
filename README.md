@@ -5,7 +5,7 @@
 
 |  |  |
 | --- | --- |
-| ![README/Untitled.png](README/Splash Screen.png) | ![README/Untitled%201.png](README/소개 화면.png) |
+| ![README/Splash Screen.png](README/Splash Screen.png) | ![README/소개 화면%201.png](README/소개 화면.png) |
 
 
 

@@ -18,14 +18,14 @@
 .img-holder {
   position: relative;
   margin: 0 auto;
-  width: 100%;
+  width: 70%;
   height: 100%;
   border: none;
   border-radius: 5px;
 }
 
 .select-photo {
-  width: 100%;
+  width: 70%;
 }
 
 .no-image {

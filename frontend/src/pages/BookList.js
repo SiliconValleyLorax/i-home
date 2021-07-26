@@ -7,8 +7,6 @@ import { useEffect, useState } from "react";
 import BookDetail from "./BookDetail";
 
 const BookList = ({ location }) => {
-  // 현재는 모든 도서 목록을 불러오게 되어있지만, 알고리즘 완성 후에는 post 요청으로 이미지(attachment)를 보내서 추천도서 목록을 받아오는 것으로 변경될 예정.\
-
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [phrase, setPhrase] = useState("책을 찾을 수 없어요");
@@ -82,48 +80,51 @@ const BookList = ({ location }) => {
     case true:
       return <Loading></Loading>;
     case false:
-      if (popup === false) {
-        return (
-          <>
-            <div className="home-container">
-              {/* <div className="book-list-title">추천 도서 목록</div> */}
-              <div className="book-list-sub-title">이런 책을 추천해요</div>
-              {books &&
-                books.map((book, index) => (
-                  <div className="book-list" key={book.id}>
-                    {/* <div className="book-rank">{index + 1}</div> */}
-                    <div
-                      onClick={() => {
-                        setPopup(true);
-                        setBookId(book.id);
-                        // console.log("true");
-                      }}
-                    >
-                      <div className="book-image">
-                        <img src={book.image} alt="book" />
-                      </div>
-                      <div className="book-description">
-                        <span className="listAssemble">
-                          <div>{book.slogan}</div>
-                          {/* <div className="linetext title">{book.title}</div>
+      return (
+        <>
+          {popup && <BookDetail id={bookId} popClose={setPopup}></BookDetail>}
+          <div
+            className="home-container"
+            style={{
+              touchAction: popup ? "none" : "auto",
+              overflowY: "hidden",
+            }}
+          >
+            {/* <div className="book-list-title">추천 도서 목록</div> */}
+            <div className="book-list-sub-title">{phrase}</div>
+            {books &&
+              books.map((book, index) => (
+                <div className="book-list" key={book.id}>
+                  {/* <div className="book-rank">{index + 1}</div> */}
+                  <div
+                    onClick={() => {
+                      setPopup(true);
+                      setBookId(book.id);
+                      // console.log("true");
+                    }}
+                  >
+                    <div className="book-image">
+                      <img src={book.image} alt="book" />
+                    </div>
+                    <div className="book-description">
+                      <span className="listAssemble">
+                        <div>{book.slogan}</div>
+                        {/* <div className="linetext title">{book.title}</div>
                           <div className="linetext author">
                             Author: {book.author}
                           </div> */}
-                        </span>
-                      </div>
+                      </span>
                     </div>
-                    <button className="button-css">
-                      <img src="/zoom-logo.png" className="num-logo" />줌 수업
-                      신청하기
-                    </button>
                   </div>
-                ))}
-            </div>
-          </>
-        );
-      } else {
-        return <BookDetail id={bookId} popClose={setPopup}></BookDetail>;
-      }
+                  <button className="button-css">
+                    <img src="/zoom-logo.png" className="num-logo" />줌 수업
+                    신청하기
+                  </button>
+                </div>
+              ))}
+          </div>
+        </>
+      );
 
     default:
       return;

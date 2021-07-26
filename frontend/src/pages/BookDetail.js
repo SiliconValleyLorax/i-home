@@ -6,10 +6,10 @@ import "../css/UploadImage.css";
 
 const BookDetail = ({ id, popClose }) => {
   const [book, setBook] = useState({
-    id: 0,
-    title: 0,
-    author: 0,
-    desc: 0,
+    id: null,
+    title: null,
+    author: null,
+    desc: null,
     image: "",
   });
   const [ko, setKo] = useState(0);
@@ -38,7 +38,7 @@ const BookDetail = ({ id, popClose }) => {
   }, []);
 
   return (
-    <>
+    <div className="background">
       <div className="book_detail">
         <div className="close-button">
           <img
@@ -65,7 +65,7 @@ const BookDetail = ({ id, popClose }) => {
 
         {ko ? <div></div> : <div className="book_desc">{book.desc_ko}</div>}
       </div>
-    </>
+    </div>
   );
 };
 export default BookDetail;

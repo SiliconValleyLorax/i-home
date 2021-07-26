@@ -6,6 +6,16 @@
   --darker-color: #3f3f3f;
 }
 
+.background {
+  z-index: 99;
+  position: fixed;
+  top: 80px;
+  background-color: #fff;
+  overflow-y: auto;
+  height: calc(100vh - 80px);
+  /* height: 100%; */
+}
+
 .close-button {
   margin-left: -90%;
 }
@@ -15,6 +25,8 @@
   margin: auto;
   padding: 5%;
   text-align: center;
+  background-color: #fff;
+  height: 80vh;
 }
 
 .book_title {

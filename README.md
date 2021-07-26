@@ -5,7 +5,7 @@
 
 |  |  |
 | --- | --- |
-| ![README/Untitled.png](README/Untitled.png) | ![README/Untitled%201.png](README/Untitled%201.png) |
+| ![README/Untitled.png](README/Splash Screen.png) | ![README/Untitled%201.png](README/소개 화면.png) |
 
 
 
@@ -21,12 +21,12 @@
 
 ### Main **POC**
 
-**아이가 좋아하는 사물 (장난감, 장소)을 업로드 및 촬영하여**
+아이가 좋아하는 사물 (장난감, 장소)을 업로드 및 촬영하여
 
-**1) 객체 (사물, 색감, 분위기) 를 추출하고
-2)  유사도 검색을 통해 
+1)  **객체 (사물, 색감, 분위기) 를 추출하고**
+2)  **유사도 검색을 통해**
 
-아이 취향에 알맞는 도서를 추천해주는 AI 서비스다.**
+아이 취향에 알맞는 도서를 추천해주는 AI 서비스다.
 
 ![README/Untitled%202.png](README/Untitled%202.png)
 
@@ -36,7 +36,13 @@
 
 ![README/Untitled%203.png](README/Untitled%203.png)
 
- 
+| Role | Framework & Tech |
+| --- | --- |
+| Frontend | <img src="https://img.shields.io/badge/#61DAFB?style=flat-square&logo=React&logoColor=white"/></a> |
+| Backend | <img src="https://img.shields.io/badge/#000000?style=flat-square&logo=flask&logoColor=white"/></a>&nbsp <img src="https://img.shields.io/badge/#4169E1style=flat-square&logo=PostgreSQL&logoColor=white"/></a>&nbsp <img src="https://img.shields.io/badge/#FF6600?style=flat-square&logo=RabbitMQ&logoColor=white"/></a>&nbsp <img src="https://img.shields.io/badge/#005571?style=flat-square&logo=Elasticsearch&logoColor=white"/></a>&nbsp |
+| AI | <img src="https://img.shields.io/badge/#FF6F00?style=flat-square&logo=TensorFlow&logoColor=white"/></a>&nbsp <img src="https://img.shields.io/badge/#F9AB00?style=flat-square&logo=Google Colab&logoColor=white"/></a>&nbsp |
+| Web Server & Container | <img src="https://img.shields.io/badge/#009639?style=flat-square&logo=NGINX&logoColor=white"/></a>&nbsp <img src="https://img.shields.io/badge/#2496ED?style=flat-square&logo=Docker&logoColor=white"/></a>&nbsp  |
+
 
 ### AI
 
@@ -62,6 +68,17 @@ Tensorflow의 universal-sentence-encoder를 사용해 책 리스트의 텍스트
 ### Frontend
 
 - React
+각 페이지마다 사용자 응답에 따라 인터페이스를 변경시키기 위해 REACT 프레임워크를 사용했습니다. app.js를 기본 페이지로 두고 각각의 구현 페이지를 컴포넌트로 가져와 url 페이지 분기로 출력하는 형식입니다. 
+
+- 사용 라이브러리
+**react-router-dom**
+페이지 로딩 없이 페이지에 필요한 컴포넌트를 불러와 렌더링하는 라이브러리 react-router-dom을 사용하여 페이지를 구성했습니다. 
+
+**react-webcam**
+모바일 뿐만 아니라 pc에서도 장난감 사진을 캡쳐하기 위해 pc용 웹캠 모듈을 사용했습니다. 
+
+**axios**
+캡쳐한 장난감 사진 파일을 back으로 보내고, ai 검색 결과 책 목록 데이터를 response.data로 가져올 때 axios 라이브러리를 사용합니다.
 
 ### Search Engine
 
@@ -76,7 +93,37 @@ Tensorflow의 universal-sentence-encoder를 사용해 책 리스트의 텍스트
 
 ## 03. 팀원
 
-- Frontend : 홍명주 김서연 (후반)
-- Backend : 김하연 박지영
-- AI : 한수아, 로빈
-- DevOps: 김서연
+
+| Name | Role | Description |
+| --- | --- | --- |
+| 홍명주 | Frontend | 
+- React JS Hooks 기반 프론트엔드 설계
+- UI/UX 퍼블리싱
+- 반응형 웹앱 제작
+- 스플래시 화면, 로딩창 구현|
+| 김서연 | 팀장 / DevOps | 
+- Docker를 통한 기술스택 Containerized
+-  NHN 클라우드 배포
+- ElasticSearch, text embedding 및 cosine similarity 검색 기능 구현
+|
+| 박지영 | Backend |
+- Flask REST API구현, Swagger명세화
+- 서버 분리, 유효성 검사 및 예외 처리
+- Rabbitmq, Celery를 통한 비동기 처리구현, 서버 성능 향상
+|
+| 김하연 | Backend | 
+- PostgreSQL 개발, 스키마 설계
+- ORM 활용  (SqlAlchemy)
+- Celery task 데이터 처리 
+- NHN Cloud 배포
+|
+| 한수아 | Data Engineering | 
+- Tensorflow SSD 객체 인식 모델 구현
+- AI 모델 성능 최적화
+- 성능 시각화를 통한 모니터링
+- Google Colab 사용 
+|
+| Robin Park | Backend |
+- Elasticsearch 쿼리 구현
+- 배포 자료 수집 |
+

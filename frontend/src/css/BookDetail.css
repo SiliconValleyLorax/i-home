@@ -6,6 +6,10 @@
   --darker-color: #3f3f3f;
 }
 
+.close-button {
+  margin-left: -90%;
+}
+
 .book_detail {
   max-width: 50rem;
   margin: auto;
@@ -19,9 +23,9 @@
 }
 
 .book_img {
-  width: 100%;
+  width: 80%;
   height: 100%;
-  padding: 5%;
+  margin: 5% auto;
   /* padding-left: 15%;
   padding-right: 15%; */
   background-color: #fff;
@@ -68,4 +72,10 @@
   font-size: 0.5rem;
   font-weight: bold;
   border-radius: 0.5rem;
+}
+
+.copyright {
+  margin-top: 10%;
+  color: gray;
+  font-weight: lighter;
 }

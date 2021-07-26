@@ -28,7 +28,6 @@ function App() {
           <Route path="/classRoom" component={ClassRoom} />
           <Route path="/cameraSet" component={CameraSet} />
           <Route path="/bookList" component={BookList} />
-          <Route path="/bookDetail" component={BookDetail} />
         </Switch>
       </Router>
     </>

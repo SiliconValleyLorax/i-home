@@ -53,31 +53,6 @@ const BookList = ({ location }) => {
         setBooks([]);
         setPhrase("책을 찾을 수 없어요");
       });
-<<<<<<< Updated upstream
-=======
-      console.log(response);
-      setBooks(response.data);
-      // setBooks([
-      //   {
-      //     id: 1,
-      //     image:
-      //       "https://m.media-amazon.com/images/I/71KilybDOoL._AC_UY218_.jpg",
-      //     slogan: "한줄평입니다...",
-      //     title: "The Very Hungry Caterpillar",
-      //   },
-      //   {
-      //     id: 2,
-      //     image:
-      //       "https://m.media-amazon.com/images/I/71KilybDOoL._AC_UY218_.jpg",
-      //     slogan: "한줄평입니다...",
-      //     title: "The Very Hungry Caterpillar",
-      //   },
-      // ]);
-      setLoading(false);
-    } catch (error) {
-      console.log("failed to send image to api server");
-    }
->>>>>>> Stashed changes
   };
 
   useEffect(() => {
@@ -88,7 +63,6 @@ const BookList = ({ location }) => {
     case true:
       return <Loading></Loading>;
     case false:
-<<<<<<< Updated upstream
       if (popup === false) {
         return (
           <>
@@ -132,47 +106,6 @@ const BookList = ({ location }) => {
         return <BookDetail id={bookId} popClose={setPopup}></BookDetail>;
       }
 
-=======
-      return (
-        <>
-          <div className="home-container">
-            {/* <div className="book-list-title">추천 도서 목록</div> */}
-            <div className="book-list-sub-title">이런 책을 추천해요</div>
-            {books &&
-              books.map((book, index) => (
-                <div className="book-list">
-                  {/* <div className="book-rank">{index + 1}</div> */}
-                  <Link
-                    to={{
-                      pathname: `/bookDetail/${book.title}`,
-                      state: { id: book.id },
-                    }}
-                    className="listline"
-                    key={book.id}
-                  >
-                    <div className="book-image">
-                      <img src={book.image} alt="book" />
-                    </div>
-                    <div className="book-description">
-                      <span className="listAssemble">
-                        <div>{book.slogan}</div>
-                        {/* <div className="linetext title">{book.title}</div>
-                        <div className="linetext author">
-                          Author: {book.author}
-                        </div> */}
-                      </span>
-                    </div>
-                  </Link>
-                  <button className="button-css">
-                    <img src="/zoom-logo.png" className="num-logo" />줌 수업
-                    신청하기
-                  </button>
-                </div>
-              ))}
-          </div>
-        </>
-      );
->>>>>>> Stashed changes
     default:
       return;
   }

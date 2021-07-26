@@ -40,7 +40,6 @@ const BookDetail = ({ id, popClose }) => {
   return (
     <>
       <div className="book_detail">
-<<<<<<< Updated upstream
         <div className="close-button">
           <img
             src="/close.png"
@@ -55,14 +54,6 @@ const BookDetail = ({ id, popClose }) => {
         <div className="book_title">
           <h3>{book.title}</h3>
         </div>
-=======
-        <div>
-          <img src={book.image} alt="book" width="100%" className="book_img" />
-        </div>
-        <div className="book_title">
-          <h3>{book.title}</h3>
-        </div>
->>>>>>> Stashed changes
         <div className="book_author">{book.author}</div>
         <div className="book_desc">{book.desc}</div>
         <div>

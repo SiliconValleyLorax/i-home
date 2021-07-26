@@ -21,10 +21,7 @@ a {
   text-align: center;
   font-size: 1.3rem;
   padding-bottom: 50px;
-<<<<<<< Updated upstream
   font-weight: bold;
-=======
->>>>>>> Stashed changes
 }
 .book-list {
   padding: 5%;
@@ -52,7 +49,6 @@ a {
   font-size: 1.2rem;
 } */
 .book-image img {
-<<<<<<< Updated upstream
   border-radius: 1rem;
   width: 100%;
   height: 100%;
@@ -61,15 +57,6 @@ a {
 }
 .book-description {
   margin: 5%;
-=======
-  border-radius: 10px;
-  width: 100%;
-  height: 100%;
-  /* object-fit: cover; */
-}
-.book-description {
-  margin-top: 5%;
->>>>>>> Stashed changes
   text-align: center;
   word-break: keep-all;
 }
@@ -92,10 +79,7 @@ a {
   padding: 10px;
   vertical-align: middle;
   max-width: 100%;
-<<<<<<< Updated upstream
   color: gray;
-=======
->>>>>>> Stashed changes
 }
 
 .linetext {
@@ -111,15 +95,9 @@ a {
   padding-right: 0.5rem;
 } */
 @media screen and (max-width: 960px) {
-<<<<<<< Updated upstream
   /* .book-image img {
     margin-top: 35px;
   } */
-=======
-  .book-image img {
-    margin-top: 35px;
-  }
->>>>>>> Stashed changes
   .book-description {
     padding-left: 0;
   }

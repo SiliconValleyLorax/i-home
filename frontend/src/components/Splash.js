@@ -7,11 +7,7 @@ const Splash = () => {
   return (
     <div>
       <img src={imgUrl} alt="main" className="main-image"></img>
-<<<<<<< Updated upstream
       <div className="splash-text">
-=======
-      <div>
->>>>>>> Stashed changes
         영어 그림책 추천부터 수업까지
         <br />
         한번에 해결하세요!

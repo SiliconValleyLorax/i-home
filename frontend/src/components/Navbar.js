@@ -21,6 +21,8 @@ function Navbar() {
     }
   };
 
+  const imgUrl = "/ihome-logo.png";
+
   window.addEventListener("resize", showButton);
 
   return (
@@ -28,6 +30,10 @@ function Navbar() {
       <div className="navbar">
         <div className="navbar-container container">
           <Link to="/" className="navbar-logo">
+            <img src={imgUrl} alt="main" className="main-image" />
+            아이홈 잉글리시
+          </Link>
+          {/* <Link to="/" className="navbar-logo">
             iHome
           </Link>
           <div className="menu-icon" onClick={handleClick}>
@@ -71,7 +77,7 @@ function Navbar() {
                 </Link>
               )}
             </li>
-          </ul>
+          </ul> */}
         </div>
       </div>
     </>

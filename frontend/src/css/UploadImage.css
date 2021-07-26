@@ -12,7 +12,7 @@
   text-align: center;
   margin-bottom: 40px;
   font-size: 1.3rem;
-  word-break:keep-all;
+  word-break: keep-all;
 }
 
 .img-holder {
@@ -21,7 +21,6 @@
   height: 300px;
   border: none;
   border-radius: 5px;
-  margin-top: 5rem;
 }
 .no-image {
   width: 100%;
@@ -34,7 +33,7 @@
   height: 100px;
   color: #fff;
   border-radius: 10px;
-  background-color: #3f3f3f;
+  background-color: #28aa9d;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -45,23 +44,23 @@
 .icon-btn {
   width: 50px;
   height: 50px;
-  color: #0cff6d;
+  color: #fff;
   margin-right: 20px;
 }
 .camera-btn {
-  background-color: #c4c4c4;
+  background-color: #28aa9d;
   border: none;
-  color: #3f3f3f;
+  color: #fff;
 }
 .link_css {
   text-decoration: none;
 }
 .photo {
-  color: #3f3f3f;
+  color: #fff;
 }
 .image-upload .g-icons {
   width: 50px;
   height: 50px;
-  color: #0cff6d;
+  color: #28aa9d;
   margin-right: 20px;
 }

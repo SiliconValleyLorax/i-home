@@ -1,15 +1,20 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 // import axios from "axios";
+import "../css/Main.css";
 
 const GallerySet = ({ attachment, back, openFile }) => {
   return (
-    <>
+    <div className="home-container">
       <div className="img-holder">
         <img src={attachment} alt="nothing" className="no-image" id="preview" />
       </div>
-      <form className="main-container">
-        <button type="submit" className="submit-btn" onClick={back}>
+      <form className="form-css">
+        <button
+          type="submit"
+          className="button-css gallery-button"
+          onClick={back}
+        >
           돌아가기
         </button>
         <div
@@ -19,15 +24,15 @@ const GallerySet = ({ attachment, back, openFile }) => {
             openFile();
           }}
         >
-          <button className="submit-btn">다시 선택하기</button>
+          <button className="button-css gallery-button">다시 선택하기</button>
         </div>
         <Link to={{ pathname: "/bookList", state: { image: attachment } }}>
-          <button type="submit" className="submit-btn">
-            결과 확인하기
+          <button type="submit" className="button-css gallery-button">
+            아이 취향 분석하기
           </button>
         </Link>
       </form>
-    </>
+    </div>
   );
 };
 export default GallerySet;

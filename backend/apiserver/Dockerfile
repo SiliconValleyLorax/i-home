@@ -20,4 +20,4 @@ COPY . /apiserver/
 
 
 # 개발용
-# CMD ["python", "wsgi.py"]
+CMD ["python", "wsgi.py"]

@@ -23,8 +23,8 @@ RUN npm install --silent
 # RUN npm install react-scripts -g
 
 # 개발용
-# CMD ["npm", "start"]
+CMD ["npm", "start"]
 
 # 배포용
-RUN npm run build
+# RUN npm run build
 

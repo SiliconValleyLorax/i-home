@@ -6,45 +6,11 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import GallerySet from "./GallerySet";
 // import Book from './Book'
-import axios from "axios";
 const UploadImage = () => {
   const [option, setOption] = useState(0);
   const [attachment, setAttachment] = useState(
     "https://i.stack.imgur.com/GNhxO.png"
   );
-
-  const test = async () => {
-    let taskID;
-    const getTaskID = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/api/test");
-        taskID = response.data;
-        console.log(taskID);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-
-    const getResult = async () => {
-      try {
-        const finalresult = await axios.post(
-          "http://localhost:5000/api/result",
-          {
-            taskID: taskID,
-          }
-        );
-        console.log(taskID, finalresult.data);
-        if (finalresult.data === "PROCESSING") {
-          setTimeout(() => getResult(), 2000);
-          return;
-        } else return;
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    getTaskID();
-    // confirmtask();
-  };
 
   function openFile() {
     var input = document.createElement("input");
@@ -74,7 +40,7 @@ const UploadImage = () => {
       <>
         <div className="main-container">
           <div className="container-title">
-            <span>아이가 좋아하는 장난감, 공간 등을 알려주세요</span>
+            <span>아이가 좋아하는 장난감을 등록해주세요</span>
           </div>
           <Link to="/CameraSet" className="link_css">
             <div className="upload-btn camera-btn">
@@ -88,9 +54,6 @@ const UploadImage = () => {
               갤러리로 등록
             </div>
           </div>
-          {/* <button onClick={test} className="upload-btn gallery-btn">
-            <div>test</div>
-          </button> */}
         </div>
       </>
     );

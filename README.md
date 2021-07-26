@@ -13,9 +13,6 @@
 
 > 5~7세 아이들은 직접 프로필을 작성하는데에 어려움이 있어. 아이들의 정확한 취향을 파악하기 어렵다. 또한 아이들의 개인정보를 기반으로 추천시스템을 개발하기에 이미 수집된 데이터가 부족하기 때문에 Cold Start 문제가 발생할 수 있다. 따라서 **이미지 인식을 통한 취향 파악과 라벨을 기준으로 한 유사도 검색 및 추천 기능 도입**으로 으로 이 문제를 해결하려고 한다.
 
-<img width="500" height="auto" src="https://user-images.githubusercontent.com/51521314/127013473-74d4a7e3-e0c7-4d85-99a4-d7010739f98e.gif" alt="no-image"/>
-![Hnet-image](https://user-images.githubusercontent.com/51521314/127013473-74d4a7e3-e0c7-4d85-99a4-d7010739f98e.gif)
-
 ### Main **POC**
 
 아이가 좋아하는 사물 (장난감, 장소)을 업로드 및 촬영하여

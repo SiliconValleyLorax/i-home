@@ -4,13 +4,16 @@
 
 > **AI 가 찾아주는 아이의 취향과 그림책 추천 서비스  "iHome" 을 소개합니다.**
 
-![README/Splash_Screen.png](README/Splash_Screen.png)
+|   |   |
+|---|---|
+|![README/Splash_Screen.png](README/Splash_Screen.png)   | ![README/%EC%86%8C%EA%B0%9C_% alED%99%94%EB%A9%B4.png](README/%EC%86%8C%EA%B0%9C_%ED%99%94%EB%A9%B4.png)  |
 
-![README/%EC%86%8C%EA%B0%9C_%ED%99%94%EB%A9%B4.png](README/%EC%86%8C%EA%B0%9C_%ED%99%94%EB%A9%B4.png)
 
 ### Needs
 
 > 5~7세 아이들은 직접 프로필을 작성하는데에 어려움이 있어. 아이들의 정확한 취향을 파악하기 어렵다. 또한 아이들의 개인정보를 기반으로 추천시스템을 개발하기에 이미 수집된 데이터가 부족하기 때문에 Cold Start 문제가 발생할 수 있다. 따라서 **이미지 인식을 통한 취향 파악과 라벨을 기준으로 한 유사도 검색 및 추천 기능 도입**으로 으로 이 문제를 해결하려고 한다.
+
+<img width="500" height="auto" src="https://user-images.githubusercontent.com/51521314/127013473-74d4a7e3-e0c7-4d85-99a4-d7010739f98e.gif" alt="no-image"/>
 ![Hnet-image](https://user-images.githubusercontent.com/51521314/127013473-74d4a7e3-e0c7-4d85-99a4-d7010739f98e.gif)
 
 ### Main **POC**
@@ -42,9 +45,11 @@ Google Colab 환경에서 Tensorflow로 모델을 학습 시켰습니다. 학습
 
 [ 객체 인식 예시 ]
 
-![README/Untitled%202.png](README/Untitled%202.png)
+|   |   |
+|---|---|
+|![README/Untitled%202.png](README/Untitled%202.png)  | ![README/Untitled%203.png](README/Untitled%203.png)  |
 
-![README/Untitled%203.png](README/Untitled%203.png)
+
 
 ### Backend
 

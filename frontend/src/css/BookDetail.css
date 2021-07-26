@@ -4,6 +4,13 @@
   --base-color: #c4c4c4;
   --lighter-color: #ece9e9;
   --darker-color: #3f3f3f;
+<<<<<<< Updated upstream
+}
+
+.close-button {
+  margin-left: -90%;
+=======
+>>>>>>> Stashed changes
 }
 
 .book_detail {
@@ -19,9 +26,15 @@
 }
 
 .book_img {
+<<<<<<< Updated upstream
+  width: 80%;
+  height: 100%;
+  margin: 5% auto;
+=======
   width: 100%;
   height: 100%;
   padding: 5%;
+>>>>>>> Stashed changes
   /* padding-left: 15%;
   padding-right: 15%; */
   background-color: #fff;
@@ -69,3 +82,12 @@
   font-weight: bold;
   border-radius: 0.5rem;
 }
+<<<<<<< Updated upstream
+
+.copyright {
+  margin-top: 10%;
+  color: gray;
+  font-weight: lighter;
+}
+=======
+>>>>>>> Stashed changes

@@ -6,12 +6,19 @@
   --darker-color: #3f3f3f;
 }
 
+<<<<<<< Updated upstream
+.splash-text {
+  margin: 1rem;
+}
+
+=======
+>>>>>>> Stashed changes
 .main_container {
   text-align: center;
 }
 
 .main-image {
-  max-width: 60%;
+  max-width: 100%;
   margin: 0 auto;
   height: auto;
   overflow: hidden;

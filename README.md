@@ -4,9 +4,9 @@
 
 > **AI 가 찾아주는 아이의 취향과 그림책 추천 서비스  "iHome" 을 소개합니다.**
 
-![README%20md%2035023d69915d4e6c9431ffd8c1a39ac4/Splash_Screen.png](README%20md%2035023d69915d4e6c9431ffd8c1a39ac4/Splash_Screen.png)
+![README/Splash_Screen.png](README/Splash_Screen.png)
 
-![README%20md%2035023d69915d4e6c9431ffd8c1a39ac4/%EC%86%8C%EA%B0%9C_%ED%99%94%EB%A9%B4.png](README%20md%2035023d69915d4e6c9431ffd8c1a39ac4/%EC%86%8C%EA%B0%9C_%ED%99%94%EB%A9%B4.png)
+![README/%EC%86%8C%EA%B0%9C_%ED%99%94%EB%A9%B4.png](README/%EC%86%8C%EA%B0%9C_%ED%99%94%EB%A9%B4.png)
 
 ### Needs
 
@@ -22,7 +22,7 @@
 
 아이 취향에 알맞는 도서를 추천해주는 AI 서비스다.
 
-![README%20md%2035023d69915d4e6c9431ffd8c1a39ac4/Untitled.png](README%20md%2035023d69915d4e6c9431ffd8c1a39ac4/Untitled.png)
+![README/Untitled.png](README/Untitled.png)
 
 ---
 
@@ -30,7 +30,7 @@
 
  
 
-![README%20md%2035023d69915d4e6c9431ffd8c1a39ac4/Untitled%201.png](README%20md%2035023d69915d4e6c9431ffd8c1a39ac4/Untitled%201.png)
+![README/Untitled%201.png](README/Untitled%201.png)
 
 ### AI
 
@@ -42,9 +42,9 @@ Google Colab 환경에서 Tensorflow로 모델을 학습 시켰습니다. 학습
 
 [ 객체 인식 예시 ]
 
-![README%20md%2035023d69915d4e6c9431ffd8c1a39ac4/Untitled%202.png](README%20md%2035023d69915d4e6c9431ffd8c1a39ac4/Untitled%202.png)
+![README/Untitled%202.png](README/Untitled%202.png)
 
-![README%20md%2035023d69915d4e6c9431ffd8c1a39ac4/Untitled%203.png](README%20md%2035023d69915d4e6c9431ffd8c1a39ac4/Untitled%203.png)
+![README/Untitled%203.png](README/Untitled%203.png)
 
 ### Backend
 

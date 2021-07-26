@@ -41,11 +41,12 @@ const UploadImage = () => {
         <div className="home-container">
           <div className="link_css" onClick={openFile}>
             <img src="/select-photo.png" className="select-photo" />
-            {/* <div className="upload-btn gallery-btn">
-              <RiGalleryUploadFill className="icon-btn gallery" />
-              갤러리로 등록
-            </div> */}
           </div>
+          {/* <Link to="/CameraSet" className="link_css">
+            <div className="link_css">
+              <img src="/select-photo.png" className="select-photo" />
+            </div>
+          </Link> */}
           <div className="container-title">
             <span>아이가 좋아하는 장난감을 등록해주세요</span>
           </div>

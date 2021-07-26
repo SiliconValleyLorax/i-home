@@ -13,6 +13,11 @@
   padding-left: 1em;
 }
 
+.img-text {
+  font-size: 80%;
+  margin-top: 1rem;
+}
+
 .desc-line {
   display: flex;
   position: relative;
@@ -35,6 +40,13 @@
   font-weight: bold;
 }
 
+.reset-button {
+  width: 1.5rem;
+  position: absolute;
+  left: 92.5%;
+  border-radius: 100%;
+}
+
 .button-css {
   border: none;
   background: #28aa9d;
@@ -42,11 +54,13 @@
   padding: 1rem;
   width: 90%;
   height: 30%;
+  max-width: 20rem;
   min-width: 5rem;
   font-weight: bold;
   font-size: 1rem;
   border-radius: 0.2em;
   box-shadow: 0 0.1em 0.5em gray;
+  text-decoration: none;
 }
 
 .form-css {
@@ -56,5 +70,5 @@
 
 .gallery-button {
   /* margin-top: 5%; */
-  margin-bottom: 5%;
+  margin-bottom: 1.5rem;
 }

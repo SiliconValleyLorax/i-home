@@ -116,10 +116,14 @@ const BookList = ({ location }) => {
                       </span>
                     </div>
                   </div>
-                  <button className="button-css">
+                  <a
+                    href="https://forms.gle/2CCCGf2R258YnHsE9"
+                    target="_blank"
+                    className="button-css"
+                  >
                     <img src="/zoom-logo.png" className="num-logo" />줌 수업
                     신청하기
-                  </button>
+                  </a>
                 </div>
               ))}
           </div>

@@ -197,14 +197,14 @@ def get_data(task_id):
       return results[i]["result"]       
   return None
 
-@app.route('/api/result', methods=['POST'])
-def result():
+@app.route('/api/result/<task_id>', methods=['GET'])
+def result(task_id):
     """
     uuid를 받아 해당 id에 해당하는 Task의 현재 상황과 결과를 반환한다.
     ---
     parameters:
       - name: body
-        in: body
+        in: path
         type: string
         example: "8e770c08-f118-48a3-97ba-32a5367da94c"
         required: true
@@ -252,15 +252,11 @@ def result():
           application/json: {"state":"FAIL", "result":[]}
       
     """
-    if request.method != "POST":
+    if request.method != "GET":
       return jsonify("INVALID request"), 405
 
     data = {"state":"", "result":[]}
-    try:
-        task_id = request.get_json()["taskID"]
-    except:
-        data["state"] = "PROCESSING"
-        return jsonify(data), 202
+    
     try:
         book_list = get_data(task_id)
         if book_list == None:

@@ -13,7 +13,7 @@
  
 ## 🔎Needs
 
-5~7세 아이들은 직접 프로필을 작성하는데에 어려움이 있어. 아이들의 정확한 취향을 파악하기 어렵다. 또한 아이들의 개인정보를 기반으로 추천시스템을 개발하기에 이미 수집된 데이터가 부족하기 때문에 Cold Start 문제가 발생할 수 있다. 따라서 **이미지 인식을 통한 취향 파악과 라벨을 기준으로 한 유사도 검색 및 추천 기능 도입**으로 으로 이 문제를 해결하려고 한다.
+5~7세 아이들은 직접 프로필을 작성하는데에 어려움이 있어. 아이들의 정확한 취향을 파악하기 어렵다. 또한 아이들의 개인정보를 기반으로 추천시스템을 개발하기에 이미 수집된 데이터가 부족하기 때문에 Cold Start 문제가 발생할 수 있다. 따라서 ***`이미지 인식을 통한 취향 파악과 라벨을 기준으로 한 유사도 검색 및 추천 기능 도입 `*** 으로 으로 이 문제를 해결하려고 한다.
 
 
 ## 🌟Main **POC**
@@ -57,11 +57,11 @@ SQLAlchemy, Python 기반의 ORM(Object-relational mapping)으로 직접 SQL 쿼
 
 - **Message Broker / Worker : RabbitMQ, Worker**
 
-- RabbitMQ
+**RabbitMQ**
 
 Python은 인터프리티 언어로, 싱글 스레드로 작동합니다. 이런 파이썬의 한계를 극복하기 위해 메세지 큐를 사용합니다.
 
-- Celery
+**Celery**
 
 Python의 느린 속도를 보완하기 위해 비동기 작업을 위한 worker로 Celery를 사용합니다.
 
@@ -125,7 +125,28 @@ Docker Compose 파일을 통해 컨테이너를 구축하여 필요한 이미지
 NHN 클라우드 서비스 Toast에서 인스턴스를 생성하여 도커를 설치하고, 컨테이너를 빌드해 해당 서비스를 배포하였습니다.
 
 ---
+# 03. 시작하는법
 
+1.  ` git clone https://github.com/SiliconValleyLorax/i-home ` 
+
+2. `cd frontend`
+
+3. `npm i`
+
+4. `cd .. [docker-compose.yml 있는 루트 폴더]`
+
+5. `docker-compose up --build`
+
+
+
+---
 # 03. 팀원
+| Name | Role  | Detail|
+|---|---|---|
+|김서연 |	팀장/DevOps	| Docker를 통한 기술스택 Containerized / NHN 클라우드 배포 /ElasticSearch, text embedding 및 cosine similarity 검색 기능 구현 |
+|홍명주 |	Frontend	| React JS Hooks 기반 프론트엔드 설계 / UI/UX 퍼블리싱/ 반응형 웹앱 제작 / 스플래시 화면, 로딩창 구현|
+|박지영	| Backend |	Flask REST API구현/ Swagger명세화 /서버 분리, 유효성 검사 및 예외 처리/ Rabbitmq, Celery를 통한 비동기 처리구현, 서버 성능 향상|
+|김하연 |	Backend	| PostgreSQL 개발, 스키마 설계 / ORM 활용 (SqlAlchemy) / Celery task 데이터 처리/ NHN Cloud 배포|
+|한수아 |	Data Engineering	| Tensorflow SSD 객체 인식 모델 구현 / AI 모델 성능 최적화 /성능 시각화를 통한 모니터링 / Google Colab 사용|
+|로빈	|Backend	|Elasticsearch 쿼리 구현 /배포 자료 수집|
 
-[Untitled](https://www.notion.so/a9b2dfbbbab94fbb9a6f134e0c6a2a55)

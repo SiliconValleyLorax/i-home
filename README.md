@@ -1,24 +1,27 @@
 # README.md
 
-## 00. Project Introduction
+# 00. Project Introduction
+
 
 > **AI 가 찾아주는 아이의 취향과 그림책 추천 서비스  "iHome" 을 소개합니다.**
+
 
 |   |   |
 |---|---|
 |![README/Splash_Screen.png](README/Splash_Screen.png)   | ![README/%EC%86%8C%EA%B0%9C_% alED%99%94%EB%A9%B4.png](README/%EC%86%8C%EA%B0%9C_%ED%99%94%EB%A9%B4.png)  |
+ 
+ 
+## 🔎Needs
+
+5~7세 아이들은 직접 프로필을 작성하는데에 어려움이 있어. 아이들의 정확한 취향을 파악하기 어렵다. 또한 아이들의 개인정보를 기반으로 추천시스템을 개발하기에 이미 수집된 데이터가 부족하기 때문에 Cold Start 문제가 발생할 수 있다. 따라서 **이미지 인식을 통한 취향 파악과 라벨을 기준으로 한 유사도 검색 및 추천 기능 도입**으로 으로 이 문제를 해결하려고 한다.
 
 
-### Needs
-
-> 5~7세 아이들은 직접 프로필을 작성하는데에 어려움이 있어. 아이들의 정확한 취향을 파악하기 어렵다. 또한 아이들의 개인정보를 기반으로 추천시스템을 개발하기에 이미 수집된 데이터가 부족하기 때문에 Cold Start 문제가 발생할 수 있다. 따라서 **이미지 인식을 통한 취향 파악과 라벨을 기준으로 한 유사도 검색 및 추천 기능 도입**으로 으로 이 문제를 해결하려고 한다.
-
-### Main **POC**
+## 🌟Main **POC**
 
 아이가 좋아하는 사물 (장난감, 장소)을 업로드 및 촬영하여
 
-**1) 객체 (사물, 색감, 분위기) 를 추출하고
-2)  유사도 검색을 통해** 
+1) **객체 (사물, 색감, 분위기) 를 추출하고**
+2) **유사도 검색을 통해** 
 
 아이 취향에 알맞는 도서를 추천해주는 AI 서비스다.
 
@@ -26,33 +29,21 @@
 
 ---
 
-## 01. Software Architecture
+# 01. Software Architecture
 
  
 
 ![README/Untitled%201.png](README/Untitled%201.png)
 
-### AI
-
-- Google Colab
-- Tensorflow
-- Object Detection : SSD
-
-Google Colab 환경에서 Tensorflow로 모델을 학습 시켰습니다. 학습된 모델을 저장하여 flask 서버 상에서 api와 연결하여, object detection을 수행하고 label을 반환하는 프로세스입니다. Object Detection 모델은 SSD를 사용하였습니다. 
-
-[ 객체 인식 예시 ]
-
-|   |   |
-|---|---|
-|![README/Untitled%202.png](README/Untitled%202.png)  | ![README/Untitled%203.png](README/Untitled%203.png)  |
 
 
 
-### Backend
 
-- **Webserver : NGINX (middleware : gunicorn)**
-
-가볍지만 높은 성능을 보이는 리버스 프록시 웹서버인 Nginx와 Flask와의 통신을 도와주는 Gunicorn 인터페이스를 사용하여 REST API통신을 하는 서버를 구축했습니다.
+## 📍Backend
+<img src="https://img.shields.io/badge/Flask-000000?style=flat-square&logo=Flask&logoColor=white" height="25px"/></a>
+<img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=PostgreSQL&logoColor=white" height="25px"/></a>
+<img src="https://img.shields.io/badge/RabbitMQ-FF6600?style=flat-square&logo=RabbitMQ&logoColor=white" height="25px"/></a>
+<img src="https://img.shields.io/badge/NGINX-009639?style=flat-square&logo=NGINX&logoColor=white" height="25px"/></a>
 
 - **API Server / Model Server : Flask**
 
@@ -78,7 +69,13 @@ Celery의 Result Backend을 PostgreSQL로 설정합니다. 매 Task의 UUID를 �
 
 이런 비동기 방식의 처리를 통해, 서버가 항상 응답이 가능한 상태가 유지되도록 합니다.
 
-### Frontend
+- **Webserver : NGINX (middleware : gunicorn)**
+
+가볍지만 높은 성능을 보이는 리버스 프록시 웹서버인 Nginx와 Flask와의 통신을 도와주는 Gunicorn 인터페이스를 사용하여 REST API통신을 하는 서버를 구축했습니다.
+
+
+## 📍Frontend
+<img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=React&logoColor=white" height="25px"/></a>
 
 - **React**
 
@@ -95,15 +92,29 @@ Celery의 Result Backend을 PostgreSQL로 설정합니다. 매 Task의 UUID를 �
 **axios**
 캡쳐한 장난감 사진 파일을 back으로 보내고, ai 검색 결과 책 목록 데이터를 response.data로 가져올 때 axios 라이브러리를 사용합니다.
 
-### Search Engine
 
-- **Elasticsearch ( Cosinesimilarity )**
+## 📍AI & Search Engine
+<img src="https://img.shields.io/badge/Google Colab-F9AB00?style=flat-square&logo=Google Colab&logoColor=white" height="25px"/></a>
+<img src="https://img.shields.io/badge/TensorFlow-FF6F00?style=flat-square&logo=TensorFlow&logoColor=white" height="25px"/></a>
+<img src="https://img.shields.io/badge/Elasticsearch-005571?style=flat-square&logo=Elasticsearch&logoColor=white" height="25px"/></a>
+
+
+- **Google Colab**
+- **Tensorflow**
+- **Object Detection : SSD**
+
+Google Colab 환경에서 Tensorflow로 모델을 학습 시켰습니다. 학습된 모델을 저장하여 flask 서버 상에서 api와 연결하여, object detection을 수행하고 label을 반환하는 프로세스입니다. Object Detection 모델은 SSD를 사용하였습니다. 
+
+[SSD GITHUB](https://github.com/balancap/SSD-Tensorflow)
+
+- **Elasticsearch**
 
 Tensorflow의 universal-sentence-encoder를 사용해 책 리스트의 텍스트 메타 데이터를 벡터 값으로 변환 시켰습니다. 앞서 도출된 label 값을 임베딩하여, 엘라스틱서치에 벡터 값으로 변환된 라벨 값을 input으로 주고 cosine similarity 쿼리를 사용해, 유사도 검색을 수행했습니다. 
 
 [TensorFlow Hub](https://tfhub.dev/google/universal-sentence-encoder/4)
 
-### Container Virtualization & Deploy
+## 📍Container Virtualization & Deploy
+<img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=Docker&logoColor=white" height="25px"/></a>
 
 - **Docker**
 
@@ -115,6 +126,6 @@ NHN 클라우드 서비스 Toast에서 인스턴스를 생성하여 도커를 �
 
 ---
 
-## 03. 팀원
+# 03. 팀원
 
 [Untitled](https://www.notion.so/a9b2dfbbbab94fbb9a6f134e0c6a2a55)

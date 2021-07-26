@@ -38,22 +38,27 @@ const UploadImage = () => {
   const showButtons = () => {
     return (
       <>
-        <div className="main-container">
+        <div className="home-container">
+          <div className="link_css" onClick={openFile}>
+            <img src="/select-photo.png" className="select-photo" />
+            {/* <div className="upload-btn gallery-btn">
+              <RiGalleryUploadFill className="icon-btn gallery" />
+              갤러리로 등록
+            </div> */}
+          </div>
           <div className="container-title">
             <span>아이가 좋아하는 장난감을 등록해주세요</span>
           </div>
-          <Link to="/CameraSet" className="link_css">
+          {/* <Link to="/CameraSet" className="link_css">
             <div className="upload-btn camera-btn">
               <AiFillCamera className="icon-btn photo" />
               카메라로 등록
             </div>
-          </Link>
-          <div className="link_css" onClick={openFile}>
-            <div className="upload-btn gallery-btn">
-              <RiGalleryUploadFill className="icon-btn gallery" />
-              갤러리로 등록
-            </div>
-          </div>
+          </Link> */}
+
+          {/* <button onClick={test} className="upload-btn gallery-btn">
+            <div>test</div>
+          </button> */}
         </div>
       </>
     );

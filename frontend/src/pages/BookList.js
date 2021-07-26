@@ -1,17 +1,19 @@
 import "../css/BookList.css";
 import "../css/Main.css";
 import { Link, Redirect } from "react-router-dom";
-import Loading2 from "../components/Loading2";
+import Loading from "../components/Loading";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import BookDetail from "./BookDetail";
 
 const BookList = ({ location }) => {
-  // 현재는 모든 도서 목록을 불러오게 되어있지만, 알고리즘 완성 후에는 post 요청으로 이미지(attachment)를 보내서 추천도서 목록을 받아오는 것으로 변경될 예정.\
-
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [phrase, setPhrase] = useState("책을 찾을 수 없어요");
 
+  // const [image, setImage] = useState(null);
+  const [popup, setPopup] = useState(false);
+  const [bookId, setBookId] = useState("");
   const getResult = (taskId) => {
     axios
       .post("http://localhost:5000/api/result", { taskID: taskId })
@@ -76,23 +78,30 @@ const BookList = ({ location }) => {
   }
   switch (loading) {
     case true:
-      return <Loading2></Loading2>;
+      return <Loading></Loading>;
     case false:
       return (
         <>
-          <div className="home-container">
+          {popup && <BookDetail id={bookId} popClose={setPopup}></BookDetail>}
+          <div
+            className="home-container"
+            style={{
+              touchAction: popup ? "none" : "auto",
+              overflowY: "hidden",
+            }}
+          >
             {/* <div className="book-list-title">추천 도서 목록</div> */}
             <div className="book-list-sub-title">{phrase}</div>
             {books &&
               books.map((book, index) => (
                 <div className="book-list" key={book.id}>
                   {/* <div className="book-rank">{index + 1}</div> */}
-                  <Link
-                    to={{
-                      pathname: `/bookDetail/${book.title}`,
-                      state: { id: book.id },
+                  <div
+                    onClick={() => {
+                      setPopup(true);
+                      setBookId(book.id);
+                      // console.log("true");
                     }}
-                    className="listline"
                   >
                     <div className="book-image">
                       <img src={book.image} alt="book" />
@@ -101,12 +110,12 @@ const BookList = ({ location }) => {
                       <span className="listAssemble">
                         <div>{book.slogan}</div>
                         {/* <div className="linetext title">{book.title}</div>
-                        <div className="linetext author">
-                          Author: {book.author}
-                        </div> */}
+                          <div className="linetext author">
+                            Author: {book.author}
+                          </div> */}
                       </span>
                     </div>
-                  </Link>
+                  </div>
                   <button className="button-css">
                     <img src="/zoom-logo.png" className="num-logo" />줌 수업
                     신청하기
@@ -116,6 +125,7 @@ const BookList = ({ location }) => {
           </div>
         </>
       );
+
     default:
       return;
   }

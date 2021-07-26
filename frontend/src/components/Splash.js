@@ -7,7 +7,7 @@ const Splash = () => {
   return (
     <div>
       <img src={imgUrl} alt="main" className="main-image"></img>
-      <div>
+      <div className="splash-text">
         영어 그림책 추천부터 수업까지
         <br />
         한번에 해결하세요!

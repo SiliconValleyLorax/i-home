@@ -168,7 +168,9 @@ def visualize_boxes_and_labels_on_image_array(
     skip_scores=False,
     skip_labels=False,
     skip_track_ids=False):
+  
   global final_label
+  final_label = None
   box_to_display_str_map = collections.defaultdict(list)
   box_to_color_map = collections.defaultdict(str)
   box_to_instance_masks_map = {}
@@ -205,6 +207,7 @@ def visualize_boxes_and_labels_on_image_array(
               class_name = 'N/A'
             display_str = str(class_name)
         final_label = display_str
+
         if not skip_scores :
           if not display_str :
             display_str = '{}%'.format(round(100*scores[i]))
@@ -232,74 +235,76 @@ def visualize_boxes_and_labels_on_image_array(
               classes[i] % len(STANDARD_COLORS)
           ]
 
+  
+  if final_label is not None :
+    final_percent = 1
+    global final_box
+    global final_color
+    for box, colour in box_to_color_map.items() :
+      not_include_list = box_to_display_str_map[box][0].split()
+      label = not_include_list[0]
+      percent = not_include_list[-1]
+      percent = int(percent[0:2])
 
-  final_percent = 1
-  global final_box
-  global final_color
-  for box, colour in box_to_color_map.items() :
-    not_include_list = box_to_display_str_map[box][0].split()
-    label = not_include_list[0]
-    percent = not_include_list[-1]
-    percent = int(percent[0:2])
+      if percent > final_percent :
+        final_percent = percent
+        final_label = label
+        final_box = box
+        final_color = colour
 
-    if percent > final_percent :
-      final_percent = percent
-      final_label = label
-      final_box = box
-      final_color = colour
-
-  final_list = []
-  final_comp = final_label + ' : ' + str(final_percent) +'%'
-  final_list.append(final_comp)
+    final_list = []
+    final_comp = final_label + ' : ' + str(final_percent) +'%'
+    final_list.append(final_comp)
 
 
-  for box, color in box_to_color_map.items() :
-    ymin, xmin, ymax, xmax = final_box
-    if instance_masks is not None :
-      draw_mask_on_image_array (
-          image,
-          box_to_instance_masks_map[box],
-          color='red',
-          alpha=1.0
-      ) 
-    if instance_boundaries is not None :
-      draw_mask_on_image_array (
-          image,
-          box_to_instance_boundaries_map[box],
-          color='red',
-          alpha=1.0
-      )
+    for box, color in box_to_color_map.items() :
+      ymin, xmin, ymax, xmax = final_box
+      if instance_masks is not None :
+        draw_mask_on_image_array (
+            image,
+            box_to_instance_masks_map[box],
+            color='red',
+            alpha=1.0
+        ) 
+      if instance_boundaries is not None :
+        draw_mask_on_image_array (
+            image,
+            box_to_instance_boundaries_map[box],
+            color='red',
+            alpha=1.0
+        )
 
-    draw_bounding_box_on_image_array (
-        image, 
-        ymin,
-        xmin,
-        ymax,
-        xmax,
-        color = final_color,
-        thickness=0 if skip_boxes else line_thickness,
-        display_str_list = final_list,
-        use_normalized_coordinates = use_normalized_coordinates
-      )
+      draw_bounding_box_on_image_array (
+          image, 
+          ymin,
+          xmin,
+          ymax,
+          xmax,
+          color = final_color,
+          thickness=0 if skip_boxes else line_thickness,
+          display_str_list = final_list,
+          use_normalized_coordinates = use_normalized_coordinates
+        )
 
-    if keypoints is not None :
-      keypoint_scores_for_box = None
-      if box_to_keypoint_scores_map :
-        keypoint_scores_for_box = box_to_keypoint_scores_map[box]
-      draw_keypoints_on_image_array (
-          image,
-          box_to_keypoints_map[box],
-          keypoint_scores_for_box,
-          min_score_thresh = min_score_thresh,
-          color=color,
-          radius=line_thickness/2,
-          use_normalized_coordinates = use_normalized_coordinates,
-          keypoint_edges = keypoint_edges,
-          keypoint_edge_color = color,
-          keypoint_edge_width = line_thickness//2
-      )
+      if keypoints is not None :
+        keypoint_scores_for_box = None
+        if box_to_keypoint_scores_map :
+          keypoint_scores_for_box = box_to_keypoint_scores_map[box]
+        draw_keypoints_on_image_array (
+            image,
+            box_to_keypoints_map[box],
+            keypoint_scores_for_box,
+            min_score_thresh = min_score_thresh,
+            color=color,
+            radius=line_thickness/2,
+            use_normalized_coordinates = use_normalized_coordinates,
+            keypoint_edges = keypoint_edges,
+            keypoint_edge_color = color,
+            keypoint_edge_width = line_thickness//2
+        )
+
+
   return final_label
-
 
 def run_inference(model, image) :
   imagee = np.asarray(image)

@@ -1,29 +1,24 @@
 item {
-    id : 1
-    name : 'dog'
+  id : 1
+  name : 'dog'
 }
-
 item {
-    id : 2
-    name : 'bear'
+  id : 2
+  name : 'bear'
 }
-
 item {
-    id : 3
-    name : 'rabbit'
+  id : 3
+  name : 'rabbit'
 }
-
 item {
-    id : 4
-    name : 'car'
+  id : 4
+  name : 'car'
 }
-
 item {
-    id : 5
-    name : 'dinosaur'
+  id : 5
+  name : 'robot'
 }
-
 item {
-    id : 6
-    name : 'robot'
+  id : 6
+  name : 'dinosaur'
 }

@@ -18,6 +18,7 @@ const BookDetail = ({ id, popClose }) => {
     try {
       const response = await axios.get(`http://localhost:5000/api/book/${id}`);
       setBook(response.data);
+      console.log(response.data);
       // setBook({
       //   author: "by Eric Carle",
       //   desc: "THE all-time classic picture book, from generation to generation, sold somewhere in the world every 30 seconds! A sturdy and beautiful book to give as a gift for new babies, baby showers, birthdays, and other new beginnings!",
@@ -62,7 +63,6 @@ const BookDetail = ({ id, popClose }) => {
           </button>
         </div>
         <div className="copyright"> ©Goodreads </div>
-
         {ko ? <div></div> : <div className="book_desc">{book.desc_ko}</div>}
       </div>
     </div>

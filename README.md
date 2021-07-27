@@ -12,6 +12,7 @@
 
 
 ### 👉[데모 동영상 : YouTube 링크 ](https://www.youtube.com/watch?v=ZtOEeWc1jy4)
+![README/final_demo.gif](README/final_demo.gif)
  
 ## 🔎Needs
 초기 POC는 5-7세 아동 대상 AI 영어 그림책 추천서비스입니다. 초기 POC는 아이들에게 직접 프로필을 작성하게 하여, 사전 설문조사를 통해 파악된 취향을 기반으로 추천 알고리즘을 통해 해당 아동에게 맞는 그림책을 추천해주는 서비스였습니다.
@@ -21,7 +22,7 @@
 또한 추천 알고리즘을 개발하기에는 사전에 수집된 데이터가 부족하여, ***'cold start'문제가 발생하였습니다.*** 5-7세 아동들의 취향과, 이에맞는 도서데이터를 직접 수집하는것은 비효율적이라 판단하여, 사전 데이터가 필요 없는 추천 서비스를 구현할 방법을 모색하였습니다. 
 
 
-## 🌟Main **POC**
+## 🌟Main **PoC**
 
 따라서 저희 팀은 이미지 인식 + 유사도 검색 기능 도입으로 사전 데이터가 필요 없는 추천 시스템을 도입하기로 결정하였습니다. 
 
@@ -43,7 +44,7 @@
 
  
 
-![README/Untitled%201.png](README/Untitled%201.png)
+![README/Software_Architecture.png](README/Software_Architecture.png)
 
 
 

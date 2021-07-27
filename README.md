@@ -9,10 +9,9 @@
 |   |   |
 |---|---|
 |![README/Splash_Screen.png](README/Splash_Screen.png)   | ![README/%EC%86%8C%EA%B0%9C_% alED%99%94%EB%A9%B4.png](README/%EC%86%8C%EA%B0%9C_%ED%99%94%EB%A9%B4.png)  |
- 
- 
- <iframe width="560" height="315" src="https://www.youtube.com/embed/ZtOEeWc1jy4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
- 
+
+
+### 👉[데모 동영상 : YouTube 링크 ](https://www.youtube.com/watch?v=ZtOEeWc1jy4)
  
 ## 🔎Needs
 초기 POC는 5-7세 아동 대상 AI 영어 그림책 추천서비스입니다. 초기 POC는 아이들에게 직접 프로필을 작성하게 하여, 사전 설문조사를 통해 파악된 취향을 기반으로 추천 알고리즘을 통해 해당 아동에게 맞는 그림책을 추천해주는 서비스였습니다.

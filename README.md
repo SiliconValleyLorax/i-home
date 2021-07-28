@@ -116,6 +116,8 @@ Use the axios library for REST API communication with FLASK. Based on Promise, A
 |![README/image_detection1.png](README/image_detection1.png)   | ![README/image_detection2.png](README/image_detection2.png)  |
 
 
+### Object Detection
+
 - **Google Colab**
 - **Tensorflow**
 - **Object Detection : SSD**
@@ -124,8 +126,10 @@ On Google Colab, we trained the object detection model with Tensorflow. And we a
 
 [SSD GITHUB](https://github.com/balancap/SSD-Tensorflow)
 
+### Text Embedding & Similarity Search
+
 - **Elasticsearch**
-- 
+- **Text Embedding: Universal Sentence Encoder**
 The text metadata in the book list was converted to vector values using Tensorflow's universal-sentence-encoder. By embedding the derived label value, we gave the label value converted to the vector value to input to the elastic search and performed a similarity search using cosine similarity queries. 
 
 [TensorFlow Hub](https://tfhub.dev/google/universal-sentence-encoder/4)

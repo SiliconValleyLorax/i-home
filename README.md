@@ -35,7 +35,7 @@ When you upload a child's favorite things (toy, object .. etc),
 
 1) ***Extract labels through object detection***
 
-2) ***And search for text similarity*** 
+2) ***And utilize text similarity search*** 
 
 Our AI service recommends books suitable for children's taste.
 
@@ -83,8 +83,8 @@ Set Celery's Result Backend to PostgreSQL. Creates a UUID for each task, designa
 
 This asynchronous processing ensures that the server is always in a responsive state.
 
-- **Webserver : NGINX (middleware : gunicorn)**
-- 
+**Webserver : NGINX (middleware : gunicorn)**
+
 We built a RESTful API server using the Gunicorn interface that helps communicate with Nginx, a lightweight but high-performance reverse proxy web server.
 
 

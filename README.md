@@ -48,7 +48,7 @@ With these services, parents can curate books that are semantically similar to t
 
  
 
-![README/software-architecture.png](README/software-architecture.png)
+![README/software_architecture.png](README/software_architecture.png)
 
 
 

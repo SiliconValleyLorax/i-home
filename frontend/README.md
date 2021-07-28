@@ -4,7 +4,7 @@
 ### file tree
 
 |   🎈---public
-|   |       close.png
+|   |       close.png<br/>
 |   |       favicon.ico
 |   |       gclose.jpg
 |   |       gclose.png

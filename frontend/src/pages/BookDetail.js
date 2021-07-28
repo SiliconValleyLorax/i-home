@@ -6,10 +6,18 @@ import "../css/UploadImage.css";
 
 const BookDetail = ({ popClose, book }) => {
   const [ko, setKo] = useState(false);
-
-  // useEffect(() => {
-  //   getbook();
-  // }, []);
+  const [koDesc, setKoDesc] = useState(null);
+  const getKoDesc = async (id) => {
+    if (koDesc !== null) return;
+    try {
+      const response = await axios.get(
+        `http://ihome-eng.tk:5000/api/translation/${id}`
+      );
+      setKoDesc(response.data);
+    } catch (error) {
+      console.log("error");
+    }
+  };
 
   return (
     <div className="background">
@@ -32,11 +40,17 @@ const BookDetail = ({ popClose, book }) => {
         <div className="book_desc">{book.desc}</div>
         <div className="copyright"> ©Goodreads </div>
         <div>
-          <button onClick={() => setKo(!ko)} className="translate-btn">
+          <button
+            onClick={() => {
+              getKoDesc(book.id);
+              setKo(!ko);
+            }}
+            className="translate-btn"
+          >
             {ko ? "숨기기" : "번역 보기"}
           </button>
         </div>
-        {ko ? <div className="book_desc">{book.desc_ko}</div> : <div></div>}
+        {ko ? <div className="book_desc">{koDesc}</div> : <div></div>}
       </div>
     </div>
   );

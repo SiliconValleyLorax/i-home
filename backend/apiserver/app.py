@@ -111,7 +111,7 @@ def send_image():
 @app.route('/api/book/<int:id>', methods=['GET'])
 def get_book(id):
     """
-    DB에서 id에 해당하는 책 정보 불러오기
+    DB에서 id에 해당하는 책 정보를 반환한다.
     ---
     description: get information of the book
     parameters:
@@ -140,9 +140,6 @@ def get_book(id):
           desc:
             type: string
             example: "THE all-time classic picture book, from generation to generation, sold somewhere in the world every 30 seconds! A sturdy and beautiful book to give as a gift for new babies, baby showers, birthdays, and other new beginnings!"
-          desc_ko:
-            type: string
-            example: "세대에서 세대에 걸쳐 전 세계 어디선가 30초마다 팔리는 고전 그림책! 아기들, 아기 샤워, 생일, 그리고 다른 새로운 시작들을 위해 선물로 줄 튼튼하고 아름다운 책!"
     responses:
       200:
         description: the information of the Book
@@ -163,7 +160,6 @@ def get_book(id):
             "author": book_detail.author,
             "desc": book_detail.desc,
             "image": book_detail.img_src,
-            "desc_ko": get_translate(book_detail.desc)
         }
         return jsonify(bookObject), 200
     except NoResultFound:
@@ -288,3 +284,40 @@ def result(task_id):
         data["state"] = "FAILURE"
         print ("Requested Book Not Found")
     return jsonify(data), 200
+
+@app.route("/api/translation/<int:id>")
+def translate(id):
+    """
+    파파고 api를 통해 해당 id의 책 소개 문구를 번역하고, 그 결과를 반환한다.
+    ---
+    description: get translated description of the book
+    parameters:
+      - name: id
+        in: path
+        type: integer
+        example: 1
+        required: true
+        description: Numeric id of the book to get
+    definitions:
+      translation:
+          type: string
+          example: "세대에서 세대에 걸쳐 전 세계 어디선가 30초마다 팔리는 고전 그림책! 아기들, 아기 샤워, 생일, 그리고 다른 새로운 시작들을 위해 선물로 줄 튼튼하고 아름다운 책!"
+    responses:
+      200:
+        description: translated description of the book
+        schema:
+          $ref: "#/definitions/translation"
+      404:
+        description: Can't find the description of requested book 
+      405:
+        description: Invalid request
+    """
+    if request.method != 'GET':
+        return jsonify("INVALID request"), 405
+    try:
+        book_detail = session.query(Book).filter(Book.id == id).one()
+        desc_ko = get_translate(book_detail.desc)
+        return jsonify(desc_ko), 200
+    except NoResultFound:
+        print ("Requested Book Not Found")
+        return jsonify("Failed to get book translation"), 404

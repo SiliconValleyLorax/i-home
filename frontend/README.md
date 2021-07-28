@@ -5,7 +5,7 @@
 
 Frontend <br/>
 |---🎈---public <br/>
-|---|-------close.png <br/>
+│   ├──close.png <br/>
 |---|-------favicon.ico <br/>
 |---|-------gclose.jpg <br/>
 |---|-------gclose.png <br/>

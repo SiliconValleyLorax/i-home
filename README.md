@@ -94,7 +94,7 @@ We built a server that communicates REST API using the Gunicorn interface that h
 - **React**
 The REACT framework was used to change the interface according to user responses on each page. The format in which app.js is the default page and each implementation page is imported as a component.
 
-**[사용 라이브러리]**
+**[Libraries]**
 
 **react-router-dom**
 The page was configured using the library react-router-dom, which loads and renders the necessary components of the page without page loading.

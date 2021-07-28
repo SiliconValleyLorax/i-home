@@ -159,7 +159,7 @@ def visualize_boxes_and_labels_on_image_array(
     track_ids=None,
     use_normalized_coordinates=False,
     max_boxes_to_draw=3,
-    min_score_thresh=0.6,
+    min_score_thresh=0.1,
     agnostic_mode=False,
     line_thickness=4,
     mask_alpha=0.4,

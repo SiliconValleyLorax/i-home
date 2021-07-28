@@ -3,7 +3,7 @@
 # 00. Project Introduction
 
 
-> **Introducing children book AI reccommendation service "IHOME" based on Object Detection*
+> **Introducing children picture book AI reccommendation service "IHOME" based on Object Detection*
 
 
 |   |   |
@@ -15,11 +15,11 @@
 ![README/final_demo.gif](README/final_demo.gif)
  
 ## 🔎Needs
-Early PoC is an AI English picture book recommendation service for children aged 5-7. Early PoC was a service that has children write their own profiles and recommends picture books for them through recommendation algorithms based on tastes identified through preliminary surveys.
+Early PoC was an AI English picture book recommendation service for children aged 5-7. Early PoC was a service that makes children write their own profiles and recommends picture books for them through recommendation algorithms based on tastes identified through preliminary surveys.
 
-However, ***children aged 5-7 has difficulty writing their own profiles so, there are difficulties expecting accurate surveys.***
+However, ***children aged 5-7 have difficulties writing their own profiles, so there are difficulties expecting accurate surveys.***
 
-Also, there was not enough data collected in advance to develop the recommended algorithm, causing a ***'cold start' problem.*** Considering that it is inefficient to collect the taste of children aged 5-7 and the appropriate book data directly, we sought to implement recommended services that do not require prior data.
+Also, there was not enough data collected in advance to develop the recommendation algorithm, causing a ***'cold start' problem.*** Considering that it is inefficient to collect the taste of children aged 5-7 and the appropriate book data directly, we sought to implement recommendation service that does not require prior data.
 
 
 ## 🌟Main **PoC**
@@ -29,7 +29,7 @@ Therefore, our team decided to introduce a recommendation system that does not r
 
 ![README/Untitled.png](README/Untitled.png)
 
-Our team's MAIN POC is "AI picture book recommendation service based on object detection."
+Our team's MAIN PoC is "AI picture book recommendation service based on object detection."
 
 When you upload a child's favorite things (toy, object .. etc),
 
@@ -37,7 +37,7 @@ When you upload a child's favorite things (toy, object .. etc),
 
 2) ***And search for text similarity*** 
 
-OuR AI service recommends books suitable for children's taste.
+Our AI service recommends books suitable for children's taste.
 
 
 With these services, parents can curate books that are semantically similar to their children's favorite toys by simply taking photos. Also, there is an advantage that it can interest children in the process of taking pictures.
@@ -48,7 +48,7 @@ With these services, parents can curate books that are semantically similar to t
 
  
 
-![README/Software_Architecture.png](README/Software_Architecture.png)
+![README/software-architecture.png](README/software-architecture.png)
 
 
 
@@ -67,7 +67,7 @@ A lightweight Web framework based on Python. It provides minimal structure and i
 
 Open source object-relational database system (ORDBMS) for data storage and management.
 
-Process data without creating SQL query statements directly with Python-based object-relational mapping (ORM). In API Server (Flask), the SqlAlchemy module was used to define book data schemas, insert data, and query.
+Process data without creating SQL query statements directly with Python-based object-relational mapping (ORM). In API Server (Flask), the SQLAlchemy module was used to define book data schemas, insert data, and query.
 
 - **Message Broker / Worker : RabbitMQ, Worker**
 
@@ -85,7 +85,7 @@ This asynchronous processing ensures that the server is always in a responsive s
 
 - **Webserver : NGINX (middleware : gunicorn)**
 - 
-We built a server that communicates REST API using the Gunicorn interface that helps communicate with Nginx, a lightweight but high-performance reverse proxy web server.
+We built a RESTful API server using the Gunicorn interface that helps communicate with Nginx, a lightweight but high-performance reverse proxy web server.
 
 
 ## 📍Frontend
@@ -100,7 +100,7 @@ The REACT framework was used to change the interface according to user responses
 The page was configured using the library react-router-dom, which loads and renders the necessary components of the page without page loading.
 
 **react-webcam**
-We use PC webcam module to capture toy photos not only with mobile but also with pc.
+We use PC webcam module to capture toy photos not only with mobile phones but also with pc.
 
 **axios**
 Use the axios library for REST API communication with FLASK. Based on Promise, Axios can use async/await grammar to make XHR requests very easy.
@@ -157,12 +157,12 @@ We created an instance in NHN Cloud Service Toast and install dockers, built con
 | Name | 김서연 | 홍명주  | 박지영 |
 |---|---|---|---|
 |Role| Leader/DevOps | Frontend | Backend |
-|Detail|Technical Stack Containerized through Docker / NHN Cloud Deployment / ElasticSearch, text embedding, and cosine similarity search capabilities | Front-end design based on React JS Hooks / UI/UX publishing / Reactive web app production / Splash screen, loading window implementation | Flask REST API implementation / Swagger specification / Server isolation, validation and exception handling / Asynchronous processing implementation with Rabbitmq, Celery, server performance improvement|
+|Detail|Technical Stack Containerization through Docker / NHN Cloud Server Deployment / ElasticSearch, text embedding, and cosine similarity search capabilities | Frontend design based on React JS Hooks / UI/UX publishing / Reactive web app production / Splash screen, loading window implementation | Flask REST API implementation / Swagger specification / Server Division, validation and exception handling / Asynchronous processing implementation with Rabbitmq, Celery, server performance improvement|
 
 
 
 | Name | 김하연 | 한수아  | Robin Park |
 |---|---|---|---|
 |Role| Backend | Data Engineering | Backend |
-|Detail | Develop PostgreSQL, Schema Design / Leverage ORM (SqlAlchemy) / Process Celery task data / Deploy NHN Cloud | Implement enorflow SSD object recognition model / Optimize AI model performance / Monitor with performance visualization / Use Google Collabor | Implement Elasticsearch Queries / Research |
+|Detail | PostgreSQL Usage, Schema Design / Usage of ORM Framework (SQLAlchemy) / Process Celery task data / NHN Cloud Server Deployment | Tensorflow SSD object recognition model implementation / AI model performance optimization / Monitor with performance visualization / Google Colab Usage | Elasticsearch Queries Implementation / Research |
 

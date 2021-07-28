@@ -100,7 +100,7 @@ services:
       memlock:
         soft: -1
         hard: -1
-
+        
   rabbit:
     hostname: rabbit
     image: "rabbitmq:3.8-management"
@@ -124,11 +124,13 @@ services:
     networks:
       - app-tier
 
+
+
   nginx:
     build: ./nginx
     ports:
+      - "80:80"
       - "8080:8080"
-      - "8081:8081"
     volumes:
       - build_folder:/var/www/frontend
     depends_on:

@@ -1,4 +1,4 @@
--- CREATE DATABASE ihome_db;
+CREATE DATABASE ihome_db;
 
 -- CREATE EXTENSION IF NOT EXISTS dblink; -- enable extension 
 --   IF EXISTS (SELECT 1 FROM pg_database WHERE datname = _db) THEN

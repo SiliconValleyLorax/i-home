@@ -16,7 +16,7 @@ const BookList = ({ location }) => {
   const [bookId, setBookId] = useState("");
   const getResult = (taskId) => {
     axios
-      .get(`http://localhost:5000/api/result/${taskId}`)
+      .get(`http://ihome-eng.tk:5000/api/result/${taskId}`)
       .then((response) => {
         if (response.data.state === "PROCESSING") {
           console.log(taskId, response);
@@ -44,7 +44,7 @@ const BookList = ({ location }) => {
     if (location.state === undefined) return;
     axios
       .post(
-        "http://localhost:5000/api/image",
+        "http://ihome-eng.tk:5000/api/image",
         {
           image: location.state.image,
         },

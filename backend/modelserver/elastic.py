@@ -139,7 +139,7 @@ def initialize_book_list():
     ## 텍스트 임베딩 모델 다운로드 
     print("Downloading pre-trained embeddings from tensorflow hub...")
     os.environ["TFHUB_CACHE_DIR"] = "/tmp/tfhub"
-    embed = hub.KerasLayer("./models/sentence-encoder/4")
+    embed = hub.KerasLayer("https://tfhub.dev/google/universal-sentence-encoder/4")
     print("Done.")
     
     insert_book_list(embed, es)

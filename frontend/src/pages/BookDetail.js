@@ -16,7 +16,7 @@ const BookDetail = ({ id, popClose }) => {
 
   const getbook = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/book/${id}`);
+      const response = await axios.get(`http://ihome-eng.tk:5000/api/book/${id}`);
       setBook(response.data);
       console.log(response.data);
       // setBook({

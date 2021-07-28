@@ -83,7 +83,7 @@ Set Celery's Result Backend to PostgreSQL. Creates a UUID for each task, designa
 
 This asynchronous processing ensures that the server is always in a responsive state.
 
-**Webserver : NGINX (middleware : gunicorn)**
+- **Webserver : NGINX (middleware : gunicorn)**
 
 We built a RESTful API server using the Gunicorn interface that helps communicate with Nginx, a lightweight but high-performance reverse proxy web server.
 

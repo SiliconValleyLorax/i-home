@@ -24,14 +24,14 @@ Frontend <br/>
 |---|-------select-photo.png <br/>
 |---|-------splash-image.png <br/>
 |---|-------zoom-logo.png <br/>
-|---|------- <br/>
+|<br/>
 |---🎈---src <br/>
 |-------|---App.css <br/>
 |-------|---App.js <br/>
 |-------|---index.css <br/>
 |-------|---index.js <br/>
 |-------|---ScrollTop.js <br/>
-|-------|    <br/>
+|<br/>
 |-------✨---components <br/>
 |-------|-------Button.js <br/>
 |-------|-------Loading.js <br/>
@@ -40,7 +40,7 @@ Frontend <br/>
 |-------|-------Result.js <br/>
 |-------|-------Splash.js <br/>
 |-------|-------Webcam.js <br/>
-|-------|        <br/>
+|<br/>
 |-------✨---css <br/>
 |-------|-------BookDetail.css <br/>
 |-------|-------BookList.css <br/>
@@ -51,7 +51,7 @@ Frontend <br/>
 |-------|-------Navbar.css <br/>
 |-------|-------UploadImage.css <br/>
 |-------|-------Webcam.css <br/>
-|       |        <br/>
+|<br/>
 |-------✨---pages <br/>
 |-------|-------BookDetail.js <br/>
 |-------|-------BookList.js <br/>

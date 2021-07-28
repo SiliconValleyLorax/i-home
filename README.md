@@ -111,6 +111,11 @@ Use the axios library for REST API communication with FLASK. Based on Promise, A
 <img src="https://img.shields.io/badge/Elasticsearch-005571?style=flat-square&logo=Elasticsearch&logoColor=white" height="25px"/></a>
 
 
+| INPUT  | OUTPUT  |
+|---|---|
+|![README/image_detection1.png](README/image_detection1.png)   | ![README/image_detection2.png](README/image_detection2.png)  |
+
+
 - **Google Colab**
 - **Tensorflow**
 - **Object Detection : SSD**

@@ -13,14 +13,31 @@ const BookList = ({ location }) => {
 
   // const [image, setImage] = useState(null);
   const [popup, setPopup] = useState(false);
-  const [bookId, setBookId] = useState("");
+  // const [bookId, setBookId] = useState("");
+  const [book, setBook] = useState({
+    id: null,
+    title: null,
+    author: null,
+    desc: null,
+    image: "",
+  });
+  const getbook = async (id) => {
+    try {
+      const response = await axios.get(
+        `http://ihome-eng.tk:5000/api/book/${id}`
+      );
+      setBook(response.data);
+      setPopup(true);
+    } catch (error) {
+      console.log("error");
+    }
+  };
   const getResult = (taskId) => {
     axios
       .get(`http://ihome-eng.tk:5000/api/result/${taskId}`)
       .then((response) => {
         if (response.data.state === "PROCESSING") {
-          console.log(taskId, response);
-          setTimeout(() => getResult(taskId), 2000);
+          setTimeout(() => getResult(taskId), 1500);
         } else if (response.data.state === "SUCCESS") {
           setBooks(response.data.result);
           setPhrase("이런 책을 추천해요");
@@ -30,7 +47,7 @@ const BookList = ({ location }) => {
           setBooks(response.data.result);
           setLoading(false);
         } else {
-          console.log(response.data, "Failed to get bookList from server");
+          console.log("Failed to get bookList from server");
           setLoading(false);
         }
       })
@@ -61,7 +78,7 @@ const BookList = ({ location }) => {
           setLoading(false);
           return;
         }
-        console.log(response.data);
+        // console.log(response.data);
         getResult(response.data);
       })
       .catch((error) => {
@@ -82,12 +99,12 @@ const BookList = ({ location }) => {
     case false:
       return (
         <>
-          {popup && <BookDetail id={bookId} popClose={setPopup}></BookDetail>}
+          {popup && <BookDetail book={book} popClose={setPopup}></BookDetail>}
           <div
             className="home-container"
             style={{
               touchAction: popup ? "none" : "auto",
-              overflowY: "hidden",
+              overflowY: popup ? "hidden" : "visible",
             }}
           >
             {/* <div className="book-list-title">추천 도서 목록</div> */}
@@ -98,9 +115,8 @@ const BookList = ({ location }) => {
                   {/* <div className="book-rank">{index + 1}</div> */}
                   <div
                     onClick={() => {
-                      setPopup(true);
-                      setBookId(book.id);
-                      // console.log("true");
+                      getbook(book.id);
+                      // setBookId(book.id);
                     }}
                   >
                     <div className="book-image">

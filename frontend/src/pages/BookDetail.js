@@ -4,39 +4,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import "../css/UploadImage.css";
 
-const BookDetail = ({ id, popClose }) => {
-  const [book, setBook] = useState({
-    id: null,
-    title: null,
-    author: null,
-    desc: null,
-    image: "",
-  });
-  const [ko, setKo] = useState(0);
+const BookDetail = ({ popClose, book }) => {
+  const [ko, setKo] = useState(false);
 
-  const getbook = async () => {
-    try {
-      const response = await axios.get(`http://ihome-eng.tk:5000/api/book/${id}`);
-      setBook(response.data);
-      console.log(response.data);
-      // setBook({
-      //   author: "by Eric Carle",
-      //   desc: "THE all-time classic picture book, from generation to generation, sold somewhere in the world every 30 seconds! A sturdy and beautiful book to give as a gift for new babies, baby showers, birthdays, and other new beginnings!",
-      //   id: 1,
-      //   image: "https://m.media-amazon.com/images/I/71KilybDOoL._AC_UY218_.jpg",
-      //   title: "The Very Hungry Caterpillar",
-      //   slogan: "한줄평입니다...",
-      // });
-    } catch (error) {
-      console.log("error");
-    }
-  };
-  const getTranslate = () => {
-    ko ? setKo(0) : setKo(1);
-  };
-  useEffect(() => {
-    getbook();
-  }, []);
+  // useEffect(() => {
+  //   getbook();
+  // }, []);
 
   return (
     <div className="background">
@@ -57,13 +30,13 @@ const BookDetail = ({ id, popClose }) => {
         </div>
         <div className="book_author">{book.author}</div>
         <div className="book_desc">{book.desc}</div>
+        <div className="copyright"> ©Goodreads </div>
         <div>
-          <button onClick={getTranslate} className="translate-btn">
-            번역 보기
+          <button onClick={() => setKo(!ko)} className="translate-btn">
+            {ko ? "숨기기" : "번역 보기"}
           </button>
         </div>
-        <div className="copyright"> ©Goodreads </div>
-        {ko ? <div></div> : <div className="book_desc">{book.desc_ko}</div>}
+        {ko ? <div className="book_desc">{book.desc_ko}</div> : <div></div>}
       </div>
     </div>
   );

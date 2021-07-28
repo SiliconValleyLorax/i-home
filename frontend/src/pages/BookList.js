@@ -106,6 +106,12 @@ const BookList = ({ location }) => {
               touchAction: popup ? "none" : "auto",
               overflowY: popup ? "hidden" : "visible",
             }}
+            onScroll={(e) => {
+              if (popup) {
+                e.preventDefault();
+                e.stopPropagation();
+              }
+            }}
           >
             {/* <div className="book-list-title">추천 도서 목록</div> */}
             <div className="book-list-sub-title">{phrase}</div>

@@ -114,23 +114,122 @@ const BookList = ({ location }) => {
             }}
           >
             {/* <div className="book-list-title">추천 도서 목록</div> */}
-            <div className="book-list-sub-title">{phrase}</div>
+            <div
+              className="book-list-sub-title"
+              style={{
+                touchAction: popup ? "none" : "auto",
+                overflowY: popup ? "hidden" : "visible",
+              }}
+              onScroll={(e) => {
+                if (popup) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }
+              }}
+            >
+              {phrase}
+            </div>
             {books &&
               books.map((book, index) => (
-                <div className="book-list" key={book.id}>
+                <div
+                  className="book-list"
+                  key={book.id}
+                  style={{
+                    touchAction: popup ? "none" : "auto",
+                    overflowY: popup ? "hidden" : "visible",
+                  }}
+                  onScroll={(e) => {
+                    if (popup) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }
+                  }}
+                >
                   {/* <div className="book-rank">{index + 1}</div> */}
                   <div
+                    style={{
+                      touchAction: popup ? "none" : "auto",
+                      overflowY: popup ? "hidden" : "visible",
+                    }}
+                    onScroll={(e) => {
+                      if (popup) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }
+                    }}
                     onClick={() => {
                       getbook(book.id);
                       // setBookId(book.id);
                     }}
                   >
-                    <div className="book-image">
-                      <img src={book.image} alt="book" />
+                    <div
+                      className="book-image"
+                      style={{
+                        touchAction: popup ? "none" : "auto",
+                        overflowY: popup ? "hidden" : "visible",
+                      }}
+                      onScroll={(e) => {
+                        if (popup) {
+                          e.preventDefault();
+                          e.stopPropagation();
+                        }
+                      }}
+                    >
+                      <img
+                        src={book.image}
+                        alt="book"
+                        style={{
+                          touchAction: popup ? "none" : "auto",
+                          overflowY: popup ? "hidden" : "visible",
+                        }}
+                        onScroll={(e) => {
+                          if (popup) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }
+                        }}
+                      />
                     </div>
-                    <div className="book-description">
-                      <span className="listAssemble">
-                        <div>{book.slogan}</div>
+                    <div
+                      className="book-description"
+                      style={{
+                        touchAction: popup ? "none" : "auto",
+                        overflowY: popup ? "hidden" : "visible",
+                      }}
+                      onScroll={(e) => {
+                        if (popup) {
+                          e.preventDefault();
+                          e.stopPropagation();
+                        }
+                      }}
+                    >
+                      <span
+                        className="listAssemble"
+                        style={{
+                          touchAction: popup ? "none" : "auto",
+                          overflowY: popup ? "hidden" : "visible",
+                        }}
+                        onScroll={(e) => {
+                          if (popup) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }
+                        }}
+                      >
+                        <div
+                          style={{
+                            touchAction: popup ? "none" : "auto",
+                            overflowY: popup ? "hidden" : "visible",
+                          }}
+                          onScroll={(e) => {
+                            if (popup) {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }
+                          }}
+                        >
+                          {book.slogan}
+                        </div>
                         {/* <div className="linetext title">{book.title}</div>
                           <div className="linetext author">
                             Author: {book.author}

@@ -46,19 +46,13 @@ def find_book_list(label, embed, es):
     index_name="book_test"
     script_query={
         "script_score":{
-            "query":{"match":{
-                        "message": {
-                        "query": "doc['text-vector']",
-                        "fuzziness": "AUTO"
-                }
-            }
-        },
+            "query":{"match_all":{}},
             "script":{
                 "source": "cosineSimilarity(params.query_vector, doc['text-vector']) + 1.0",
                 "params": {"query_vector": query_vector}
             }
         }
-      }
+    }
     search_start=time.time()
     response=es.search(
         index=index_name,

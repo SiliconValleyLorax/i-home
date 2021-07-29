@@ -48,13 +48,20 @@ def find_book_list(label, embed, es):
     index_name="book_test"
     script_query={
         "script_score":{
-            "query":{"match_all":{}},
+            "query":{"match":{
+                        "message": {
+                        "query": "doc['text-vector']",
+                        "fuzziness": "AUTO"
+                }
+            }
+        },
             "script":{
                 "source": "cosineSimilarity(params.query_vector, doc['text-vector']) + 1.0",
                 "params": {"query_vector": query_vector}
             }
         }
-    }
+      }
+    
     search_start=time.time()
     response=es.search(
         index=index_name,
@@ -70,7 +77,7 @@ def find_book_list(label, embed, es):
     print("{} total hits.".format(response["hits"]["total"]["value"]))
     print("search time: {:.2f} ms".format(search_time * 1000))
     for hit in response["hits"]["hits"]:
-        print("id: {}, score: {}".format(hit["_id"], hit["_score"]))
+        print("id: {}, score: {}".format(hit["_id"], hit["_score")
         print(hit["_source"])
         print()
         tmp={"id":hit["_source"]["idx"], "score":hit["_score"]}

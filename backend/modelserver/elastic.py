@@ -40,9 +40,7 @@ def default(o):
         return o.isoformat()
 
 def find_book_list(label, embed, es):
-    
     query=label
-
     embeddings=embed([query])
     query_vector=np.array(embeddings[0]).tolist()
     index_name="book_test"

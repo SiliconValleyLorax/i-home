@@ -40,21 +40,25 @@ def default(o):
         return o.isoformat()
 
 def find_book_list(label, embed, es):
-    
     query=label
-
     embeddings=embed([query])
     query_vector=np.array(embeddings[0]).tolist()
     index_name="book_test"
     script_query={
         "script_score":{
-            "query":{"match_all":{}},
+            "query":{"match":{
+                        "message": {
+                        "query": "doc['text-vector']",
+                        "fuzziness": "AUTO"
+                }
+            }
+        },
             "script":{
                 "source": "cosineSimilarity(params.query_vector, doc['text-vector']) + 1.0",
                 "params": {"query_vector": query_vector}
             }
         }
-    }
+      }
     search_start=time.time()
     response=es.search(
         index=index_name,
